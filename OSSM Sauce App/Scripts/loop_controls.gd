@@ -90,7 +90,7 @@ func send_command():
 	var loop_command:PackedByteArray
 	loop_command.resize(19)
 	
-	loop_command.encode_u8(0, owner.CommandType.LOOP)
+	loop_command.encode_u8(0, Enums.CommandType.LOOP)
 	loop_command.encode_u32(1, in_duration * 1000)
 	loop_command.encode_u16(5, 10000)
 	loop_command.encode_u8(7, in_trans)

@@ -5,8 +5,8 @@ func _ready():
 	$AnimationPlayer.play('Spin')
 
 
-var homing_lock:bool
-var restart_ready:bool
+var homing_lock: bool
+var restart_ready: bool
 func _on_inside_button_pressed():
 	if homing_lock:
 		return

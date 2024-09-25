@@ -1,300 +1,67 @@
-[gd_scene load_steps=53 format=3 uid="uid://d3cq3b5o0feo0"]
+[gd_scene load_steps=55 format=3 uid="uid://d3cq3b5o0feo0"]
 
-[ext_resource type="Theme" uid="uid://dqhnc02ffxjr2" path="res://Theme.tres" id="1_2qx77"]
-[ext_resource type="Script" path="res://Scripts/OSSM Sauce.gd" id="2_7liag"]
-[ext_resource type="Texture2D" uid="uid://da3nxjs8pqcoy" path="res://Textures/Dot Small.svg" id="3_4fxdc"]
-[ext_resource type="Script" path="res://Scripts/Position Controls.gd" id="4_juubk"]
-[ext_resource type="Texture2D" uid="uid://du8j273r744tn" path="res://Textures/Straight.svg" id="5_assl3"]
-[ext_resource type="Texture2D" uid="uid://bm14gbhhm3uqb" path="res://Textures/Smooth.svg" id="6_w7w2d"]
-[ext_resource type="Texture2D" uid="uid://cb703kraugp85" path="res://Textures/S32.svg" id="7_vkr47"]
-[ext_resource type="Texture2D" uid="uid://cnyl16jr7jd8g" path="res://Textures/Dot.svg" id="8_gc26k"]
-[ext_resource type="Script" path="res://Scripts/Loop Controls.gd" id="9_ggpkr"]
-[ext_resource type="Texture2D" uid="uid://bssf5wkfubmdu" path="res://Textures/PauseLarge.svg" id="10_txgs1"]
-[ext_resource type="Script" path="res://Scripts/Action Panel.gd" id="11_ovb0l"]
-[ext_resource type="Texture2D" uid="uid://dkpllak4evknm" path="res://Textures/Play.svg" id="12_5566s"]
-[ext_resource type="Texture2D" uid="uid://dcx71x8114vuv" path="res://Textures/Selection.svg" id="13_5y1j6"]
-[ext_resource type="Texture2D" uid="uid://fxyub7xy8ha5" path="res://Textures/Pause.svg" id="14_nxmo0"]
-[ext_resource type="Texture2D" uid="uid://dd4yrbph2jgxm" path="res://Textures/Speed.svg" id="15_h1yph"]
-[ext_resource type="Texture2D" uid="uid://df1fg8fsnax6k" path="res://Textures/Range.svg" id="16_6gn0p"]
-[ext_resource type="Texture2D" uid="uid://biyi8wy11rxn2" path="res://Textures/Menu.svg" id="17_qgwvh"]
-[ext_resource type="Script" path="res://Scripts/Speed Panel.gd" id="18_xiv3r"]
-[ext_resource type="Texture2D" uid="uid://btmbmu74nqhry" path="res://Textures/Back.svg" id="19_cpmuu"]
-[ext_resource type="Script" path="res://Scripts/Range Panel.gd" id="20_ogp2k"]
-[ext_resource type="Script" path="res://Scripts/Menu.gd" id="21_khfk6"]
-[ext_resource type="Texture2D" uid="uid://1yuj650f5xs" path="res://Textures/Gear.svg" id="22_2ruby"]
-[ext_resource type="Texture2D" uid="uid://o6gdsdww0cu4" path="res://Textures/Exit.svg" id="23_nlut4"]
-[ext_resource type="Texture2D" uid="uid://bvlmowqblmdgt" path="res://Textures/Down.svg" id="24_n8lpp"]
-[ext_resource type="Texture2D" uid="uid://hdymqqpd3vf" path="res://Textures/Up.svg" id="25_pehks"]
-[ext_resource type="Texture2D" uid="uid://rcaxkukbqghe" path="res://Textures/Restart.svg" id="26_aqrhn"]
-[ext_resource type="Texture2D" uid="uid://bd8t1o4bylcx0" path="res://Textures/Trash.svg" id="27_jm1bm"]
-[ext_resource type="Texture2D" uid="uid://6v1hvd7m2vhs" path="res://Textures/t3.svg" id="28_wynws"]
-[ext_resource type="Script" path="res://Scripts/Playlist.gd" id="28_ycvea"]
-[ext_resource type="Script" path="res://Scripts/Settings.gd" id="29_ui4fx"]
-[ext_resource type="Script" path="res://Scripts/Add File.gd" id="30_0ohdi"]
-[ext_resource type="Script" path="res://Scripts/File List.gd" id="31_476hc"]
-[ext_resource type="Script" path="res://Scripts/Circle Selection.gd" id="32_6g672"]
-[ext_resource type="Texture2D" uid="uid://8r6wnojlpyb2" path="res://Textures/Circle Selection.svg" id="33_onotn"]
-[ext_resource type="Texture2D" uid="uid://ceigu0byvwpor" path="res://Textures/Play Large.svg" id="34_0psch"]
-[ext_resource type="Texture2D" uid="uid://dtor82hfkxpes" path="res://Textures/Restart Large.svg" id="35_yhpak"]
-[ext_resource type="Texture2D" uid="uid://ceniqb8fv6rr" path="res://Textures/hourglass.svg" id="36_fybvn"]
-[ext_resource type="Texture2D" uid="uid://c0bgeto1j6das" path="res://Textures/wifi.svg" id="37_kag8w"]
+[ext_resource type="Theme" uid="uid://dqhnc02ffxjr2" path="res://Theme.tres" id="1_vq4js"]
+[ext_resource type="Script" path="res://main.gd" id="2_jo8ih"]
+[ext_resource type="Script" path="res://Scripts/path_area.gd" id="3_py3xv"]
+[ext_resource type="Texture2D" uid="uid://da3nxjs8pqcoy" path="res://Textures/Dot Small.svg" id="4_omejw"]
+[ext_resource type="Script" path="res://Scripts/position_controls.gd" id="5_5h8ag"]
+[ext_resource type="Texture2D" uid="uid://du8j273r744tn" path="res://Textures/Straight.svg" id="6_ngul0"]
+[ext_resource type="Texture2D" uid="uid://bm14gbhhm3uqb" path="res://Textures/Smooth.svg" id="7_i5p2j"]
+[ext_resource type="Texture2D" uid="uid://cb703kraugp85" path="res://Textures/S32.svg" id="8_vohcf"]
+[ext_resource type="Texture2D" uid="uid://cnyl16jr7jd8g" path="res://Textures/Dot.svg" id="9_al0ah"]
+[ext_resource type="Script" path="res://Scripts/loop_controls.gd" id="10_gmb8f"]
+[ext_resource type="Script" path="res://Scripts/in.gd" id="11_orbto"]
+[ext_resource type="Script" path="res://Scripts/out.gd" id="12_1s6sv"]
+[ext_resource type="Texture2D" uid="uid://bssf5wkfubmdu" path="res://Textures/PauseLarge.svg" id="13_uh3br"]
+[ext_resource type="Script" path="res://Scripts/action_panel.gd" id="14_38rqh"]
+[ext_resource type="Texture2D" uid="uid://dkpllak4evknm" path="res://Textures/Play.svg" id="15_p5801"]
+[ext_resource type="Texture2D" uid="uid://dcx71x8114vuv" path="res://Textures/Selection.svg" id="16_32t78"]
+[ext_resource type="Texture2D" uid="uid://fxyub7xy8ha5" path="res://Textures/Pause.svg" id="17_u07ej"]
+[ext_resource type="Texture2D" uid="uid://dd4yrbph2jgxm" path="res://Textures/Speed.svg" id="18_b0x4r"]
+[ext_resource type="Texture2D" uid="uid://df1fg8fsnax6k" path="res://Textures/Range.svg" id="19_3upt7"]
+[ext_resource type="Texture2D" uid="uid://biyi8wy11rxn2" path="res://Textures/Menu.svg" id="20_fglpl"]
+[ext_resource type="Script" path="res://Scripts/circle_selection.gd" id="21_j8sxo"]
+[ext_resource type="Texture2D" uid="uid://8r6wnojlpyb2" path="res://Textures/Circle Selection.svg" id="22_vxc6i"]
+[ext_resource type="Texture2D" uid="uid://ceigu0byvwpor" path="res://Textures/Play Large.svg" id="23_br8ur"]
+[ext_resource type="Texture2D" uid="uid://dtor82hfkxpes" path="res://Textures/Restart Large.svg" id="24_kxq4c"]
+[ext_resource type="Texture2D" uid="uid://ceniqb8fv6rr" path="res://Textures/hourglass.svg" id="25_kpo0t"]
+[ext_resource type="Script" path="res://Scripts/speed_panel.gd" id="26_lhh5s"]
+[ext_resource type="Texture2D" uid="uid://btmbmu74nqhry" path="res://Textures/Back.svg" id="27_62j01"]
+[ext_resource type="Script" path="res://Scripts/range_panel.gd" id="28_gnuht"]
+[ext_resource type="Script" path="res://Scripts/menu.gd" id="29_0fvj7"]
+[ext_resource type="Texture2D" uid="uid://1yuj650f5xs" path="res://Textures/Gear.svg" id="30_xkr47"]
+[ext_resource type="Texture2D" uid="uid://o6gdsdww0cu4" path="res://Textures/Exit.svg" id="31_e3kd5"]
+[ext_resource type="Texture2D" uid="uid://bvlmowqblmdgt" path="res://Textures/Down.svg" id="32_ogpss"]
+[ext_resource type="Texture2D" uid="uid://hdymqqpd3vf" path="res://Textures/Up.svg" id="33_6ebn3"]
+[ext_resource type="Texture2D" uid="uid://rcaxkukbqghe" path="res://Textures/Restart.svg" id="34_3ubnk"]
+[ext_resource type="Texture2D" uid="uid://bd8t1o4bylcx0" path="res://Textures/Trash.svg" id="35_34sm8"]
+[ext_resource type="Script" path="res://Scripts/playlist.gd" id="36_2if2i"]
+[ext_resource type="Script" path="res://Scripts/item.gd" id="37_2q0r0"]
+[ext_resource type="Texture2D" uid="uid://6v1hvd7m2vhs" path="res://Textures/t3.svg" id="38_xc03m"]
+[ext_resource type="Script" path="res://Scripts/add_delay.gd" id="39_elhwg"]
+[ext_resource type="Script" path="res://Scripts/save_playlist.gd" id="40_jjxyt"]
+[ext_resource type="Script" path="res://Scripts/settings.gd" id="41_m8wy6"]
+[ext_resource type="Script" path="res://Scripts/add_file.gd" id="42_p7l1i"]
+[ext_resource type="Script" path="res://Scripts/file_list.gd" id="43_ypxlb"]
+[ext_resource type="Script" path="res://Scripts/scroll_item.gd" id="44_rs8f6"]
+[ext_resource type="Texture2D" uid="uid://c0bgeto1j6das" path="res://Textures/wifi.svg" id="45_jo84y"]
+[ext_resource type="Script" path="res://Scripts/splash.gd" id="46_kew6m"]
 
-[sub_resource type="GDScript" id="GDScript_o3urw"]
-script/source = "extends Control
+[sub_resource type="GDScript" id="GDScript_xugi5"]
+script/source = "extends TextureRect
 
-func _on_gui_input(event):
-	if event is InputEventMouseButton and owner.active_path_index != null:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.is_pressed():
-				$Timer.start()
-			elif event.is_released():
-				$Timer.stop()
 
-func _on_timer_timeout():
-	if owner.paused:
-		%CircleSelection.show_play()
-	else:
-		%CircleSelection.show_pause()
+func _process(delta: float) -> void:
+	position.y = %PositionControls.target_pos + %PositionControls.deviation
+	#position.y = clamp(position.y, %PositionControls.max_range, %PositionControls.min_range)
 "
 
-[sub_resource type="GDScript" id="GDScript_mmyal"]
-script/source = "extends Control
-
-var stroke_duration:float
-
-var slider_min_pos:float #these seem reversed
-var slider_max_pos:float
-@onready var slider:TextureRect = $StrokeDurationSlider/Slider
-@onready var slider_stop:TextureRect = $StrokeDurationSlider/SliderStop
-
-@onready var touch_pos:float = slider_min_pos
-
-@onready var link_button:Button = get_node('../LinkSpeedSliders')
-
-@onready var out = get_node('../Out')
+[sub_resource type="GDScript" id="GDScript_1dy6y"]
+script/source = "extends TextureRect
 
 
-func _ready():
-	slider_min_pos = slider_stop.position.y
-	slider_max_pos = slider.position.y
-
-
-func _physics_process(delta):
-	if not input_active:
-		return
-	var slider_resist = get_parent().slider_resist
-	var pos = lerp(slider.position.y, touch_pos, delta * slider_resist)
-	var clamped_pos = clamp(pos, slider_max_pos, slider_min_pos)
-	slider.position.y = clamped_pos
-	if link_button.button_pressed:
-		out.slider.position.y = clamped_pos
-		out.map_stroke_duration()
-		out.update_stroke_duration_text()
-	map_stroke_duration()
-	update_stroke_duration_text()
-	get_parent().send_command()
-
-
-var input_active:bool
-func _input(event):
-	if input_active:
-		var offset = 140
-		if 'position' in event:
-			touch_pos = event.position.x - offset
-
-
-func _on_slider_gui_input(event):
-	if event is InputEventScreenDrag:
-		input_active = true
-	elif event is InputEventScreenTouch and not event.pressed:
-		input_active = false
-
-
-func map_stroke_duration():
-	var slider_position_percent = remap(
-			slider.position.y,
-			slider_max_pos,
-			slider_min_pos,
-			0,
-			1)
-	if slider_position_percent < 0.005:
-		stroke_duration = 0
-		return
-	stroke_duration = snappedf(remap(
-			slider.position.y,
-			slider_min_pos,
-			slider_max_pos,
-			owner.min_stroke_duration,
-			owner.max_stroke_duration), 0.01)
-
-
-func reset_stroke_duration_slider():
-	slider.position.y = slider_max_pos
-	var stroke_duration = snappedf(remap(
-			slider.position.y,
-			slider_min_pos,
-			slider_max_pos,
-			owner.min_stroke_duration,
-			owner.max_stroke_duration), 0.01)
-	if owner.connected_to_server:
-		get_parent().send_command()
-	update_stroke_duration_text()
-
-
-func update_stroke_duration_text():
-	var slider_position_percent = remap(
-		slider.position.y,
-		slider_max_pos,
-		slider_min_pos,
-		0,
-		1)
-	if slider_position_percent < 0.005:
-		$StrokeDurationLabel.text = \"IN: OFF\"
-	else:
-		var display_text:String
-		if %Menu/LoopSettings/DisplayMode/OptionButton.selected == 0:
-			display_text = \"IN: \" + str(stroke_duration) + \"s\"
-		else:
-			var map = snappedf(remap(
-				slider.position.y,
-				slider_max_pos,
-				slider_min_pos,
-				1,
-				100), 0.01)
-			display_text = \"IN: \" + str(map) + \"%\"
-		$StrokeDurationLabel.text = display_text
-
-
-func _on_transition_item_selected(index):
-	if link_button.button_pressed:
-		out.get_node('AccelerationControls/Transition').select(index)
-	get_parent().send_command()
-
-
-func _on_easing_item_selected(index):
-	if link_button.button_pressed:
-		out.get_node('AccelerationControls/Easing').select(index)
-	get_parent().send_command()
-"
-
-[sub_resource type="GDScript" id="GDScript_j6k60"]
-script/source = "extends Control
-
-var stroke_duration:float
-
-var slider_min_pos:float #these seem reversed
-var slider_max_pos:float
-@onready var slider:TextureRect = $StrokeDurationSlider/Slider
-@onready var slider_stop:TextureRect = $StrokeDurationSlider/SliderStop
-
-@onready var touch_pos:float = slider_min_pos
-
-@onready var link_button:Button = get_node('../LinkSpeedSliders')
-
-@onready var _in = get_node('../In')
-
-
-func _ready():
-	slider_min_pos = slider_stop.position.y
-	slider_max_pos = slider.position.y
-
-
-func _physics_process(delta):
-	if not input_active:
-		return
-	var slider_resist = get_parent().slider_resist
-	var pos = lerp(slider.position.y, touch_pos, delta * slider_resist)
-	var clamped_pos = clamp(pos, slider_max_pos, slider_min_pos)
-	slider.position.y = clamped_pos
-	if link_button.button_pressed:
-		_in.slider.position.y = clamped_pos
-		_in.map_stroke_duration()
-		_in.update_stroke_duration_text()
-	map_stroke_duration()
-	update_stroke_duration_text()
-	get_parent().send_command()
-
-
-var input_active:bool
-func _input(event):
-	if input_active:
-		var offset = 140
-		if 'position' in event:
-			touch_pos = event.position.x - offset
-
-
-func _on_slider_gui_input(event):
-	if event is InputEventScreenDrag:
-		input_active = true
-	elif event is InputEventScreenTouch and not event.pressed:
-		input_active = false
-
-
-func map_stroke_duration():
-	var slider_position_percent = remap(
-			slider.position.y,
-			slider_max_pos,
-			slider_min_pos,
-			0,
-			1)
-	if slider_position_percent < 0.005:
-		stroke_duration = 0
-		return
-	stroke_duration = snappedf(remap(
-			slider.position.y,
-			slider_min_pos,
-			slider_max_pos,
-			owner.min_stroke_duration,
-			owner.max_stroke_duration), 0.01)
-
-
-func reset_stroke_duration_slider():
-	slider.position.y = slider_max_pos
-	var stroke_duration = snappedf(remap(
-		slider.position.y,
-		slider_min_pos,
-		slider_max_pos,
-		owner.min_stroke_duration,
-		owner.max_stroke_duration), 0.01)
-	if owner.connected_to_server:
-		get_parent().send_command()
-	update_stroke_duration_text()
-
-
-func update_stroke_duration_text():
-	var slider_position_percent = remap(
-		slider.position.y,
-		slider_max_pos,
-		slider_min_pos,
-		0,
-		1)
-	if slider_position_percent < 0.005:
-		$StrokeDurationLabel.text = \"OUT: OFF\"
-	else:
-		var display_text:String
-		if %Menu/LoopSettings/DisplayMode/OptionButton.selected == 0:
-			display_text = \"OUT: \" + str(stroke_duration) + \"s\"
-		else:
-			var map = snappedf(remap(
-				slider.position.y,
-				slider_max_pos,
-				slider_min_pos,
-				1,
-				100), 0.01)
-			display_text = \"OUT: \" + str(map) + \"%\"
-		$StrokeDurationLabel.text = display_text
-
-
-func _on_transition_item_selected(index):
-	if link_button.button_pressed:
-		_in.get_node('AccelerationControls/Transition').select(index)
-	get_parent().send_command()
-
-
-func _on_easing_item_selected(index):
-	if link_button.button_pressed:
-		_in.get_node('AccelerationControls/Easing').select(index)
-	get_parent().send_command()
+func _process(delta: float) -> void:
+	position.y = %PositionControls.target_pos
 "
 
 [sub_resource type="Animation" id="Animation_il416"]
@@ -335,29 +102,6 @@ _data = {
 "Spin": SubResource("Animation_7gpwe")
 }
 
-[sub_resource type="GDScript" id="GDScript_pigvm"]
-script/source = "extends Panel
-
-func set_active():
-	$Icon.show()
-	$Animation.play('Spin')
-
-func select():
-	$Label.self_modulate = Color.SANDY_BROWN
-	self_modulate = Color.SLATE_GRAY
-
-func deselect():
-	self_modulate.a = 0.7
-	self_modulate = Color.WHITE
-	if get_index() == get_tree().get_root().get_child(0).active_path_index:
-		$Label.self_modulate = Color.BURLYWOOD
-	else:
-		$Label.self_modulate = Color.WHITE
-		$Label.self_modulate.a = 0.765
-		$Icon.hide()
-		$Animation.stop()
-"
-
 [sub_resource type="Animation" id="Animation_4ant3"]
 length = 0.001
 tracks/0/type = "value"
@@ -396,117 +140,15 @@ _data = {
 "Spin": SubResource("Animation_cbmbt")
 }
 
-[sub_resource type="GDScript" id="GDScript_3psro"]
-script/source = "extends Control
-
-
-func _on_add_delay_pressed():
-	var duration:float = $Box/SpinBox.value
-	owner.create_delay(duration)
-	show_menu_buttons()
-
-
-func show_menu_buttons():
-	var buttons = [
-		%Menu/Main/PlaylistButtons,
-		%Menu/Main/PathButtons,
-		%Menu/PathControls,
-		%Menu/Header,
-		%Menu/Main/Mode]
-	for button in buttons:
-		button.show()
-	%Menu.refresh_selection()
-	hide()
-
-
-func _on_back_pressed():
-	show_menu_buttons()
-"
-
-[sub_resource type="GDScript" id="GDScript_kgmbj"]
-script/source = "extends Control
-
-
-func _on_text_edit_text_changed():
-	var filter:Array = ['\\\\', '/', ':', '*', '?', '\"', '<', '>', '|', '\\n']
-	var filtered_text:String = $TextEdit.text
-	for character in filter:
-		filtered_text = filtered_text.replace(character,\"\")
-	if $TextEdit.text != filtered_text:
-		$TextEdit.text = filtered_text
-		$TextEdit.set_caret_column($TextEdit.text.length())
-	if $TextEdit.text.length() > 0:
-		$HBox/Save.disabled = false
-	else:
-		$HBox/Save.disabled = true
-
-
-func _on_save_pressed():
-	var filename:String = $TextEdit.text
-	var path:String = owner.playlists_dir + \"/\" + filename + \".bxpl\"
-	var file = FileAccess.open(path, FileAccess.WRITE)
-	for path_name in %Menu/Playlist.get_items():
-		file.store_line(path_name)
-	file.close()
-	show_menu_buttons()
-
-
-func show_menu_buttons():
-	var buttons = [
-		%Menu/Main/PlaylistButtons,
-		%Menu/Main/PathButtons,
-		%Menu/PathControls,
-		%Menu/Header,
-		%Menu/Main/Mode]
-	for button in buttons:
-		button.show()
-	%Menu.refresh_selection()
-	hide()
-
-
-func _on_back_pressed():
-	show_menu_buttons()
-"
-
-[sub_resource type="GDScript" id="GDScript_rckrg"]
-script/source = "extends Panel
-
-func select():
-	$Label.self_modulate = Color.SANDY_BROWN
-	self_modulate = Color.SLATE_GRAY
-
-func deselect():
-	$Label.self_modulate = Color.WHITE
-	$Label.self_modulate.a = 0.765
-	self_modulate.a = 0.7
-	self_modulate = Color.WHITE
-"
-
-[sub_resource type="GDScript" id="GDScript_dqjk0"]
-script/source = "extends Panel
-
-
-func _ready():
-	self_modulate.a = 2
-
-
-func _on_accept_pressed():
-	hide()
-
-
-func _on_dont_show_toggled(toggled_on):
-	owner.user_settings.set_value('app_settings', 'show_splash', !toggled_on)
-"
-
-[node name="OSSMSauce" type="Control"]
+[node name="Main" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_2qx77")
-script = ExtResource("2_7liag")
+theme = ExtResource("1_vq4js")
+script = ExtResource("2_jo8ih")
 
 [node name="PathDisplay" type="Control" parent="."]
 unique_name_in_owner = true
@@ -525,7 +167,7 @@ anchor_right = 1.0
 anchor_bottom = 0.84375
 grow_horizontal = 2
 grow_vertical = 2
-script = SubResource("GDScript_o3urw")
+script = ExtResource("3_py3xv")
 metadata/_edit_use_anchors_ = true
 
 [node name="Timer" type="Timer" parent="PathDisplay/PathArea"]
@@ -533,21 +175,22 @@ wait_time = 0.3
 
 [node name="Paths" type="Control" parent="PathDisplay"]
 anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="Ball" type="Sprite2D" parent="PathDisplay"]
 self_modulate = Color(1, 0.384314, 0.47451, 1)
 position = Vector2(540, 960)
-texture = ExtResource("3_4fxdc")
+texture = ExtResource("4_omejw")
 
 [node name="PositionControls" type="Control" parent="."]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 anchor_right = 1.0
 anchor_bottom = 0.898958
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("4_juubk")
+script = ExtResource("5_5h8ag")
 metadata/_edit_use_anchors_ = true
 
 [node name="Smoothing" type="Control" parent="PositionControls"]
@@ -590,7 +233,7 @@ offset_top = -40.0
 offset_right = 86.0
 offset_bottom = 40.0
 grow_vertical = 2
-texture = ExtResource("5_assl3")
+texture = ExtResource("6_ngul0")
 
 [node name="Smooth" type="TextureRect" parent="PositionControls/Smoothing"]
 layout_mode = 1
@@ -604,7 +247,7 @@ offset_top = -40.5
 offset_bottom = 40.5
 grow_horizontal = 0
 grow_vertical = 2
-texture = ExtResource("6_w7w2d")
+texture = ExtResource("7_i5p2j")
 
 [node name="MovementBar" type="NinePatchRect" parent="PositionControls"]
 layout_mode = 1
@@ -619,7 +262,7 @@ offset_right = 86.0
 offset_bottom = 779.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("7_vkr47")
+texture = ExtResource("8_vohcf")
 patch_margin_top = 80
 patch_margin_bottom = 80
 
@@ -637,7 +280,41 @@ offset_right = 69.0
 offset_bottom = -570.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_gc26k")
+texture = ExtResource("9_al0ah")
+
+[node name="DeviationGhost" type="TextureRect" parent="PositionControls/MovementBar"]
+self_modulate = Color(1, 1, 1, 0.270588)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -69.0
+offset_top = 291.0
+offset_right = 69.0
+offset_bottom = 429.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_al0ah")
+script = SubResource("GDScript_xugi5")
+
+[node name="TargetPosGhost" type="TextureRect" parent="PositionControls/MovementBar"]
+self_modulate = Color(1, 1, 1, 0.556863)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -69.0
+offset_top = 431.0
+offset_right = 69.0
+offset_bottom = 569.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("9_al0ah")
+script = SubResource("GDScript_1dy6y")
 
 [node name="Slider" type="TextureRect" parent="PositionControls/MovementBar"]
 self_modulate = Color(0.941176, 0.501961, 0.501961, 1)
@@ -653,7 +330,7 @@ offset_right = 69.0
 offset_bottom = 708.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_gc26k")
+texture = ExtResource("9_al0ah")
 
 [node name="LoopControls" type="Control" parent="."]
 unique_name_in_owner = true
@@ -663,7 +340,7 @@ anchor_right = 1.0
 anchor_bottom = 0.898958
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("9_ggpkr")
+script = ExtResource("10_gmb8f")
 metadata/_edit_use_anchors_ = true
 
 [node name="In" type="Control" parent="LoopControls"]
@@ -673,7 +350,7 @@ anchor_right = 1.0
 offset_top = 26.0
 offset_bottom = 288.0
 grow_horizontal = 2
-script = SubResource("GDScript_mmyal")
+script = ExtResource("11_orbto")
 
 [node name="StrokeDurationLabel" type="Label" parent="LoopControls/In"]
 layout_mode = 1
@@ -698,7 +375,7 @@ offset_right = -298.0
 offset_bottom = 1184.0
 grow_horizontal = 2
 rotation = 4.71239
-texture = ExtResource("7_vkr47")
+texture = ExtResource("8_vohcf")
 patch_margin_top = 80
 patch_margin_bottom = 80
 
@@ -713,7 +390,7 @@ offset_top = 16.0
 offset_right = 69.0
 offset_bottom = 154.0
 grow_horizontal = 2
-texture = ExtResource("8_gc26k")
+texture = ExtResource("9_al0ah")
 
 [node name="SliderStop" type="TextureRect" parent="LoopControls/In/StrokeDurationSlider"]
 visible = false
@@ -729,7 +406,7 @@ offset_right = 69.0001
 offset_bottom = 452.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_gc26k")
+texture = ExtResource("9_al0ah")
 
 [node name="AccelerationControls" type="HBoxContainer" parent="LoopControls/In"]
 custom_minimum_size = Vector2(700, 0)
@@ -752,10 +429,9 @@ alignment = 1
 custom_minimum_size = Vector2(346, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-item_count = 8
 selected = 1
+item_count = 8
 popup/item_0/text = "Linear"
-popup/item_0/id = 0
 popup/item_1/text = "Sine"
 popup/item_1/id = 1
 popup/item_2/text = "Circ"
@@ -774,10 +450,9 @@ popup/item_7/id = 7
 [node name="Easing" type="OptionButton" parent="LoopControls/In/AccelerationControls"]
 layout_mode = 2
 size_flags_horizontal = 8
-item_count = 4
 selected = 2
+item_count = 4
 popup/item_0/text = "Ease In"
-popup/item_0/id = 0
 popup/item_1/text = "Ease Out"
 popup/item_1/id = 1
 popup/item_2/text = "Ease In/Out"
@@ -792,7 +467,7 @@ anchor_right = 1.0
 offset_top = 542.0
 offset_bottom = 804.0
 grow_horizontal = 2
-script = SubResource("GDScript_j6k60")
+script = ExtResource("12_1s6sv")
 
 [node name="StrokeDurationLabel" type="Label" parent="LoopControls/Out"]
 layout_mode = 1
@@ -817,7 +492,7 @@ offset_right = -298.0
 offset_bottom = 1184.0
 grow_horizontal = 2
 rotation = 4.71239
-texture = ExtResource("7_vkr47")
+texture = ExtResource("8_vohcf")
 patch_margin_top = 80
 patch_margin_bottom = 80
 
@@ -832,7 +507,7 @@ offset_top = 16.0
 offset_right = 69.0
 offset_bottom = 154.0
 grow_horizontal = 2
-texture = ExtResource("8_gc26k")
+texture = ExtResource("9_al0ah")
 
 [node name="SliderStop" type="TextureRect" parent="LoopControls/Out/StrokeDurationSlider"]
 visible = false
@@ -848,7 +523,7 @@ offset_right = 69.0001
 offset_bottom = 452.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_gc26k")
+texture = ExtResource("9_al0ah")
 
 [node name="AccelerationControls" type="HBoxContainer" parent="LoopControls/Out"]
 custom_minimum_size = Vector2(700, 0)
@@ -871,10 +546,9 @@ alignment = 1
 custom_minimum_size = Vector2(346, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-item_count = 8
 selected = 1
+item_count = 8
 popup/item_0/text = "Linear"
-popup/item_0/id = 0
 popup/item_1/text = "Sine"
 popup/item_1/id = 1
 popup/item_2/text = "Circ"
@@ -893,10 +567,9 @@ popup/item_7/id = 7
 [node name="Easing" type="OptionButton" parent="LoopControls/Out/AccelerationControls"]
 layout_mode = 2
 size_flags_horizontal = 8
-item_count = 4
 selected = 2
+item_count = 4
 popup/item_0/text = "Ease In"
-popup/item_0/id = 0
 popup/item_1/text = "Ease Out"
 popup/item_1/id = 1
 popup/item_2/text = "Ease In/Out"
@@ -948,7 +621,7 @@ offset_right = 150.0
 offset_bottom = 690.5
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("10_txgs1")
+texture = ExtResource("13_uh3br")
 
 [node name="Control" type="Control" parent="LoopControls"]
 visible = false
@@ -996,7 +669,7 @@ offset_top = -194.0
 offset_right = 541.0
 grow_horizontal = 2
 grow_vertical = 0
-script = ExtResource("11_ovb0l")
+script = ExtResource("14_38rqh")
 
 [node name="Play" type="TextureRect" parent="ActionPanel"]
 layout_mode = 1
@@ -1008,7 +681,7 @@ offset_top = -47.5
 offset_right = 152.0
 offset_bottom = 47.5
 grow_vertical = 2
-texture = ExtResource("12_5566s")
+texture = ExtResource("15_p5801")
 
 [node name="Selection" type="TextureRect" parent="ActionPanel/Play"]
 visible = false
@@ -1025,7 +698,7 @@ offset_bottom = 90.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("13_5y1j6")
+texture = ExtResource("16_32t78")
 
 [node name="Button" type="TextureButton" parent="ActionPanel/Play"]
 layout_mode = 1
@@ -1049,7 +722,7 @@ offset_top = -40.5
 offset_right = 133.0
 offset_bottom = 40.5
 grow_vertical = 2
-texture = ExtResource("14_nxmo0")
+texture = ExtResource("17_u07ej")
 
 [node name="Selection" type="TextureRect" parent="ActionPanel/Pause"]
 visible = false
@@ -1066,7 +739,7 @@ offset_bottom = 90.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("13_5y1j6")
+texture = ExtResource("16_32t78")
 
 [node name="Button" type="TextureButton" parent="ActionPanel/Pause"]
 layout_mode = 1
@@ -1089,7 +762,7 @@ offset_top = -52.0
 offset_right = 469.0
 offset_bottom = 53.0
 grow_vertical = 2
-texture = ExtResource("15_h1yph")
+texture = ExtResource("18_b0x4r")
 
 [node name="Selection" type="TextureRect" parent="ActionPanel/Speed"]
 visible = false
@@ -1106,7 +779,7 @@ offset_bottom = 90.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("13_5y1j6")
+texture = ExtResource("16_32t78")
 
 [node name="Button" type="TextureButton" parent="ActionPanel/Speed"]
 layout_mode = 1
@@ -1131,7 +804,7 @@ offset_right = -301.0
 offset_bottom = 30.0
 grow_horizontal = 0
 grow_vertical = 2
-texture = ExtResource("16_6gn0p")
+texture = ExtResource("19_3upt7")
 
 [node name="Selection" type="TextureRect" parent="ActionPanel/Range"]
 visible = false
@@ -1144,7 +817,7 @@ offset_bottom = 61.5
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("13_5y1j6")
+texture = ExtResource("16_32t78")
 
 [node name="Button" type="TextureButton" parent="ActionPanel/Range"]
 layout_mode = 1
@@ -1169,7 +842,7 @@ offset_right = -60.0
 offset_bottom = 51.0
 grow_horizontal = 0
 grow_vertical = 2
-texture = ExtResource("17_qgwvh")
+texture = ExtResource("20_fglpl")
 
 [node name="Selection" type="TextureRect" parent="ActionPanel/Menu"]
 visible = false
@@ -1186,7 +859,7 @@ offset_bottom = 90.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("13_5y1j6")
+texture = ExtResource("16_32t78")
 
 [node name="Button" type="TextureButton" parent="ActionPanel/Menu"]
 layout_mode = 1
@@ -1214,7 +887,7 @@ anchor_right = 0.755556
 anchor_bottom = 0.593229
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("32_6g672")
+script = ExtResource("21_j8sxo")
 metadata/_edit_use_anchors_ = true
 
 [node name="Circle" type="TextureRect" parent="CircleSelection"]
@@ -1232,7 +905,7 @@ offset_bottom = 258.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(258, 258)
-texture = ExtResource("33_onotn")
+texture = ExtResource("22_vxc6i")
 
 [node name="Pause" type="TextureRect" parent="CircleSelection"]
 visible = false
@@ -1248,7 +921,7 @@ offset_right = 73.5
 offset_bottom = 121.5
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("10_txgs1")
+texture = ExtResource("13_uh3br")
 
 [node name="Play" type="TextureRect" parent="CircleSelection"]
 layout_mode = 1
@@ -1259,7 +932,7 @@ anchor_right = 0.719203
 anchor_bottom = 0.728261
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("34_0psch")
+texture = ExtResource("23_br8ur")
 metadata/_edit_use_anchors_ = true
 
 [node name="Restart" type="TextureButton" parent="CircleSelection"]
@@ -1276,7 +949,7 @@ offset_right = 147.0
 offset_bottom = 154.5
 grow_horizontal = 2
 grow_vertical = 2
-texture_normal = ExtResource("35_yhpak")
+texture_normal = ExtResource("24_kxq4c")
 stretch_mode = 3
 
 [node name="Hourglass" type="TextureRect" parent="CircleSelection"]
@@ -1293,7 +966,7 @@ offset_right = 125.0
 offset_bottom = 154.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("36_fybvn")
+texture = ExtResource("25_kpo0t")
 stretch_mode = 3
 
 [node name="HomingLabel" type="Label" parent="CircleSelection/Hourglass"]
@@ -1342,7 +1015,7 @@ anchors_preset = -1
 anchor_left = -0.5
 anchor_bottom = 1.0
 grow_vertical = 2
-script = ExtResource("18_xiv3r")
+script = ExtResource("26_lhh5s")
 metadata/_edit_use_anchors_ = true
 
 [node name="SpeedBar" type="NinePatchRect" parent="SpeedPanel"]
@@ -1358,7 +1031,7 @@ offset_right = 1.0
 offset_bottom = 806.5
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("7_vkr47")
+texture = ExtResource("8_vohcf")
 patch_margin_top = 80
 patch_margin_bottom = 80
 
@@ -1376,7 +1049,7 @@ offset_right = 69.0
 offset_bottom = -653.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_gc26k")
+texture = ExtResource("9_al0ah")
 
 [node name="SliderBottom" type="TextureRect" parent="SpeedPanel/SpeedBar"]
 visible = false
@@ -1392,7 +1065,7 @@ offset_right = 69.0
 offset_bottom = 790.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_gc26k")
+texture = ExtResource("9_al0ah")
 
 [node name="AccelerationBar" type="NinePatchRect" parent="SpeedPanel"]
 layout_mode = 1
@@ -1407,7 +1080,7 @@ offset_right = 158.0
 offset_bottom = 806.5
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("7_vkr47")
+texture = ExtResource("8_vohcf")
 patch_margin_top = 80
 patch_margin_bottom = 80
 
@@ -1425,7 +1098,7 @@ offset_right = 69.0
 offset_bottom = -653.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_gc26k")
+texture = ExtResource("9_al0ah")
 
 [node name="SliderBottom" type="TextureRect" parent="SpeedPanel/AccelerationBar"]
 visible = false
@@ -1441,7 +1114,7 @@ offset_right = 69.0
 offset_bottom = 790.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_gc26k")
+texture = ExtResource("9_al0ah")
 
 [node name="BackTexture" type="TextureRect" parent="SpeedPanel"]
 layout_mode = 1
@@ -1457,7 +1130,7 @@ offset_bottom = 61.5
 grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("19_cpmuu")
+texture = ExtResource("27_62j01")
 
 [node name="BackButton" type="TextureButton" parent="SpeedPanel"]
 layout_mode = 1
@@ -1511,7 +1184,7 @@ anchor_right = 1.5
 anchor_bottom = 1.0
 grow_horizontal = 0
 grow_vertical = 2
-script = ExtResource("20_ogp2k")
+script = ExtResource("28_gnuht")
 metadata/_edit_use_anchors_ = true
 
 [node name="RangeBar" type="NinePatchRect" parent="RangePanel"]
@@ -1527,7 +1200,7 @@ offset_right = 86.0
 offset_bottom = 807.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("7_vkr47")
+texture = ExtResource("8_vohcf")
 patch_margin_top = 80
 patch_margin_bottom = 80
 
@@ -1542,7 +1215,7 @@ offset_top = 16.0
 offset_right = 69.0
 offset_bottom = 154.0
 grow_horizontal = 2
-texture = ExtResource("8_gc26k")
+texture = ExtResource("9_al0ah")
 
 [node name="MinSlider" type="TextureRect" parent="RangePanel/RangeBar"]
 self_modulate = Color(1, 0.498039, 0.313726, 1)
@@ -1558,7 +1231,7 @@ offset_right = 69.0
 offset_bottom = 790.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_gc26k")
+texture = ExtResource("9_al0ah")
 
 [node name="BackTexture" type="TextureRect" parent="RangePanel"]
 layout_mode = 1
@@ -1571,7 +1244,7 @@ offset_right = -46.0
 offset_bottom = 61.5
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("19_cpmuu")
+texture = ExtResource("27_62j01")
 flip_h = true
 
 [node name="BackButton" type="TextureButton" parent="RangePanel"]
@@ -1626,7 +1299,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("21_khfk6")
+script = ExtResource("29_0fvj7")
 
 [node name="Header" type="HBoxContainer" parent="Menu"]
 layout_mode = 1
@@ -1639,19 +1312,19 @@ alignment = 1
 
 [node name="Back" type="TextureButton" parent="Menu/Header"]
 layout_mode = 2
-texture_normal = ExtResource("19_cpmuu")
+texture_normal = ExtResource("27_62j01")
 stretch_mode = 3
 
 [node name="Settings" type="TextureButton" parent="Menu/Header"]
 self_modulate = Color(0.560784, 0.737255, 0.560784, 1)
 layout_mode = 2
-texture_normal = ExtResource("22_2ruby")
+texture_normal = ExtResource("30_xkr47")
 stretch_mode = 3
 
 [node name="Exit" type="TextureButton" parent="Menu/Header"]
 modulate = Color(0.862745, 0.0784314, 0.235294, 1)
 layout_mode = 2
-texture_normal = ExtResource("23_nlut4")
+texture_normal = ExtResource("31_e3kd5")
 stretch_mode = 3
 
 [node name="Main" type="VBoxContainer" parent="Menu"]
@@ -1671,8 +1344,8 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.498039, 0.313726, 1)
 alignment = 1
 expand_icon = true
-item_count = 3
 selected = 0
+item_count = 3
 popup/item_0/text = "Path Mode"
 popup/item_0/id = 2
 popup/item_1/text = "Position Mode"
@@ -1738,10 +1411,9 @@ text = "Stroke Speed Display:"
 [node name="OptionButton" type="OptionButton" parent="Menu/LoopSettings/DisplayMode"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 54
-item_count = 2
 selected = 0
+item_count = 2
 popup/item_0/text = "Seconds"
-popup/item_0/id = 0
 popup/item_1/text = "Percentage"
 popup/item_1/id = 1
 
@@ -1793,7 +1465,7 @@ offset_left = 46.0
 offset_top = 58.0
 offset_right = 169.0
 offset_bottom = 127.0
-texture_normal = ExtResource("24_n8lpp")
+texture_normal = ExtResource("32_ogpss")
 
 [node name="Up" type="TextureButton" parent="Menu/PathControls"]
 layout_mode = 0
@@ -1801,7 +1473,7 @@ offset_left = 200.0
 offset_top = 58.0
 offset_right = 323.0
 offset_bottom = 127.0
-texture_normal = ExtResource("25_pehks")
+texture_normal = ExtResource("33_6ebn3")
 
 [node name="HBox" type="HBoxContainer" parent="Menu/PathControls"]
 layout_mode = 1
@@ -1821,24 +1493,24 @@ alignment = 2
 
 [node name="Play" type="TextureButton" parent="Menu/PathControls/HBox"]
 layout_mode = 2
-texture_normal = ExtResource("12_5566s")
+texture_normal = ExtResource("15_p5801")
 stretch_mode = 3
 
 [node name="Pause" type="TextureButton" parent="Menu/PathControls/HBox"]
 visible = false
 layout_mode = 2
-texture_normal = ExtResource("14_nxmo0")
+texture_normal = ExtResource("17_u07ej")
 stretch_mode = 3
 
 [node name="Restart" type="TextureButton" parent="Menu/PathControls/HBox"]
 visible = false
 layout_mode = 2
-texture_normal = ExtResource("26_aqrhn")
+texture_normal = ExtResource("34_3ubnk")
 stretch_mode = 3
 
 [node name="Delete" type="TextureButton" parent="Menu/PathControls/HBox"]
 layout_mode = 2
-texture_normal = ExtResource("27_jm1bm")
+texture_normal = ExtResource("35_34sm8")
 stretch_mode = 3
 
 [node name="Playlist" type="Panel" parent="Menu"]
@@ -1849,7 +1521,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("28_ycvea")
+script = ExtResource("36_2if2i")
 metadata/_edit_use_anchors_ = true
 
 [node name="Scroll" type="ScrollContainer" parent="Menu/Playlist"]
@@ -1869,7 +1541,7 @@ theme_override_constants/separation = 2
 self_modulate = Color(1, 1, 1, 0.701961)
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
-script = SubResource("GDScript_pigvm")
+script = ExtResource("37_2q0r0")
 
 [node name="Label" type="Label" parent="Menu/Playlist/Scroll/VBox/Item"]
 self_modulate = Color(1, 1, 1, 0.764706)
@@ -1902,7 +1574,7 @@ grow_horizontal = 0
 grow_vertical = 2
 pivot_offset = Vector2(33, 33)
 mouse_filter = 2
-texture = ExtResource("28_wynws")
+texture = ExtResource("38_xc03m")
 
 [node name="Button" type="TextureButton" parent="Menu/Playlist/Scroll/VBox/Item"]
 layout_mode = 1
@@ -1930,7 +1602,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = SubResource("GDScript_3psro")
+script = ExtResource("39_elhwg")
 
 [node name="Box" type="Control" parent="Menu/AddDelay"]
 self_modulate = Color(0, 1, 1, 1)
@@ -2014,7 +1686,7 @@ offset_right = 540.0
 offset_bottom = -90.0
 grow_horizontal = 2
 grow_vertical = 2
-script = SubResource("GDScript_kgmbj")
+script = ExtResource("40_jjxyt")
 
 [node name="HBox" type="HBoxContainer" parent="Menu/SavePlaylist"]
 layout_mode = 1
@@ -2102,7 +1774,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("29_ui4fx")
+script = ExtResource("41_m8wy6")
 
 [node name="Back" type="TextureButton" parent="Settings"]
 layout_mode = 1
@@ -2112,7 +1784,7 @@ anchor_top = 0.0223958
 anchor_right = 0.199074
 anchor_bottom = 0.0932292
 grow_horizontal = 2
-texture_normal = ExtResource("19_cpmuu")
+texture_normal = ExtResource("27_62j01")
 stretch_mode = 3
 metadata/_edit_use_anchors_ = true
 
@@ -2313,7 +1985,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("30_0ohdi")
+script = ExtResource("42_p7l1i")
 
 [node name="Label" type="Label" parent="AddFile"]
 layout_mode = 1
@@ -2377,7 +2049,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("31_476hc")
+script = ExtResource("43_ypxlb")
 metadata/_edit_use_anchors_ = true
 
 [node name="Scroll" type="ScrollContainer" parent="AddFile/FileList"]
@@ -2393,13 +2065,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 2
 
-[node name="Item" type="Panel" parent="AddFile/FileList/Scroll/VBox"]
+[node name="ScrollItem" type="Panel" parent="AddFile/FileList/Scroll/VBox"]
 self_modulate = Color(1, 1, 1, 0.701961)
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
-script = SubResource("GDScript_rckrg")
+script = ExtResource("44_rs8f6")
 
-[node name="Label" type="Label" parent="AddFile/FileList/Scroll/VBox/Item"]
+[node name="Label" type="Label" parent="AddFile/FileList/Scroll/VBox/ScrollItem"]
 self_modulate = Color(1, 1, 1, 0.764706)
 layout_mode = 1
 anchors_preset = 4
@@ -2414,7 +2086,7 @@ theme_override_font_sizes/font_size = 48
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="Button" type="TextureButton" parent="AddFile/FileList/Scroll/VBox/Item"]
+[node name="Button" type="TextureButton" parent="AddFile/FileList/Scroll/VBox/ScrollItem"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2422,16 +2094,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Timer" type="Timer" parent="AddFile/FileList/Scroll/VBox/Item"]
+[node name="Timer" type="Timer" parent="AddFile/FileList/Scroll/VBox/ScrollItem"]
 wait_time = 0.5
 one_shot = true
 
 [node name="Wifi" type="Sprite2D" parent="."]
+unique_name_in_owner = true
 visible = false
 position = Vector2(1031, 45)
-texture = ExtResource("37_kag8w")
+texture = ExtResource("45_jo84y")
 
 [node name="Splash" type="Panel" parent="."]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -2439,7 +2113,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = SubResource("GDScript_dqjk0")
+script = ExtResource("46_kew6m")
 
 [node name="Label" type="RichTextLabel" parent="Splash"]
 layout_mode = 1
@@ -2512,6 +2186,7 @@ theme_override_font_sizes/font_size = 60
 text = "ACCEPT"
 
 [node name="ConnectingLabel" type="Label" parent="."]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 8

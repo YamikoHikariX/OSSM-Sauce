@@ -1,14 +1,14 @@
 extends Panel
 
-var speed_slider_min_pos:float
-var speed_slider_max_pos:float
-@onready var speed_slider:TextureRect = $SpeedBar/Slider
-@onready var speed_bottom:TextureRect = $SpeedBar/SliderBottom
+var speed_slider_min_pos: float
+var speed_slider_max_pos: float
+@onready var speed_slider: TextureRect = $SpeedBar/Slider
+@onready var speed_bottom: TextureRect = $SpeedBar/SliderBottom
 
-var accel_slider_min_pos:float
-var accel_slider_max_pos:float
-@onready var acceleration_slider:TextureRect = $AccelerationBar/Slider
-@onready var acceleration_bottom:TextureRect = $AccelerationBar/SliderBottom
+var accel_slider_min_pos: float
+var accel_slider_max_pos: float
+@onready var acceleration_slider: TextureRect = $AccelerationBar/Slider
+@onready var acceleration_bottom: TextureRect = $AccelerationBar/SliderBottom
 
 
 func _ready():
@@ -58,9 +58,9 @@ func update_speed():
 			0,
 			owner.max_speed))
 	if owner.connected_to_server:
-		var command:PackedByteArray
+		var command: PackedByteArray
 		command.resize(5)
-		command.encode_u8(0, owner.CommandType.SET_SPEED_LIMIT)
+		command.encode_u8(0, Enums.CommandType.SET_SPEED_LIMIT)
 		command.encode_u32(1, speed_map)
 		owner.websocket.send(command)
 	$LabelTop.text = "Max Speed:\n" + str(speed_map) + " steps/sec"
@@ -74,9 +74,9 @@ func update_acceleration():
 			1000,
 			owner.max_acceleration))
 	if owner.connected_to_server:
-		var command:PackedByteArray
+		var command: PackedByteArray
 		command.resize(5)
-		command.encode_u8(0, owner.CommandType.SET_GLOBAL_ACCELERATION)
+		command.encode_u8(0, Enums.CommandType.SET_GLOBAL_ACCELERATION)
 		command.encode_u32(1, acceleration_map)
 		owner.websocket.send(command)
 	$LabelBot.text = "Acceleration:\n" + str(acceleration_map) + " steps/sec²"
@@ -126,22 +126,22 @@ func acceleration_slider_gui_input(event):
 					slider_position_percent)
 
 
-func tween(activating:bool = true):
+func tween(activating: bool = true):
 	var tween = get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_QUART)
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_parallel()
 	var outside_pos := Vector2(-size.x, position.y)
 	var inside_pos := Vector2(0, outside_pos.y)
-	var positions:Array = [outside_pos, inside_pos]
+	var positions: Array = [outside_pos, inside_pos]
 	if not activating:
 		positions.reverse()
 	tween.tween_method(set_position, position, positions[1], owner.ANIM_TIME)
-	var start_color:Color = $BackTexture.self_modulate
-	var end_color:Color = start_color
+	var start_color: Color = $BackTexture.self_modulate
+	var end_color: Color = start_color
 	start_color.a = 0
 	end_color.a = 1
-	var colors:Array = [start_color, end_color]
+	var colors: Array = [start_color, end_color]
 	if not activating:
 		colors.reverse()
 		$BackButton.hide()

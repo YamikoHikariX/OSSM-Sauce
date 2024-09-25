@@ -1,10 +1,10 @@
 extends Panel
 
-@onready var Item:Panel = $Scroll/VBox/Item
+@onready var Item: Panel = $Scroll/VBox/Item
 
 var selected_index
 
-var drag_delta:float
+var drag_delta: float
 
 
 func _ready():
@@ -34,7 +34,7 @@ func _on_item_selected(item):
 		timer.start()
 
 
-func add_item(item_text:String):
+func add_item(item_text: String):
 	var item = Item.duplicate()
 	item.get_node('Label').text = item_text
 	$Scroll/VBox.add_child(item)
@@ -69,7 +69,7 @@ func move_item(current_index, new_index):
 
 
 func get_items() -> Array:
-	var items:Array
+	var items: Array
 	for item in $Scroll/VBox.get_children():
 		items.append(item.get_node('Label').text)
 	return items

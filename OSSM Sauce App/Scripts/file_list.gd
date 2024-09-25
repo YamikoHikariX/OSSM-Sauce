@@ -1,18 +1,16 @@
 extends Panel
 
-@onready var Item:Panel = $Scroll/VBox/Item
+@onready var scroll_item: Panel = $Scroll/VBox/ScrollItem
 
 var selected_index
 
-var drag_delta:float
+var drag_delta: float
 
-var mode
-enum Mode {
-	PATH,
-	PLAYLIST}
+var mode: Enums.FileListMode
+
 
 func _ready():
-	$Scroll/VBox.remove_child(Item)
+	$Scroll/VBox.remove_child(scroll_item)
 
 func _on_item_selected(item):
 	if drag_delta > 7:
@@ -20,23 +18,23 @@ func _on_item_selected(item):
 	deselect_all()
 	item.select()
 	match mode:
-		Mode.PATH:
+		Enums.FileListMode.PATH:
 			get_parent().get_node('HBox/AddPath').disabled = false
-		Mode.PLAYLIST:
+		Enums.FileListMode.PLAYLIST:
 			get_parent().get_node('HBox/LoadPlaylist').disabled = false
 	selected_index = item.get_index()
 	var timer = item.get_node('Timer')
 	if timer.time_left:
 		match mode:
-			Mode.PATH:
+			Enums.FileListMode.PATH:
 				get_parent()._on_add_path_pressed()
-			Mode.PLAYLIST:
+			Enums.FileListMode.PLAYLIST:
 				get_parent()._on_load_playlist_pressed()
 	else:
 		timer.start()
 
-func add_item(item_text:String):
-	var item = Item.duplicate()
+func add_item(item_text: String):
+	var item = scroll_item.duplicate()
 	item.get_node('Label').text = item_text
 	$Scroll/VBox.add_child(item)
 	var item_button = item.get_node('Button')

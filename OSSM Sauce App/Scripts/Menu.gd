@@ -1,6 +1,6 @@
 extends Panel
 
-@onready var buttons:Array = [
+@onready var buttons: Array = [
 	$PathControls/Up,
 	$PathControls/Down,
 	$PathControls/HBox/Play,
@@ -20,7 +20,7 @@ func _on_Settings_pressed():
 
 
 func _on_Exit_pressed():
-	owner.user_settings.save(owner.cfg_path)
+	owner.user_settings.save(dirs.cfg_path)
 	get_tree().quit()
 
 
@@ -152,26 +152,26 @@ func show_pause():
 	$PathControls.show()
 
 
-func flash_button(button:Node):
+func flash_button(button: Node):
 	var tween = get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_QUART)
 	tween.set_ease(Tween.EASE_OUT)
-	var start_color:Color = Color.DARK_ORANGE
-	var end_color:Color = Color.WHITE
+	var start_color: Color = Color.DARK_ORANGE
+	var end_color: Color = Color.WHITE
 	tween.tween_method(button.set_self_modulate, start_color, end_color, 0.6)
 
 
 const ANIM_TIME = 0.35
-func tween(activating:bool = true):
+func tween(activating: bool = true):
 	var tween = get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_QUART)
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_parallel()
-	var start_color:Color = modulate
-	var end_color:Color = start_color
+	var start_color: Color = modulate
+	var end_color: Color = start_color
 	start_color.a = 0
 	end_color.a = 1
-	var colors:Array = [start_color, end_color]
+	var colors: Array = [start_color, end_color]
 	if activating:
 		refresh_selection()
 	else:
@@ -225,17 +225,17 @@ func select_mode(index):
 	_on_mode_selected(index)
 
 
-func _on_mode_selected(index:int):
-	var mode_id:int = $Main/Mode.get_item_id(index)
+func _on_mode_selected(index: int):
+	var mode_id: int = $Main/Mode.get_item_id(index)
 	owner.app_mode = mode_id
 	owner.user_settings.set_value('app_settings', 'mode', index)
-	owner.send_command(owner.CommandType.RESET)
+	owner.send_command(Enums.CommandType.RESET)
 	owner.home_to(0)
 	if owner.connected_to_ossm:
 		await owner.homing_complete
 	match mode_id:
-		owner.Mode.MOVE:
-			owner.set_physics_process(true)
+		Enums.AppMode.MOVE:
+			# owner.set_physics_process(true)
 			%PositionControls.set_physics_process(false)
 			%LoopControls/In.set_physics_process(false)
 			%LoopControls/Out.set_physics_process(false)
@@ -255,13 +255,13 @@ func _on_mode_selected(index:int):
 				owner.display_active_path_index()
 			refresh_selection()
 		
-		owner.Mode.POSITION:
+		Enums.AppMode.POSITION:
 			owner.paused = true
-			owner.set_physics_process(false)
+			# owner.set_physics_process(false)
 			%LoopControls/In.set_physics_process(false)
 			%LoopControls/Out.set_physics_process(false)
 			var min_pos = %PositionControls.min_range
-			%PositionControls.touch_pos = min_pos
+			%PositionControls.target_pos = min_pos
 			%PositionControls.last_position = 0
 			%PositionControls/MovementBar/Slider.position.y = min_pos
 			%PositionControls.set_physics_process(true)
@@ -280,9 +280,9 @@ func _on_mode_selected(index:int):
 			$Playlist.hide()
 			owner.play()
 		
-		owner.Mode.LOOP:
+		Enums.AppMode.LOOP:
 			owner.paused = true
-			owner.set_physics_process(false)
+			# owner.set_physics_process(false)
 			%PositionControls.set_physics_process(false)
 			var stop_pos = %LoopControls/In.slider_max_pos
 			%LoopControls/In.touch_pos = stop_pos

@@ -8,20 +8,20 @@ func _on_play_button_pressed():
 	$Play/Selection.show()
 	$Timer.start()
 	match owner.app_mode:
-		owner.Mode.MOVE:
+		Enums.AppMode.MOVE:
 			if owner.active_path_index != null:
 				owner.play()
 				$Play.hide()
 				$Pause/Selection.show()
 				$Pause.show()
-		owner.Mode.LOOP:
+		Enums.AppMode.LOOP:
 			%LoopControls.active = true
 			owner.play()
 			%LoopControls/Pause.hide()
 			$Play.hide()
 			$Pause/Selection.show()
 			$Pause.show()
-		owner.Mode.POSITION:
+		Enums.AppMode.POSITION:
 			%PositionControls.set_physics_process(true)
 			%PositionControls.set_process_input(true)
 			owner.play()
@@ -32,7 +32,7 @@ func _on_play_button_pressed():
 
 func _on_pause_button_pressed():
 	match owner.app_mode:
-		owner.Mode.MOVE:
+		Enums.AppMode.MOVE:
 			clear_selections()
 			self_modulate.a = 1.2
 			%CircleSelection.hide_and_reset()
@@ -42,14 +42,14 @@ func _on_pause_button_pressed():
 			$Pause.hide()
 			$Play/Selection.show()
 			$Play.show()
-		owner.Mode.LOOP:
+		Enums.AppMode.LOOP:
 			owner.pause()
 			%LoopControls.active = false
 			%LoopControls/Pause.show()
 			$Play.show()
 			$Play/Selection.show()
 			$Pause.hide()
-		owner.Mode.POSITION:
+		Enums.AppMode.POSITION:
 			%PositionControls.set_physics_process(false)
 			%PositionControls.set_process_input(false)
 			owner.pause()

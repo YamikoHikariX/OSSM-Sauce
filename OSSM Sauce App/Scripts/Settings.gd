@@ -6,7 +6,7 @@ extends Panel
 func _ready():
 	if OS.get_name() == "Android":
 		$Window.hide()
-	var numeric_inputs:Array = [
+	var numeric_inputs: Array = [
 		$Network/Port/TextEdit,
 		$Sliders/MaxSpeed/TextEdit,
 		$Sliders/MaxAcceleration/TextEdit]
@@ -15,9 +15,9 @@ func _ready():
 
 
 func _on_connect_pressed():
-	var server_address:String = address_input.text
-	var address:String
-	var port:String = "120"
+	var server_address: String = address_input.text
+	var address: String
+	var port: String = "120"
 	if ':' in server_address:
 		var sections = server_address.split(':')
 		address = sections[0]
@@ -36,11 +36,11 @@ func _on_get_range_pressed():
 
 func _on_network_address_text_changed():
 	if "\n" in address_input.text:
-		address_input.text = address_input.text.replace("\n","")
+		address_input.text = address_input.text.replace("\n", "")
 		_on_connect_pressed()
 
 
-func _on_numeric_input_changed(input_node:Node):
+func _on_numeric_input_changed(input_node: Node):
 	var regex = RegEx.new()
 	regex.compile("[^0-9]")
 	var filtered_text = regex.sub(input_node.text, "", true)
@@ -86,9 +86,9 @@ func _on_acceleration_input_changed():
 
 func send_homing_speed():
 	if owner.connected_to_server:
-		var command:PackedByteArray
+		var command: PackedByteArray
 		command.resize(5)
-		command.encode_u32(0, owner.CommandType.SET_HOMING_SPEED)
+		command.encode_u32(0, Enums.CommandType.SET_HOMING_SPEED)
 		command.encode_u32(1, $HomingSpeed/SpinBox.value)
 		owner.websocket.send(command)
 

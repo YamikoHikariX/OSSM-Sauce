@@ -1,10 +1,10 @@
 extends Panel
 
-var min_range_pos:float
-var max_range_pos:float
+var min_range_pos: float
+var max_range_pos: float
 
-@onready var min_slider:TextureRect = $RangeBar/MinSlider
-@onready var max_slider:TextureRect = $RangeBar/MaxSlider
+@onready var min_slider: TextureRect = $RangeBar/MinSlider
+@onready var max_slider: TextureRect = $RangeBar/MaxSlider
 
 
 func _ready():
@@ -46,9 +46,9 @@ func update_min_range():
 	owner.user_settings.set_value('range_slider_min', 'position_percent', percent)
 	if owner.connected_to_server:
 		const MIN_RANGE = 0
-		var command:PackedByteArray
+		var command: PackedByteArray
 		command.resize(4)
-		command.encode_u8(0, owner.CommandType.SET_RANGE_LIMIT)
+		command.encode_u8(0, Enums.CommandType.SET_RANGE_LIMIT)
 		command.encode_u8(1, MIN_RANGE)
 		command.encode_u16(2, range_map)
 		owner.websocket.send(command)
@@ -63,9 +63,9 @@ func update_max_range():
 	owner.user_settings.set_value('range_slider_max', 'position_percent', percent)
 	if owner.connected_to_server:
 		const MAX_RANGE = 1
-		var command:PackedByteArray
+		var command: PackedByteArray
 		command.resize(4)
-		command.encode_u8(0, owner.CommandType.SET_RANGE_LIMIT)
+		command.encode_u8(0, Enums.CommandType.SET_RANGE_LIMIT)
 		command.encode_u8(1, MAX_RANGE)
 		command.encode_u16(2, range_map)
 		owner.websocket.send(command)
@@ -95,7 +95,7 @@ func set_max_slider_pos(percent):
 	update_max_range()
 
 
-func tween(activating:bool = true):
+func tween(activating: bool = true):
 	var tween = get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_QUART)
 	tween.set_ease(Tween.EASE_OUT)
@@ -104,16 +104,16 @@ func tween(activating:bool = true):
 	var viewport_middle = get_viewport_rect().size.x / 2
 	var outside_pos := Vector2(viewport_right_edge, position.y)
 	var inside_pos := Vector2(viewport_middle, outside_pos.y)
-	var positions:Array = [outside_pos, inside_pos]
+	var positions: Array = [outside_pos, inside_pos]
 	if not activating:
 		positions.reverse()
 	tween.tween_method(set_position, position, positions[1], owner.ANIM_TIME)
 	var back = $BackTexture
-	var start_color:Color = $BackTexture.self_modulate
-	var end_color:Color = start_color
+	var start_color: Color = $BackTexture.self_modulate
+	var end_color: Color = start_color
 	start_color.a = 0
 	end_color.a = 1
-	var colors:Array = [start_color, end_color]
+	var colors: Array = [start_color, end_color]
 	if not activating:
 		colors.reverse()
 		$BackButton.hide()
