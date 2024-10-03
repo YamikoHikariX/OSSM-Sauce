@@ -19,8 +19,10 @@ config/windows_native_icon="res://S-curve.ico"
 
 [autoload]
 
+Main="*res://globals/Main.gd"
 Enums="*res://globals/Enums.gd"
-dirs="*res://globals/Dirs.gd"
+Dirs="*res://globals/Dirs.gd"
+UserSettings="*res://globals/UserSettings.gd"
 
 [display]
 

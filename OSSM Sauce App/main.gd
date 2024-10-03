@@ -4,9 +4,8 @@ var app_version_number: String = "1.1.0"
 
 const ANIM_TIME = 0.65
 
-var user_settings := ConfigFile.new()
-
 var websocket = WebSocketPeer.new()
+var xtoys_websocket = WebSocketPeer.new()
 
 var connected_to_server: bool
 var connected_to_ossm: bool
@@ -43,18 +42,22 @@ signal homing_complete
 var position_drag: float = 0.0
 var position_axis: float = 0.0
 
-signal gamepad_position_axis(axis: float)
-signal gamepad_position_drag(position: float)
+signal gamepad_stick_input(position: float)
+signal gamepad_axis_input(axis: float)
 
 func _init():
+    Main.node = self
+
     max_speed = 25000
     max_acceleration = 500000
 
 
 func _ready():
+    xtoys_websocket.connect_to_url("wss://webhook.xtoys.app/56rrHim4ouVh")
+
     var physics_ticks_setting_path = "physics/common/physics_ticks_per_second"
     ticks_per_second = ProjectSettings.get_setting(physics_ticks_setting_path)
-    set_process(false)
+    # set_process(false)
     %PositionControls.set_physics_process(false)
     
     min_stroke_duration = %Menu/LoopSettings/MinStrokeDuration/SpinBox.value
@@ -63,26 +66,15 @@ func _ready():
     max_speed = int(%Settings/Sliders/MaxSpeed/TextEdit.text)
     max_acceleration = int(%Settings/Sliders/MaxAcceleration/TextEdit.text)
     
-    if OS.get_name() == 'Android':
-        dirs.storage_dir = OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP)
-    else:
-        dirs.storage_dir = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)
-    dirs.paths_dir = dirs.storage_dir + "/OSSM Sauce/Paths/"
-    dirs.playlists_dir = dirs.storage_dir + "/OSSM Sauce/Playlists/"
-    dirs.cfg_path = dirs.storage_dir + "/OSSM Sauce/UserSettings.cfg"
-    
     for node in [%Menu, %Settings, %SpeedPanel, %RangePanel]:
         node.self_modulate.a = 1.65
     
     %PathDisplay/Ball.position.x = %PathDisplay/PathArea.size.x / 2
     
     check_root_directory()
-    apply_user_settings()
-    
+
+    UserSettings.restore_window_size()
     center_window()
-
-    # for joypad in Input.get_connected_joypads():
-
 
 func center_window():
     if OS.get_name() != 'Android':
@@ -110,10 +102,10 @@ func handle_position_mode_gamepad_input():
     position_drag = Input.get_axis("position_in", "position_out")
     position_drag = position_drag if abs(position_drag) > 0.02 else 0.0
     if not (previous_position_drag == 0.0 and position_drag == previous_position_drag): 
-        gamepad_position_drag.emit(position_drag)
+        gamepad_stick_input.emit(position_drag)
         previous_position_drag = position_drag
     if not (previous_position_axis == 0.0 and position_axis == previous_position_axis):
-        gamepad_position_axis.emit(position_axis)
+        gamepad_axis_input.emit(position_axis)
         previous_position_axis = position_axis
 
 func handle_path_mode_physics():
@@ -164,11 +156,39 @@ func handle_path_mode_physics():
     %PathDisplay/Ball.position.y = render_depth(depth)
 
 func _process(_delta):
+    xtoys_websocket.poll()
+    var xtoys_state = xtoys_websocket.get_ready_state()
+
+    if xtoys_state == WebSocketPeer.STATE_OPEN:
+        if app_mode == Enums.AppMode.LOOP:
+            if xtoys_websocket.get_available_packet_count() > 0:
+                var packet: PackedByteArray = xtoys_websocket.get_packet()
+                if xtoys_websocket.was_string_packet():
+                    var message: String = packet.get_string_from_utf8()
+                    var json: JSON = JSON.new()
+                    json.parse(message)
+                    var data = json.data
+                    print(data)
+
+                    if data.has("action") and data["action"] == "SetBPM":
+                        if data.has("BPM"):
+                            var bpm = data["BPM"].to_float()
+                            %LoopControls.set_loop_bpm(bpm)
+                    
+                    # Process "SetDepth" action
+                    if data.has("action") and data["action"] == "SetDepth":
+                        if data.has("depth"):
+                            var depth = data["depth"].to_float()
+                            %RangePanel.update_max_range(depth)
+
+    
+
+
     websocket.poll()
     var state = websocket.get_ready_state()
     if state == WebSocketPeer.STATE_OPEN:
         if not connected_to_server:
-            user_settings.set_value(
+            UserSettings.cfg.set_value(
                 'app_settings',
                 'last_server_connection',
                 %Settings/Network/Address/TextEdit.text)
@@ -219,9 +239,8 @@ func _process(_delta):
         var text = "Webwebsocket closed with code: %d, reason %s. Clean: %s"
         print(text % [code, reason, code != -1])
         connected_to_server = false
-        set_process(false)
+        # set_process(false)
         %Wifi.hide()
-
 
 func send_command(value: int):
     if connected_to_server:
@@ -278,7 +297,7 @@ func pause():
 
 
 func check_root_directory():
-    var root_dir = DirAccess.open(dirs.storage_dir)
+    var root_dir = DirAccess.open(Dirs.storage_dir)
     if not root_dir.dir_exists("OSSM Sauce"):
         root_dir.make_dir("OSSM Sauce")
     root_dir.change_dir("OSSM Sauce")
@@ -288,129 +307,23 @@ func check_root_directory():
 
 
 func apply_user_settings():
-    user_settings.load(dirs.cfg_path)
+    UserSettings.load()
     
-    var cfg_version_number = user_settings.get_value(
-            'app_settings',
-            'version_number',
-            "")
-    if cfg_version_number != app_version_number:
-        user_settings.clear()
-        user_settings.set_value(
-                'app_settings',
-                'version_number',
-                app_version_number)
-        user_settings.save(dirs.cfg_path)
+    UserSettings.update_version()
     
-    if OS.get_name() != 'Android':
-        if user_settings.has_section_key('window', 'size'):
-            DisplayServer.window_set_size(
-                    user_settings.get_value('window', 'size'))
-        if user_settings.has_section_key('window', 'always_on_top'):
-            var checkbox = %Settings/Window/AlwaysOnTop/CheckBox
-            checkbox.button_pressed = user_settings.get_value(
-                    'window',
-                    'always_on_top')
-        if user_settings.has_section_key('window', 'transparent_background'):
-            var checkbox = %Settings/Window/TransparentBg/CheckBox
-            checkbox.button_pressed = user_settings.get_value(
-                    'window',
-                    'transparent_background')
+    UserSettings.restore_window_size()
     
-    if user_settings.get_value('app_settings', 'show_splash', true):
-        %Splash.show()
+    UserSettings.start_server_connection()
     
-    if user_settings.has_section_key('app_settings', 'last_server_connection'):
-        %Settings/Network/Address/TextEdit.text = user_settings.get_value(
-                'app_settings',
-                'last_server_connection')
-        %ActionPanel.hide()
-        %ConnectingLabel.show()
-        %Settings._on_connect_pressed()
-        ossm_connection_timeout.start()
-        await ossm_connection_timeout.timeout
-        %ActionPanel.show()
-        %ConnectingLabel.hide()
+    UserSettings.load_saved_settings()
     
-    if user_settings.has_section_key('speed_slider', 'max_speed'):
-        %Settings.set_max_speed(
-                user_settings.get_value('speed_slider', 'max_speed'))
+    UserSettings.draw_easing()
     
-    if user_settings.has_section_key('accel_slider', 'max_acceleration'):
-        %Settings.set_max_acceleration(
-                user_settings.get_value('accel_slider', 'max_acceleration'))
-    
-    if user_settings.has_section_key('speed_slider', 'position_percent'):
-        %SpeedPanel.set_speed_slider_pos(
-                user_settings.get_value('speed_slider', 'position_percent'))
-    else:
-        %SpeedPanel.set_speed_slider_pos(0.6)
-    
-    if user_settings.has_section_key('accel_slider', 'position_percent'):
-        %SpeedPanel.set_acceleration_slider_pos(
-                user_settings.get_value('accel_slider', 'position_percent'))
-    else:
-        %SpeedPanel.set_acceleration_slider_pos(0.4)
-    
-    if user_settings.has_section_key('range_slider_min', 'position_percent'):
-        %RangePanel.set_min_slider_pos(
-                user_settings.get_value('range_slider_min', 'position_percent'))
-    else:
-        %RangePanel.set_min_slider_pos(0)
-    
-    if user_settings.has_section_key('range_slider_max', 'position_percent'):
-        %RangePanel.set_max_slider_pos(
-                user_settings.get_value('range_slider_max', 'position_percent'))
-    else:
-        %RangePanel.set_max_slider_pos(1)
-    
-    if user_settings.has_section_key('device_settings', 'homing_speed'):
-        %Settings/HomingSpeed/SpinBox.set_value(
-                user_settings.get_value('device_settings', 'homing_speed'))
-        %Settings.send_homing_speed()
-    
-    if user_settings.has_section_key('app_settings', 'smoothing_slider'):
-        %PositionControls/Smoothing/HSlider.set_value(
-                user_settings.get_value('app_settings', 'smoothing_slider'))
-    
-    if user_settings.has_section_key('stroke_settings', 'min_duration'):
-        %Menu.set_min_stroke_duration(
-                user_settings.get_value('stroke_settings', 'min_duration'))
-    
-    if user_settings.has_section_key('stroke_settings', 'max_duration'):
-        %Menu.set_max_stroke_duration(
-                user_settings.get_value('stroke_settings', 'max_duration'))
-    
-    if user_settings.has_section_key('stroke_settings', 'display_mode'):
-        %Menu.set_stroke_duration_display_mode(
-                user_settings.get_value('stroke_settings', 'display_mode'))
-    
-    if user_settings.has_section_key('stroke_settings', 'in_trans'):
-        %LoopControls/In/AccelerationControls/Transition.select(
-                user_settings.get_value('stroke_settings', 'in_trans'))
-    
-    if user_settings.has_section_key('stroke_settings', 'in_ease'):
-        %LoopControls/In/AccelerationControls/Easing.select(
-                user_settings.get_value('stroke_settings', 'in_ease'))
-    
-    if user_settings.has_section_key('stroke_settings', 'out_trans'):
-        %LoopControls/Out/AccelerationControls/Transition.select(
-                user_settings.get_value('stroke_settings', 'out_trans'))
-    
-    if user_settings.has_section_key('stroke_settings', 'out_ease'):
-        %LoopControls/Out/AccelerationControls/Easing.select(
-                user_settings.get_value('stroke_settings', 'out_ease'))
-    
-    %LoopControls.draw_easing()
-    
-    if user_settings.has_section_key('app_settings', 'mode'):
-        %Menu.select_mode(user_settings.get_value('app_settings', 'mode'))
-    else:
-        %Menu.select_mode(0)
+    UserSettings.select_app_mode()
     
 
 func load_path(file_name: String) -> bool:
-    var file = FileAccess.open(dirs.paths_dir + file_name, FileAccess.READ)
+    var file = FileAccess.open(Dirs.paths_dir + file_name, FileAccess.READ)
     if not file:
         return false
     var file_data = JSON.parse_string(file.get_line())
@@ -536,12 +449,12 @@ func render_depth(depth) -> float:
 func _on_window_size_changed():
     if OS.get_name() != "Android":
         var window_size = DisplayServer.window_get_size()
-        user_settings.set_value('window', 'size', window_size)
+        UserSettings.cfg.set_value('window', 'size', window_size)
 
 
 func _notification(what):
     if what == NOTIFICATION_WM_CLOSE_REQUEST:
-        user_settings.save(dirs.cfg_path)
+        UserSettings.cfg.save(Dirs.cfg_path)
         if connected_to_server:
             const MIN_RANGE = 0
             var command: PackedByteArray

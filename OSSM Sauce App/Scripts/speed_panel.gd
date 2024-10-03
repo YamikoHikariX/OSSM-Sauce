@@ -25,6 +25,16 @@ func _ready():
 	accel_slider_max_pos = acceleration_slider.position.y
 	accel_slider_min_pos = acceleration_bottom.position.y
 
+	if UserSettings.cfg.has_section_key('speed_slider', 'position_percent'):
+		set_speed_slider_pos(UserSettings.cfg.get_value('speed_slider', 'position_percent'))
+	else:
+		set_speed_slider_pos(0.6)
+
+	if UserSettings.cfg.has_section_key('accel_slider', 'position_percent'):
+		set_acceleration_slider_pos(UserSettings.cfg.get_value('accel_slider', 'position_percent'))
+	else:
+		set_acceleration_slider_pos(0.4)
+
 
 func set_speed_slider_pos(percent):
 	var slider_map = remap(
@@ -34,7 +44,7 @@ func set_speed_slider_pos(percent):
 			speed_slider_min_pos,
 			speed_slider_max_pos)
 	speed_slider.position.y = slider_map
-	owner.user_settings.set_value('speed_slider', 'position_percent', percent)
+	UserSettings.cfg.set_value('speed_slider', 'position_percent', percent)
 	update_speed()
 
 
@@ -46,7 +56,7 @@ func set_acceleration_slider_pos(percent):
 			accel_slider_min_pos,
 			accel_slider_max_pos)
 	acceleration_slider.position.y = slider_map
-	owner.user_settings.set_value('accel_slider', 'position_percent', percent)
+	UserSettings.cfg.set_value('accel_slider', 'position_percent', percent)
 	update_acceleration()
 
 
@@ -98,7 +108,7 @@ func speed_slider_gui_input(event):
 					speed_slider_max_pos,
 					0,
 					1)
-			owner.user_settings.set_value(
+			UserSettings.cfg.set_value(
 					'speed_slider',
 					'position_percent',
 					slider_position_percent)
@@ -120,7 +130,7 @@ func acceleration_slider_gui_input(event):
 					speed_slider_max_pos,
 					0,
 					1)
-			owner.user_settings.set_value(
+			UserSettings.cfg.set_value(
 					'accel_slider',
 					'position_percent',
 					slider_position_percent)

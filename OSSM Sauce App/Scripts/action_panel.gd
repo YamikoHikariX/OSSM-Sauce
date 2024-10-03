@@ -1,6 +1,10 @@
 extends Panel
 
 
+func _ready() -> void:
+	if UserSettings.cfg.has_section_key('app_settings', 'last_server_connection'):
+		hide()
+
 func _on_play_button_pressed():
 	clear_selections()
 	self_modulate.a = 1.2
@@ -46,6 +50,7 @@ func _on_pause_button_pressed():
 			owner.pause()
 			%LoopControls.active = false
 			%LoopControls/Pause.show()
+			%LoopControls.set_loop_bpm(0)
 			$Play.show()
 			$Play/Selection.show()
 			$Pause.hide()

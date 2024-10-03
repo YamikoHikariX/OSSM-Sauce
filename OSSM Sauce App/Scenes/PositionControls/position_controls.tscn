@@ -1,0 +1,91 @@
+[gd_scene load_steps=5 format=3 uid="uid://b21w1uepu2r7m"]
+
+[ext_resource type="Script" path="res://Scenes/PositionControls/position_controls.gd" id="1_cam35"]
+[ext_resource type="Texture2D" uid="uid://du8j273r744tn" path="res://Textures/Straight.svg" id="2_llkis"]
+[ext_resource type="Texture2D" uid="uid://bm14gbhhm3uqb" path="res://Textures/Smooth.svg" id="3_p2hsp"]
+[ext_resource type="PackedScene" uid="uid://upbk6seiqbg0" path="res://Scenes/SliderBar/slider_bar.tscn" id="4_ih4c6"]
+
+[node name="PositionControls" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -185.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cam35")
+
+[node name="Smoothing" type="Control" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(860, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -430.0
+offset_right = 430.0
+offset_bottom = 160.0
+grow_horizontal = 2
+
+[node name="HSlider" type="HSlider" parent="Smoothing"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -60.0
+offset_right = 210.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.5, 1.5)
+pivot_offset = Vector2(210, 60)
+min_value = 0.05
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="Straight" type="TextureRect" parent="Smoothing"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -40.0
+offset_right = 86.0
+offset_bottom = 40.0
+grow_vertical = 2
+texture = ExtResource("2_llkis")
+
+[node name="Smooth" type="TextureRect" parent="Smoothing"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -86.0
+offset_top = -40.5
+offset_bottom = 40.5
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("3_p2hsp")
+
+[node name="PositionBar" parent="." node_paths=PackedStringArray("smoothing_slider") instance=ExtResource("4_ih4c6")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -86.0
+offset_top = -665.0
+offset_right = 86.0
+offset_bottom = 783.0
+grow_horizontal = 2
+grow_vertical = 2
+smoothing_slider = NodePath("../Smoothing/HSlider")
+
+[connection signal="value_changed" from="Smoothing/HSlider" to="." method="_on_smoothing_slider_value_changed"]

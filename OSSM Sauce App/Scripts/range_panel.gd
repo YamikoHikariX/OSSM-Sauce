@@ -18,6 +18,17 @@ func _ready():
 	min_range_pos = min_slider.position.y
 	max_range_pos = max_slider.position.y
 
+	if UserSettings.cfg.has_section_key('range_slider_min', 'position_percent'):
+		set_min_slider_pos(UserSettings.cfg.get_value('range_slider_min', 'position_percent'))
+	else:
+		set_min_slider_pos(0)
+
+	if UserSettings.cfg.has_section_key('range_slider_max', 'position_percent'):
+		set_max_slider_pos(UserSettings.cfg.get_value('range_slider_max', 'position_percent'))
+	else:
+		set_max_slider_pos(1)
+
+
 
 func min_slider_gui_input(event):
 	if 'relative' in event and event is InputEventMouseMotion:
@@ -43,7 +54,7 @@ func update_min_range():
 	var slider_pos = min_slider.position.y
 	var range_map = remap(slider_pos, min_range_pos, max_range_pos, 0, 10000)
 	var percent = remap(slider_pos, min_range_pos, max_range_pos, 0, 1)
-	owner.user_settings.set_value('range_slider_min', 'position_percent', percent)
+	UserSettings.cfg.set_value('range_slider_min', 'position_percent', percent)
 	if owner.connected_to_server:
 		const MIN_RANGE = 0
 		var command: PackedByteArray
@@ -56,11 +67,15 @@ func update_min_range():
 	$LabelBot.text = "Min Position:\n" + text_value + "%"
 
 
-func update_max_range():
+func update_max_range(position: float = 0):
 	var slider_pos = max_slider.position.y
 	var range_map = remap(slider_pos, min_range_pos, max_range_pos, 0, 10000)
+	if position:
+		range_map = remap(position, 0, 100, 0, 10000)
+		print("Custom position: ", position)
+		print("Custom Range Map: ", range_map)
 	var percent = remap(slider_pos, min_range_pos, max_range_pos, 0, 1)
-	owner.user_settings.set_value('range_slider_max', 'position_percent', percent)
+	UserSettings.cfg.set_value('range_slider_max', 'position_percent', percent)
 	if owner.connected_to_server:
 		const MAX_RANGE = 1
 		var command: PackedByteArray
@@ -141,7 +156,7 @@ func _on_back_button_pressed():
 		update_max_range()
 		%CircleSelection.show_hourglass()
 		%PositionControls.modulate.a = 0.05
-		owner.home_to(%PositionControls.last_position)
+		owner.home_to(%PositionControls/PositionBar.last_position)
 	$BackButton.hide()
 	tween(false)
 	%ActionPanel.show()

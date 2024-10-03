@@ -54,58 +54,61 @@ void initializeMotor() {
   Serial.println(TICKS_PER_S);
 }
 
-
+const int deltaSampleLength = 6000;
+const int outliersAvgSize = 40;
 int powerSampleSize = 10;
-float stdDevMultiplier = 0.333;
 
-float powerEMA;
-float powerEMASmooth;
-float powerEMADoubleSmooth;
-float getPowerReading() {
+float EMA10 = 0;
+float EMARange = 0;
+
+float powerEMA = 0;
+float powerEMASmooth = 0;
+float powerEMADoubleSmooth = 0;
+
+bool powerSpikeTriggered = false;
+
+float deltaArray[deltaSampleLength];
+
+void getPowerReading(bool takeDeltaSample = false, int deltaSampleIndex = 0) {
   float sum;
-  float average;
-  float sample;
-  float percentage;
-  float standardDeviation;
-  float readings[powerSampleSize];
-  for (int i = 0; i < powerSampleSize; i++) {
-    sample = analogRead(powerSensorPin);
-    sum += sample;
-    readings[i] = sample;
-  }
-  average = sum / powerSampleSize;
+  for (int i = 0; i < powerSampleSize; i++)
+    sum += analogRead(powerSensorPin);
+  float sampleAverage = sum / powerSampleSize;
 
-  sum = 0.0;
-  for (int i = 0; i < powerSampleSize; i++) {
-      sum += pow(readings[i] - average, 2);
-  }
-  standardDeviation = sqrt(sum / powerSampleSize);
+  EMA10 = ((sampleAverage - EMA10) * 0.1) + EMA10;
 
-  powerEMA = ((average + (standardDeviation * stdDevMultiplier) - powerEMA) * 0.02) + powerEMA;
+  powerEMA = ((sampleAverage - powerEMA) * 0.02) + powerEMA;
   powerEMASmooth = ((powerEMA - powerEMASmooth) * 0.02) + powerEMASmooth;
   powerEMADoubleSmooth = ((powerEMASmooth - powerEMADoubleSmooth) * 0.01) + powerEMADoubleSmooth;
 
+  if (takeDeltaSample) {
+    deltaArray[deltaSampleIndex] = EMA10 - powerEMADoubleSmooth;
+  }
+
   /*
-  Serial.print(average);
+  Serial.print(sampleAverage);
   Serial.print(", ");
-  Serial.println(powerEMADoubleSmooth);
+  Serial.print(powerEMADoubleSmooth);
+  Serial.print(", ");
+  Serial.print(EMA10);
+  Serial.print(", ");
+  Serial.println(powerEMADoubleSmooth + EMARange);
   */
-  return average;
+
+  if (EMA10 > powerEMADoubleSmooth + EMARange) {
+    powerSpikeTriggered = true;
+  }
 }
 
-
+float rangeSum = 0;
 void sensorlessHoming() {
   Serial.println("");
-  Serial.println("Beginning sensorless homing...");
+  Serial.println("Scanning for power consumption variance...");
+  Serial.println("");
+
   powerEMA = 0;
   powerEMASmooth = 0;
   powerEMADoubleSmooth = 0;
-  float avgPower;
-
-  //stabilize EMA
-  for (int i = 0; i < 1200; i++) {
-      getPowerReading();
-  }
 
   //relax motor
   digitalWrite(enablePinStepper, HIGH);
@@ -116,24 +119,72 @@ void sensorlessHoming() {
   stepper->setAcceleration(160000);
   stepper->setSpeedInUs(1800);
 
+  //stabilize EMA
+  for (int i = 0; i < 1200; i++) {
+    getPowerReading();
+  }
+
+  for (int i = 0; i < 5000; i++) {
+    getPowerReading(true, i);
+  }
+
+  // bubble sort samples ascending
+  for (int i = 0; i < deltaSampleLength - 1; i++) {
+    for (int j = 0; j < deltaSampleLength - i - 1; j++) {
+      if (deltaArray[j] > deltaArray[j + 1]) {
+        float temp = deltaArray[j];
+        deltaArray[j] = deltaArray[j + 1];
+        deltaArray[j + 1] = temp;
+      }
+    }
+  }
+
+  float outliersAvgLow = 0;
+  for (int i = 0; i < outliersAvgSize; i++) {
+    outliersAvgLow += deltaArray[i];
+  }
+  outliersAvgLow = outliersAvgLow / outliersAvgSize;
+
+  float outliersAvgHigh = 0;
+  for (int i = 1; i < outliersAvgSize; i++) {
+    outliersAvgHigh += deltaArray[deltaSampleLength - i];
+  }
+  outliersAvgHigh = outliersAvgHigh / outliersAvgSize;
+
+  EMARange = outliersAvgHigh - outliersAvgLow;
+
+  for (int i = 0; i < 50; i++) {
+    getPowerReading();
+  }
+
+  EMA10 = powerEMADoubleSmooth;
+
+  Serial.println("");
+  Serial.println("Beginning sensorless homing...");
+  Serial.println("");
+
   //find physical maximum limit
+  powerSpikeTriggered = false;
   int limitPhysicalMax;
+
   stepper->runForward();
-  avgPower = getPowerReading();
-  while (avgPower < powerEMADoubleSmooth) {
-    avgPower = getPowerReading();
+  while (!powerSpikeTriggered) {
+    getPowerReading();
   }
   stepper->stopMove();
   limitPhysicalMax = stepper->getCurrentPosition();
+  EMA10 = powerEMADoubleSmooth;
+  stepper->move(-50);
 
-  delay(200);
+  delay(600);
 
   //find physical minimum limit
+  powerSpikeTriggered = false;
   int limitPhysicalMin;
+
   stepper->runBackward();
-  avgPower = getPowerReading();
-  while (avgPower < powerEMADoubleSmooth) {
-    avgPower = getPowerReading();
+  while (!powerSpikeTriggered) {
+    getPowerReading();
   }
   stepper->stopMove();
   limitPhysicalMin = stepper->getCurrentPosition();

@@ -15,7 +15,7 @@ func show_paths():
 	$HBox/AddPath.disabled = true
 	$HBox/AddPath.show()
 	$HBox/LoadPlaylist.hide()
-	create_file_list(dirs.paths_dir, ".bx")
+	create_file_list(Dirs.paths_dir, ".bx")
 	if OS.get_name() == 'Android':
 		$Label.text = "Internal Storage/OSSM Sauce/Paths"
 	else:
@@ -29,7 +29,7 @@ func show_playlists():
 	$HBox/LoadPlaylist.disabled = true
 	$HBox/LoadPlaylist.show()
 	$HBox/AddPath.hide()
-	create_file_list(dirs.playlists_dir, ".bxpl")
+	create_file_list(Dirs.playlists_dir, ".bxpl")
 	if OS.get_name() == 'Android':
 		$Label.text = "Internal Storage/OSSM Sauce/Playlists"
 	else:
@@ -50,7 +50,7 @@ func _on_add_path_pressed():
 
 func _on_load_playlist_pressed():
 	var file_name: String = $FileList.get_item_text($FileList.selected_index)
-	var file = FileAccess.open(dirs.playlists_dir + file_name, FileAccess.READ)
+	var file = FileAccess.open(Dirs.playlists_dir + file_name, FileAccess.READ)
 	if not file:
 		return
 	%Menu/Playlist.clear()

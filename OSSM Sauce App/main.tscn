@@ -1,12 +1,10 @@
-[gd_scene load_steps=55 format=3 uid="uid://d3cq3b5o0feo0"]
+[gd_scene load_steps=52 format=3 uid="uid://d3cq3b5o0feo0"]
 
 [ext_resource type="Theme" uid="uid://dqhnc02ffxjr2" path="res://Theme.tres" id="1_vq4js"]
 [ext_resource type="Script" path="res://main.gd" id="2_jo8ih"]
 [ext_resource type="Script" path="res://Scripts/path_area.gd" id="3_py3xv"]
 [ext_resource type="Texture2D" uid="uid://da3nxjs8pqcoy" path="res://Textures/Dot Small.svg" id="4_omejw"]
-[ext_resource type="Script" path="res://Scripts/position_controls.gd" id="5_5h8ag"]
-[ext_resource type="Texture2D" uid="uid://du8j273r744tn" path="res://Textures/Straight.svg" id="6_ngul0"]
-[ext_resource type="Texture2D" uid="uid://bm14gbhhm3uqb" path="res://Textures/Smooth.svg" id="7_i5p2j"]
+[ext_resource type="PackedScene" uid="uid://b21w1uepu2r7m" path="res://Scenes/PositionControls/position_controls.tscn" id="5_d77dx"]
 [ext_resource type="Texture2D" uid="uid://cb703kraugp85" path="res://Textures/S32.svg" id="8_vohcf"]
 [ext_resource type="Texture2D" uid="uid://cnyl16jr7jd8g" path="res://Textures/Dot.svg" id="9_al0ah"]
 [ext_resource type="Script" path="res://Scripts/loop_controls.gd" id="10_gmb8f"]
@@ -45,24 +43,8 @@
 [ext_resource type="Script" path="res://Scripts/file_list.gd" id="43_ypxlb"]
 [ext_resource type="Script" path="res://Scripts/scroll_item.gd" id="44_rs8f6"]
 [ext_resource type="Texture2D" uid="uid://c0bgeto1j6das" path="res://Textures/wifi.svg" id="45_jo84y"]
+[ext_resource type="Script" path="res://Scripts/connecting_label.gd" id="45_ndop1"]
 [ext_resource type="Script" path="res://Scripts/splash.gd" id="46_kew6m"]
-
-[sub_resource type="GDScript" id="GDScript_xugi5"]
-script/source = "extends TextureRect
-
-
-func _process(delta: float) -> void:
-	position.y = %PositionControls.target_pos + %PositionControls.deviation
-	#position.y = clamp(position.y, %PositionControls.max_range, %PositionControls.min_range)
-"
-
-[sub_resource type="GDScript" id="GDScript_1dy6y"]
-script/source = "extends TextureRect
-
-
-func _process(delta: float) -> void:
-	position.y = %PositionControls.target_pos
-"
 
 [sub_resource type="Animation" id="Animation_il416"]
 length = 0.001
@@ -183,154 +165,9 @@ self_modulate = Color(1, 0.384314, 0.47451, 1)
 position = Vector2(540, 960)
 texture = ExtResource("4_omejw")
 
-[node name="PositionControls" type="Control" parent="."]
+[node name="PositionControls" parent="." instance=ExtResource("5_d77dx")]
 unique_name_in_owner = true
 layout_mode = 1
-anchor_right = 1.0
-anchor_bottom = 0.898958
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("5_5h8ag")
-metadata/_edit_use_anchors_ = true
-
-[node name="Smoothing" type="Control" parent="PositionControls"]
-custom_minimum_size = Vector2(860, 0)
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -430.0
-offset_right = 430.0
-offset_bottom = 160.0
-grow_horizontal = 2
-
-[node name="HSlider" type="HSlider" parent="PositionControls/Smoothing"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -210.0
-offset_top = -60.0
-offset_right = 210.0
-offset_bottom = 60.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(1.5, 1.5)
-pivot_offset = Vector2(210, 60)
-min_value = 0.5
-max_value = 20.0
-step = 0.5
-value = 16.0
-
-[node name="Straight" type="TextureRect" parent="PositionControls/Smoothing"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -40.0
-offset_right = 86.0
-offset_bottom = 40.0
-grow_vertical = 2
-texture = ExtResource("6_ngul0")
-
-[node name="Smooth" type="TextureRect" parent="PositionControls/Smoothing"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -86.0
-offset_top = -40.5
-offset_bottom = 40.5
-grow_horizontal = 0
-grow_vertical = 2
-texture = ExtResource("7_i5p2j")
-
-[node name="MovementBar" type="NinePatchRect" parent="PositionControls"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -86.0
-offset_top = -669.0
-offset_right = 86.0
-offset_bottom = 779.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("8_vohcf")
-patch_margin_top = 80
-patch_margin_bottom = 80
-
-[node name="SliderTop" type="TextureRect" parent="PositionControls/MovementBar"]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -69.0
-offset_top = -708.0
-offset_right = 69.0
-offset_bottom = -570.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_al0ah")
-
-[node name="DeviationGhost" type="TextureRect" parent="PositionControls/MovementBar"]
-self_modulate = Color(1, 1, 1, 0.270588)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -69.0
-offset_top = 291.0
-offset_right = 69.0
-offset_bottom = 429.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_al0ah")
-script = SubResource("GDScript_xugi5")
-
-[node name="TargetPosGhost" type="TextureRect" parent="PositionControls/MovementBar"]
-self_modulate = Color(1, 1, 1, 0.556863)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -69.0
-offset_top = 431.0
-offset_right = 69.0
-offset_bottom = 569.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_al0ah")
-script = SubResource("GDScript_1dy6y")
-
-[node name="Slider" type="TextureRect" parent="PositionControls/MovementBar"]
-self_modulate = Color(0.941176, 0.501961, 0.501961, 1)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -69.0
-offset_top = 570.0
-offset_right = 69.0
-offset_bottom = 708.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_al0ah")
 
 [node name="LoopControls" type="Control" parent="."]
 unique_name_in_owner = true
@@ -654,6 +491,32 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="BPMText" type="TextEdit" parent="LoopControls"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -346.0
+offset_top = 183.0
+offset_right = -35.0
+offset_bottom = 352.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "60"
+placeholder_text = "60"
+
+[node name="BPMSend" type="Button" parent="LoopControls"]
+layout_mode = 0
+offset_left = 659.0
+offset_top = 1080.0
+offset_right = 920.0
+offset_bottom = 1199.0
+text = "Send
+"
 
 [node name="ActionPanel" type="Panel" parent="."]
 unique_name_in_owner = true
@@ -1117,6 +980,7 @@ grow_vertical = 2
 texture = ExtResource("9_al0ah")
 
 [node name="BackTexture" type="TextureRect" parent="SpeedPanel"]
+visible = false
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -1133,6 +997,7 @@ mouse_filter = 2
 texture = ExtResource("27_62j01")
 
 [node name="BackButton" type="TextureButton" parent="SpeedPanel"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1234,6 +1099,7 @@ grow_vertical = 2
 texture = ExtResource("9_al0ah")
 
 [node name="BackTexture" type="TextureRect" parent="RangePanel"]
+visible = false
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -1248,6 +1114,7 @@ texture = ExtResource("27_62j01")
 flip_h = true
 
 [node name="BackButton" type="TextureButton" parent="RangePanel"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2202,11 +2069,10 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 64
 text = "Connecting to network..."
+script = ExtResource("45_ndop1")
 
 [connection signal="gui_input" from="PathDisplay/PathArea" to="PathDisplay/PathArea" method="_on_gui_input"]
 [connection signal="timeout" from="PathDisplay/PathArea/Timer" to="PathDisplay/PathArea" method="_on_timer_timeout"]
-[connection signal="value_changed" from="PositionControls/Smoothing/HSlider" to="PositionControls" method="_on_smoothing_slider_value_changed"]
-[connection signal="gui_input" from="PositionControls/MovementBar/Slider" to="PositionControls" method="_on_slider_gui_input"]
 [connection signal="gui_input" from="LoopControls/In/StrokeDurationSlider/Slider" to="LoopControls/In" method="_on_slider_gui_input"]
 [connection signal="item_selected" from="LoopControls/In/AccelerationControls/Transition" to="LoopControls/In" method="_on_transition_item_selected"]
 [connection signal="item_selected" from="LoopControls/In/AccelerationControls/Easing" to="LoopControls/In" method="_on_easing_item_selected"]
