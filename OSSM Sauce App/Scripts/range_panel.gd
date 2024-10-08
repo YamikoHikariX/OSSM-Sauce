@@ -6,6 +6,8 @@ var max_range_pos: float
 @onready var min_slider: TextureRect = $RangeBar/MinSlider
 @onready var max_slider: TextureRect = $RangeBar/MaxSlider
 
+# var custom_max_pos:float = 10000
+# var custom_min_pos:float = 0
 
 func _ready():
 	$LabelTop.self_modulate.a = 0
@@ -51,39 +53,39 @@ func max_slider_gui_input(event):
 
 
 func update_min_range():
+	# print('update_min_range')
 	var slider_pos = min_slider.position.y
 	var range_map = remap(slider_pos, min_range_pos, max_range_pos, 0, 10000)
 	var percent = remap(slider_pos, min_range_pos, max_range_pos, 0, 1)
 	UserSettings.cfg.set_value('range_slider_min', 'position_percent', percent)
-	if owner.connected_to_server:
+	if Main.node.connected_to_server:
 		const MIN_RANGE = 0
 		var command: PackedByteArray
 		command.resize(4)
 		command.encode_u8(0, Enums.CommandType.SET_RANGE_LIMIT)
 		command.encode_u8(1, MIN_RANGE)
 		command.encode_u16(2, range_map)
-		owner.websocket.send(command)
+		Main.node.websocket.send(command)
 	var text_value = str(snapped(range_map, 0.01))
 	$LabelBot.text = "Min Position:\n" + text_value + "%"
 
 
 func update_max_range(position: float = 0):
+	# print('update_max_range')
 	var slider_pos = max_slider.position.y
 	var range_map = remap(slider_pos, min_range_pos, max_range_pos, 0, 10000)
 	if position:
 		range_map = remap(position, 0, 100, 0, 10000)
-		print("Custom position: ", position)
-		print("Custom Range Map: ", range_map)
 	var percent = remap(slider_pos, min_range_pos, max_range_pos, 0, 1)
 	UserSettings.cfg.set_value('range_slider_max', 'position_percent', percent)
-	if owner.connected_to_server:
+	if Main.node.connected_to_server:
 		const MAX_RANGE = 1
 		var command: PackedByteArray
 		command.resize(4)
 		command.encode_u8(0, Enums.CommandType.SET_RANGE_LIMIT)
 		command.encode_u8(1, MAX_RANGE)
 		command.encode_u16(2, range_map)
-		owner.websocket.send(command)
+		Main.node.websocket.send(command)
 	var text_value = str(snapped(range_map, 0.01))
 	$LabelTop.text = "Max Position:\n" + text_value + "%"
 
@@ -122,7 +124,7 @@ func tween(activating: bool = true):
 	var positions: Array = [outside_pos, inside_pos]
 	if not activating:
 		positions.reverse()
-	tween.tween_method(set_position, position, positions[1], owner.ANIM_TIME)
+	tween.tween_method(set_position, position, positions[1], Main.node.ANIM_TIME)
 	var back = $BackTexture
 	var start_color: Color = $BackTexture.self_modulate
 	var end_color: Color = start_color
@@ -132,7 +134,7 @@ func tween(activating: bool = true):
 	if not activating:
 		colors.reverse()
 		$BackButton.hide()
-		tween.tween_callback(anim_finished).set_delay(owner.ANIM_TIME)
+		tween.tween_callback(anim_finished).set_delay(Main.node.ANIM_TIME)
 	else:
 		$BackButton.show()
 	var visuals = [$BackTexture, $LabelBot, $LabelTop]
@@ -141,7 +143,7 @@ func tween(activating: bool = true):
 				node.set_self_modulate,
 				colors[0],
 				colors[1],
-				owner.ANIM_TIME)
+				Main.node.ANIM_TIME)
 
 
 func anim_finished():
@@ -151,12 +153,12 @@ func anim_finished():
 
 
 func _on_back_button_pressed():
-	if owner.connected_to_ossm and %Menu/Main/Mode.selected == 1:
+	if Main.node.connected_to_ossm and %Menu/Main/Mode.selected == 1:
 		update_min_range()
 		update_max_range()
 		%CircleSelection.show_hourglass()
 		%PositionControls.modulate.a = 0.05
-		owner.home_to(%PositionControls/PositionBar.last_position)
+		Main.node.home_to(%PositionControls/PositionBar.last_slider_position)
 	$BackButton.hide()
 	tween(false)
 	%ActionPanel.show()

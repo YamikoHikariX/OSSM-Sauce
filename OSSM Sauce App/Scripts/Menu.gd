@@ -59,22 +59,22 @@ func _on_play_pressed():
     %ActionPanel/Play.hide()
     %ActionPanel/Pause.show()
     var index = $Playlist.selected_index
-    if owner.active_path_index == index:
-        owner.play()
+    if Main.node.active_path_index == index:
+        Main.node.play()
     else:
-        owner.active_path_index = index
-        owner.display_active_path_index()
+        Main.node.active_path_index = index
+        Main.node.display_active_path_index()
         $Playlist/Scroll/VBox.get_child(index).set_active()
-        if owner.connected_to_ossm:
+        if Main.node.connected_to_ossm:
             %CircleSelection.show_hourglass()
             %PositionControls.modulate.a = 0.05
-            owner.home_to(0)
+            Main.node.home_to(0)
         else:
             %CircleSelection.show_play()
 
 
 func _on_pause_pressed():
-    owner.pause()
+    Main.node.pause()
     %ActionPanel.clear_selections()
     %ActionPanel/Play.show()
     %ActionPanel/Pause.hide()
@@ -85,12 +85,12 @@ func _on_restart_pressed():
     hide()
     %ActionPanel.show()
     flash_button($PathControls/HBox/Restart)
-    owner.display_active_path_index()
+    Main.node.display_active_path_index()
     refresh_selection()
-    if owner.connected_to_ossm:
+    if Main.node.connected_to_ossm:
         %CircleSelection.show_hourglass()
-        %PathDisplay.modulate.a = 0.05
-        owner.home_to(0)
+        %PathTab.modulate.a = 0.05
+        Main.node.home_to(0)
     else:
         %CircleSelection.show_play()
 
@@ -98,16 +98,16 @@ func _on_restart_pressed():
 func _on_delete_pressed():
     flash_button($PathControls/HBox/Delete)
     var selected_item = $Playlist.selected_index
-    if owner.active_path_index == selected_item:
-        owner.active_path_index = null
+    if Main.node.active_path_index == selected_item:
+        Main.node.active_path_index = null
         $PathControls.hide()
-        if not owner.paused:
+        if not Main.node.paused:
             _on_pause_pressed()
-    %PathDisplay/Paths.remove_child(%PathDisplay/Paths.get_child(selected_item))
+    %PathTab/Paths.remove_child(%PathTab/Paths.get_child(selected_item))
     var pl_item = $Playlist/Scroll/VBox.get_child(selected_item)
     $Playlist/Scroll/VBox.remove_child(pl_item)
-    owner.paths.remove_at(selected_item)
-    owner.markers.remove_at(selected_item)
+    Main.node.paths.remove_at(selected_item)
+    Main.node.markers.remove_at(selected_item)
     $Playlist.selected_index = null
     if $Playlist/Scroll/VBox.get_child_count() == 0:
         $Main/PlaylistButtons/SavePlaylist.disabled = true
@@ -218,13 +218,13 @@ func set_stroke_duration_display_mode(value):
 
 
 func _on_min_stroke_duration_changed(value):
-    owner.min_stroke_duration = value
+    Main.node.min_stroke_duration = value
     %LoopControls.reset_stroke_duration_sliders()
     UserSettings.cfg.set_value('stroke_settings', 'min_duration', value)
 
 
 func _on_max_stroke_duration_changed(value):
-    owner.max_stroke_duration = value
+    Main.node.max_stroke_duration = value
     %LoopControls.reset_stroke_duration_sliders()
     UserSettings.cfg.set_value('stroke_settings', 'max_duration', value)
 
@@ -243,12 +243,12 @@ signal app_mode_changed(new_mode: Enums.AppMode)
 
 func _on_mode_selected(index: int):
     var mode_id: int = $Main/Mode.get_item_id(index)
-    owner.app_mode = mode_id
+    Main.node.app_mode = mode_id
     UserSettings.cfg.set_value('app_settings', 'mode', index)
-    owner.send_command(Enums.CommandType.RESET)
-    owner.home_to(0)
-    if owner.connected_to_ossm:
-        await owner.homing_complete
+    Main.node.send_command(Enums.CommandType.RESET)
+    Main.node.home_to(0)
+    if Main.node.connected_to_ossm:
+        await Main.node.homing_complete
     match mode_id:
         Enums.AppMode.MOVE:
             app_mode_changed.emit(Enums.AppMode.MOVE)
@@ -259,19 +259,19 @@ func _on_mode_selected(index: int):
             %ActionPanel/Pause.hide()
             %LoopControls.hide()
             $LoopSettings.hide()
-            %PathDisplay/Paths.show()
-            %PathDisplay/Ball.show()
+            %PathTab/Paths.show()
+            %PathTab/Ball.show()
             $Main/PlaylistButtons.show()
             $Main/PathButtons.show()
             $PathControls.show()
             $Playlist.show()
-            if owner.active_path_index != null:
-                owner.display_active_path_index()
+            if Main.node.active_path_index != null:
+                Main.node.display_active_path_index()
             refresh_selection()
         
         Enums.AppMode.POSITION:
             app_mode_changed.emit(Enums.AppMode.POSITION)
-            owner.paused = true
+            Main.node.paused = true
             %LoopControls/In.set_physics_process(false)
             %LoopControls/Out.set_physics_process(false)
             %ActionPanel.clear_selections()
@@ -279,17 +279,17 @@ func _on_mode_selected(index: int):
             %ActionPanel/Pause.show()
             %LoopControls.hide()
             $LoopSettings.hide()
-            %PathDisplay/Paths.hide()
-            %PathDisplay/Ball.hide()
+            %PathTab/Paths.hide()
+            %PathTab/Ball.hide()
             $Main/PlaylistButtons.hide()
             $Main/PathButtons.hide()
             $PathControls.hide()
             $Playlist.hide()
-            owner.play()
+            Main.node.play()
         
         Enums.AppMode.LOOP:
             app_mode_changed.emit(Enums.AppMode.LOOP)
-            owner.paused = true
+            Main.node.paused = true
             var stop_pos = %LoopControls/In.slider_max_pos
             %LoopControls/In.touch_pos = stop_pos
             %LoopControls/Out.touch_pos = stop_pos
@@ -309,8 +309,8 @@ func _on_mode_selected(index: int):
             %ActionPanel/Pause.show()
             %LoopControls.show()
             $LoopSettings.show()
-            %PathDisplay/Paths.hide()
-            %PathDisplay/Ball.hide()
+            %PathTab/Paths.hide()
+            %PathTab/Ball.hide()
             $Main/PlaylistButtons.hide()
             $Main/PathButtons.hide()
             $PathControls.hide()

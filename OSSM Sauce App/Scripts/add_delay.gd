@@ -3,7 +3,7 @@ extends Control
 
 func _on_add_delay_pressed():
 	var duration: float = $Box/SpinBox.value
-	owner.create_delay(duration)
+	Main.node.create_delay(duration)
 	show_menu_buttons()
 
 

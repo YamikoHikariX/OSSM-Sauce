@@ -14,14 +14,14 @@ enum Trans {
 }
 
 var tween_map:Dictionary = {
-    Trans.LINEAR : 0,
-    Trans.SINE : 1,
-    Trans.CIRC : 8,
-    Trans.EXPO : 5,
-    Trans.QUAD : 4,
-    Trans.CUBIC : 7,
-    Trans.QUART : 3,
-    Trans.QUINT : 2
+    Trans.LINEAR: 0,
+    Trans.SINE: 1,
+    Trans.CIRC: 8,
+    Trans.EXPO: 5,
+    Trans.QUAD: 4,
+    Trans.CUBIC: 7,
+    Trans.QUART: 3,
+    Trans.QUINT: 2,
 }
 
 var slider_resist:float = 0.8
@@ -29,7 +29,6 @@ var slider_resist:float = 0.8
 var A:Vector2
 var B:Vector2
 var C:Vector2
-
 
 func _ready():
     A.x = $Control.position.x
@@ -40,7 +39,7 @@ func _ready():
     C.y = $Control.position.y + $Control.size.y
     _on_link_speed_sliders_toggled(true)
 
-    $BPMSend.pressed.connect(set_loop_bpm)
+    $BPMSend.pressed.connect(_on_bpm_button_pressed)
 
     if UserSettings.cfg.has_section_key('stroke_settings', 'in_trans'):
         %LoopControls/In/AccelerationControls/Transition.select(UserSettings.cfg.get_value('stroke_settings', 'in_trans'))
@@ -87,14 +86,16 @@ func draw_easing():
         $Line2D.add_point(Vector2(x_pos, w - 25))
         x_pos += 1
 
+func _on_bpm_button_pressed():
+    set_loop_bpm(float($BPMText.text))
+
 func set_loop_bpm(bpm: float):
     if %ActionPanel.get_node("Play").is_visible(): return
     if bpm <= 0:
-        owner.pause()
+        Main.node.pause()
         active = false
         return
-    # var bpm: float = $BPMText.text.to_float()
-    # print("BPM: ", bpm)
+
     $BPMText.text = str(bpm)
     draw_easing()
     var in_duration:float = 60.0 / bpm / 2.0
@@ -127,13 +128,13 @@ func set_loop_bpm(bpm: float):
     loop_command.encode_u8(16, out_trans)
     loop_command.encode_u8(17, out_ease)
     loop_command.encode_u8(18, out_auxiliary)
-    if owner.connected_to_server:
-        owner.websocket.send(loop_command)
+    if Main.node.connected_to_server:
+        Main.node.websocket.send(loop_command)
         if in_duration + out_duration == 0:
-            owner.pause()
+            Main.node.pause()
             active = false
         elif not active:
-            owner.play()
+            Main.node.play()
             active = true
 
 func send_command():
@@ -165,13 +166,13 @@ func send_command():
     loop_command.encode_u8(16, out_trans)
     loop_command.encode_u8(17, out_ease)
     loop_command.encode_u8(18, out_auxiliary)
-    if owner.connected_to_server:
-        owner.websocket.send(loop_command)
+    if Main.node.connected_to_server:
+        Main.node.websocket.send(loop_command)
         if in_duration + out_duration == 0:
-            owner.pause()
+            Main.node.pause()
             active = false
         elif not active:
-            owner.play()
+            Main.node.play()
             active = true
 
 
@@ -193,8 +194,8 @@ func _on_tap_pressed():
     if prev_ms and tap_time < duration:
         duration = tap_time
     prev_ms = Time.get_ticks_msec()
-    if owner.connected_to_server and $ActiveSwitch.button_pressed:
-        owner.websocket.send_text(
+    if Main.node.connected_to_server and $ActiveSwitch.button_pressed:
+        Main.node.websocket.send_text(
             'L' + str((duration) * 0.5) + 
             "T" + str($Controls/Transitions/In.selected) + 
             "E" + str($Controls/Easings/In.selected) + 

@@ -1,15 +1,12 @@
-[gd_scene load_steps=52 format=3 uid="uid://d3cq3b5o0feo0"]
+[gd_scene load_steps=50 format=3 uid="uid://d3cq3b5o0feo0"]
 
 [ext_resource type="Theme" uid="uid://dqhnc02ffxjr2" path="res://Theme.tres" id="1_vq4js"]
 [ext_resource type="Script" path="res://main.gd" id="2_jo8ih"]
-[ext_resource type="Script" path="res://Scripts/path_area.gd" id="3_py3xv"]
-[ext_resource type="Texture2D" uid="uid://da3nxjs8pqcoy" path="res://Textures/Dot Small.svg" id="4_omejw"]
+[ext_resource type="PackedScene" uid="uid://dyp7ll8oa0ey2" path="res://Scenes/PathTab/path_tab.tscn" id="3_ujiel"]
 [ext_resource type="PackedScene" uid="uid://b21w1uepu2r7m" path="res://Scenes/PositionControls/position_controls.tscn" id="5_d77dx"]
+[ext_resource type="PackedScene" uid="uid://ddow231ohkcpj" path="res://Scenes/LoopControls/loop_controls.tscn" id="6_lyd1h"]
 [ext_resource type="Texture2D" uid="uid://cb703kraugp85" path="res://Textures/S32.svg" id="8_vohcf"]
 [ext_resource type="Texture2D" uid="uid://cnyl16jr7jd8g" path="res://Textures/Dot.svg" id="9_al0ah"]
-[ext_resource type="Script" path="res://Scripts/loop_controls.gd" id="10_gmb8f"]
-[ext_resource type="Script" path="res://Scripts/in.gd" id="11_orbto"]
-[ext_resource type="Script" path="res://Scripts/out.gd" id="12_1s6sv"]
 [ext_resource type="Texture2D" uid="uid://bssf5wkfubmdu" path="res://Textures/PauseLarge.svg" id="13_uh3br"]
 [ext_resource type="Script" path="res://Scripts/action_panel.gd" id="14_38rqh"]
 [ext_resource type="Texture2D" uid="uid://dkpllak4evknm" path="res://Textures/Play.svg" id="15_p5801"]
@@ -19,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://df1fg8fsnax6k" path="res://Textures/Range.svg" id="19_3upt7"]
 [ext_resource type="Texture2D" uid="uid://biyi8wy11rxn2" path="res://Textures/Menu.svg" id="20_fglpl"]
 [ext_resource type="Script" path="res://Scripts/circle_selection.gd" id="21_j8sxo"]
+[ext_resource type="PackedScene" uid="uid://upbk6seiqbg0" path="res://Scenes/SliderBar/slider_bar.tscn" id="22_rmtf0"]
 [ext_resource type="Texture2D" uid="uid://8r6wnojlpyb2" path="res://Textures/Circle Selection.svg" id="22_vxc6i"]
 [ext_resource type="Texture2D" uid="uid://ceigu0byvwpor" path="res://Textures/Play Large.svg" id="23_br8ur"]
 [ext_resource type="Texture2D" uid="uid://dtor82hfkxpes" path="res://Textures/Restart Large.svg" id="24_kxq4c"]
@@ -132,391 +130,19 @@ grow_vertical = 2
 theme = ExtResource("1_vq4js")
 script = ExtResource("2_jo8ih")
 
-[node name="PathDisplay" type="Control" parent="."]
+[node name="PathTab" parent="." instance=ExtResource("3_ujiel")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="PathArea" type="Control" parent="PathDisplay"]
-layout_mode = 1
-anchor_top = 0.0625
-anchor_right = 1.0
-anchor_bottom = 0.84375
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("3_py3xv")
-metadata/_edit_use_anchors_ = true
-
-[node name="Timer" type="Timer" parent="PathDisplay/PathArea"]
-wait_time = 0.3
-
-[node name="Paths" type="Control" parent="PathDisplay"]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Ball" type="Sprite2D" parent="PathDisplay"]
-self_modulate = Color(1, 0.384314, 0.47451, 1)
-position = Vector2(540, 960)
-texture = ExtResource("4_omejw")
 
 [node name="PositionControls" parent="." instance=ExtResource("5_d77dx")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 
-[node name="LoopControls" type="Control" parent="."]
+[node name="LoopControls" parent="." instance=ExtResource("6_lyd1h")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
-anchor_right = 1.0
-anchor_bottom = 0.898958
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("10_gmb8f")
-metadata/_edit_use_anchors_ = true
-
-[node name="In" type="Control" parent="LoopControls"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 26.0
-offset_bottom = 288.0
-grow_horizontal = 2
-script = ExtResource("11_orbto")
-
-[node name="StrokeDurationLabel" type="Label" parent="LoopControls/In"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -303.5
-offset_right = 303.5
-offset_bottom = 77.0
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 56
-text = "IN: OFF"
-
-[node name="StrokeDurationSlider" type="NinePatchRect" parent="LoopControls/In"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -468.0
-offset_top = 248.0
-offset_right = -298.0
-offset_bottom = 1184.0
-grow_horizontal = 2
-rotation = 4.71239
-texture = ExtResource("8_vohcf")
-patch_margin_top = 80
-patch_margin_bottom = 80
-
-[node name="Slider" type="TextureRect" parent="LoopControls/In/StrokeDurationSlider"]
-self_modulate = Color(0.858824, 0.439216, 0.576471, 1)
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -69.0
-offset_top = 16.0
-offset_right = 69.0
-offset_bottom = 154.0
-grow_horizontal = 2
-texture = ExtResource("9_al0ah")
-
-[node name="SliderStop" type="TextureRect" parent="LoopControls/In/StrokeDurationSlider"]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -68.9999
-offset_top = 314.0
-offset_right = 69.0001
-offset_bottom = 452.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_al0ah")
-
-[node name="AccelerationControls" type="HBoxContainer" parent="LoopControls/In"]
-custom_minimum_size = Vector2(700, 0)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -401.5
-offset_top = 18.0
-offset_right = 401.5
-offset_bottom = 100.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 50
-alignment = 1
-
-[node name="Transition" type="OptionButton" parent="LoopControls/In/AccelerationControls"]
-custom_minimum_size = Vector2(346, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-selected = 1
-item_count = 8
-popup/item_0/text = "Linear"
-popup/item_1/text = "Sine"
-popup/item_1/id = 1
-popup/item_2/text = "Circ"
-popup/item_2/id = 2
-popup/item_3/text = "Expo"
-popup/item_3/id = 3
-popup/item_4/text = "Quad"
-popup/item_4/id = 4
-popup/item_5/text = "Cubic"
-popup/item_5/id = 5
-popup/item_6/text = "Quart"
-popup/item_6/id = 6
-popup/item_7/text = "Quint"
-popup/item_7/id = 7
-
-[node name="Easing" type="OptionButton" parent="LoopControls/In/AccelerationControls"]
-layout_mode = 2
-size_flags_horizontal = 8
-selected = 2
-item_count = 4
-popup/item_0/text = "Ease In"
-popup/item_1/text = "Ease Out"
-popup/item_1/id = 1
-popup/item_2/text = "Ease In/Out"
-popup/item_2/id = 2
-popup/item_3/text = "Ease Out/In"
-popup/item_3/id = 3
-
-[node name="Out" type="Control" parent="LoopControls"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 542.0
-offset_bottom = 804.0
-grow_horizontal = 2
-script = ExtResource("12_1s6sv")
-
-[node name="StrokeDurationLabel" type="Label" parent="LoopControls/Out"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -303.5
-offset_right = 303.5
-offset_bottom = 77.0
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 56
-text = "OUT: OFF"
-
-[node name="StrokeDurationSlider" type="NinePatchRect" parent="LoopControls/Out"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -468.0
-offset_top = 248.0
-offset_right = -298.0
-offset_bottom = 1184.0
-grow_horizontal = 2
-rotation = 4.71239
-texture = ExtResource("8_vohcf")
-patch_margin_top = 80
-patch_margin_bottom = 80
-
-[node name="Slider" type="TextureRect" parent="LoopControls/Out/StrokeDurationSlider"]
-self_modulate = Color(0.356863, 0.423529, 0.643137, 1)
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -69.0
-offset_top = 16.0
-offset_right = 69.0
-offset_bottom = 154.0
-grow_horizontal = 2
-texture = ExtResource("9_al0ah")
-
-[node name="SliderStop" type="TextureRect" parent="LoopControls/Out/StrokeDurationSlider"]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -68.9999
-offset_top = 314.0
-offset_right = 69.0001
-offset_bottom = 452.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_al0ah")
-
-[node name="AccelerationControls" type="HBoxContainer" parent="LoopControls/Out"]
-custom_minimum_size = Vector2(700, 0)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -401.5
-offset_top = 18.0
-offset_right = 401.5
-offset_bottom = 100.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 50
-alignment = 1
-
-[node name="Transition" type="OptionButton" parent="LoopControls/Out/AccelerationControls"]
-custom_minimum_size = Vector2(346, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-selected = 1
-item_count = 8
-popup/item_0/text = "Linear"
-popup/item_1/text = "Sine"
-popup/item_1/id = 1
-popup/item_2/text = "Circ"
-popup/item_2/id = 2
-popup/item_3/text = "Expo"
-popup/item_3/id = 3
-popup/item_4/text = "Quad"
-popup/item_4/id = 4
-popup/item_5/text = "Cubic"
-popup/item_5/id = 5
-popup/item_6/text = "Quart"
-popup/item_6/id = 6
-popup/item_7/text = "Quint"
-popup/item_7/id = 7
-
-[node name="Easing" type="OptionButton" parent="LoopControls/Out/AccelerationControls"]
-layout_mode = 2
-size_flags_horizontal = 8
-selected = 2
-item_count = 4
-popup/item_0/text = "Ease In"
-popup/item_1/text = "Ease Out"
-popup/item_1/id = 1
-popup/item_2/text = "Ease In/Out"
-popup/item_2/id = 2
-popup/item_3/text = "Ease Out/In"
-popup/item_3/id = 3
-
-[node name="LinkSpeedSliders" type="Button" parent="LoopControls"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -57.0
-offset_top = 421.0
-offset_right = 54.0
-offset_bottom = 521.0
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 54
-toggle_mode = true
-button_pressed = true
-
-[node name="Label" type="Label" parent="LoopControls/LinkSpeedSliders"]
-modulate = Color(0, 0.72549, 0.490196, 1)
-layout_mode = 0
-offset_left = 13.0
-offset_top = 14.0
-offset_right = 98.0
-offset_bottom = 100.0
-theme_override_font_sizes/font_size = 62
-text = "🔗"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Line2D" type="Line2D" parent="LoopControls"]
-position = Vector2(0, 25.9997)
-
-[node name="Pause" type="TextureRect" parent="LoopControls"]
-visible = false
-modulate = Color(1, 1, 1, 0.478431)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = 231.5
-offset_right = 150.0
-offset_bottom = 690.5
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("13_uh3br")
-
-[node name="Control" type="Control" parent="LoopControls"]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -383.0
-offset_top = 131.0
-offset_right = 383.0
-offset_bottom = 743.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Panel" type="Panel" parent="LoopControls/Control"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Tap" type="TextureButton" parent="LoopControls/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="BPMText" type="TextEdit" parent="LoopControls"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -346.0
-offset_top = 183.0
-offset_right = -35.0
-offset_bottom = 352.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 100
-text = "60"
-placeholder_text = "60"
-
-[node name="BPMSend" type="Button" parent="LoopControls"]
-layout_mode = 0
-offset_left = 659.0
-offset_top = 1080.0
-offset_right = 920.0
-offset_bottom = 1199.0
-text = "Send
-"
 
 [node name="ActionPanel" type="Panel" parent="."]
 unique_name_in_owner = true
@@ -930,54 +556,20 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("9_al0ah")
 
-[node name="AccelerationBar" type="NinePatchRect" parent="SpeedPanel"]
+[node name="AccelerationBar" parent="SpeedPanel" instance=ExtResource("22_rmtf0")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -14.0
-offset_top = -806.5
-offset_right = 158.0
-offset_bottom = 806.5
+offset_left = 1.0
+offset_top = -805.0
+offset_right = 173.0
+offset_bottom = 807.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_vohcf")
-patch_margin_top = 80
-patch_margin_bottom = 80
-
-[node name="Slider" type="TextureRect" parent="SpeedPanel/AccelerationBar"]
-self_modulate = Color(1, 0.713726, 0.756863, 1)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -69.0
-offset_top = -791.0
-offset_right = 69.0
-offset_bottom = -653.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_al0ah")
-
-[node name="SliderBottom" type="TextureRect" parent="SpeedPanel/AccelerationBar"]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -69.0
-offset_top = 652.0
-offset_right = 69.0
-offset_bottom = 790.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_al0ah")
+custom_offset = 225
 
 [node name="BackTexture" type="TextureRect" parent="SpeedPanel"]
 visible = false
@@ -1252,7 +844,6 @@ theme_override_font_sizes/font_size = 64
 text = "Add Delay"
 
 [node name="LoopSettings" type="VBoxContainer" parent="Menu"]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1276,6 +867,7 @@ theme_override_font_sizes/font_size = 54
 text = "Stroke Speed Display:"
 
 [node name="OptionButton" type="OptionButton" parent="Menu/LoopSettings/DisplayMode"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 54
 selected = 0
@@ -2071,16 +1663,6 @@ theme_override_font_sizes/font_size = 64
 text = "Connecting to network..."
 script = ExtResource("45_ndop1")
 
-[connection signal="gui_input" from="PathDisplay/PathArea" to="PathDisplay/PathArea" method="_on_gui_input"]
-[connection signal="timeout" from="PathDisplay/PathArea/Timer" to="PathDisplay/PathArea" method="_on_timer_timeout"]
-[connection signal="gui_input" from="LoopControls/In/StrokeDurationSlider/Slider" to="LoopControls/In" method="_on_slider_gui_input"]
-[connection signal="item_selected" from="LoopControls/In/AccelerationControls/Transition" to="LoopControls/In" method="_on_transition_item_selected"]
-[connection signal="item_selected" from="LoopControls/In/AccelerationControls/Easing" to="LoopControls/In" method="_on_easing_item_selected"]
-[connection signal="gui_input" from="LoopControls/Out/StrokeDurationSlider/Slider" to="LoopControls/Out" method="_on_slider_gui_input"]
-[connection signal="item_selected" from="LoopControls/Out/AccelerationControls/Transition" to="LoopControls/Out" method="_on_transition_item_selected"]
-[connection signal="item_selected" from="LoopControls/Out/AccelerationControls/Easing" to="LoopControls/Out" method="_on_easing_item_selected"]
-[connection signal="toggled" from="LoopControls/LinkSpeedSliders" to="LoopControls" method="_on_link_speed_sliders_toggled"]
-[connection signal="pressed" from="LoopControls/Control/Tap" to="LoopControls" method="_on_tap_pressed"]
 [connection signal="pressed" from="ActionPanel/Play/Button" to="ActionPanel" method="_on_play_button_pressed"]
 [connection signal="pressed" from="ActionPanel/Pause/Button" to="ActionPanel" method="_on_pause_button_pressed"]
 [connection signal="pressed" from="ActionPanel/Speed/Button" to="ActionPanel" method="_on_speed_button_pressed"]

@@ -34,8 +34,8 @@ var max_stroke_duration: float
 
 signal homing_complete
 
-@onready var PATH_TOP = %PathDisplay/PathArea.position.y
-@onready var PATH_BOTTOM = PATH_TOP + %PathDisplay/PathArea.size.y
+@onready var PATH_TOP = %PathTab/PathArea.position.y
+@onready var PATH_BOTTOM = PATH_TOP + %PathTab/PathArea.size.y
 
 @onready var ossm_connection_timeout: Timer = %Settings/Network/ConnectionTimeout
 
@@ -69,7 +69,7 @@ func _ready():
     for node in [%Menu, %Settings, %SpeedPanel, %RangePanel]:
         node.self_modulate.a = 1.65
     
-    %PathDisplay/Ball.position.x = %PathDisplay/PathArea.size.x / 2
+    %PathTab/Ball.position.x = %PathTab/PathArea.size.x / 2
     
     check_root_directory()
 
@@ -152,8 +152,8 @@ func handle_path_mode_physics():
     var depth: float = paths[active_path_index][frame]
     frame += 1
 
-    %PathDisplay/Paths.get_child(active_path_index).position.x -= path_speed
-    %PathDisplay/Ball.position.y = render_depth(depth)
+    %PathTab/Paths.get_child(active_path_index).position.x -= path_speed
+    %PathTab/Ball.position.y = render_depth(depth)
 
 func _process(_delta):
     xtoys_websocket.poll()
@@ -175,7 +175,6 @@ func _process(_delta):
                             var bpm = data["BPM"].to_float()
                             %LoopControls.set_loop_bpm(bpm)
                     
-                    # Process "SetDepth" action
                     if data.has("action") and data["action"] == "SetDepth":
                         if data.has("depth"):
                             var depth = data["depth"].to_float()
@@ -207,7 +206,7 @@ func _process(_delta):
                         ossm_connection_timeout.stop()
                         %Wifi.self_modulate = Color.SEA_GREEN
                         %SpeedPanel.update_speed()
-                        %SpeedPanel.update_acceleration()
+                        %SpeedPanel/AccelerationBar.reset()
                         %RangePanel.update_min_range()
                         %RangePanel.update_max_range()
                         %Settings.send_homing_speed()
@@ -219,7 +218,7 @@ func _process(_delta):
                         var display = [
                             %PositionControls,
                             %LoopControls,
-                            %PathDisplay,
+                            %PathTab,
                             %ActionPanel,
                             %Menu]
                         for node in display:
@@ -256,7 +255,7 @@ func home_to(target_position: int):
         var displays = [
             %PositionControls,
             %LoopControls,
-            %PathDisplay,
+            %PathTab,
             %ActionPanel,
             %Menu]
         for display in displays:
@@ -396,7 +395,7 @@ func load_path(file_name: String) -> bool:
         previous_frame = marker_frame
     paths.append(path)
     markers.append(path_new)
-    %PathDisplay/Paths.add_child(path_line)
+    %PathTab/Paths.add_child(path_line)
     return true
 
 
@@ -410,7 +409,7 @@ func create_delay(duration: float):
         delay_path.append(-1)
     paths.append(delay_path)
     markers.append({0: message})
-    %PathDisplay/Paths.add_child(path_line)
+    %PathTab/Paths.add_child(path_line)
     %Menu/Playlist.add_item("delay(%s)" % [duration])
 
 
@@ -432,14 +431,14 @@ func display_active_path_index(is_paused := true, send_buffer := true):
     if is_paused:
         %ActionPanel/Pause.hide()
         %ActionPanel/Play.show()
-    for path in %PathDisplay/Paths.get_children():
+    for path in %PathTab/Paths.get_children():
         path.hide()
-    var path = %PathDisplay/Paths.get_child(active_path_index)
-    path.position.x = (%PathDisplay/PathArea.size.x / 2) + path_speed
+    var path = %PathTab/Paths.get_child(active_path_index)
+    path.position.x = (%PathTab/PathArea.size.x / 2) + path_speed
     path.show()
-    %PathDisplay/Ball.position.y = render_depth(paths[active_path_index][0])
-    %PathDisplay/Ball.show()
-    %PathDisplay.show()
+    %PathTab/Ball.position.y = render_depth(paths[active_path_index][0])
+    %PathTab/Ball.show()
+    %PathTab.show()
 
 
 func render_depth(depth) -> float:

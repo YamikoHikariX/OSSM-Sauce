@@ -26,7 +26,6 @@ func update_version() -> void:
 func restore_window_size() -> void:
     if OS.get_name() != 'Android':
         if cfg.has_section_key('window', 'size'):
-            print(cfg.get_value('window', 'size'))
             DisplayServer.window_set_size(cfg.get_value('window', 'size'))
 
 func get_setting(section: String, key: String):

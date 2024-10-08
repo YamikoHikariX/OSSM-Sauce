@@ -12,18 +12,18 @@ func _on_inside_button_pressed():
 		return
 	if restart_ready:
 		hide()
-		owner.active_path_index = 0
+		Main.node.active_path_index = 0
 		%Menu/Playlist/Scroll/VBox.get_child(0).set_active()
 		%Menu._on_restart_pressed()
 		restart_ready = false
 		return
-	elif owner.paused:
-		owner.play()
+	elif Main.node.paused:
+		Main.node.play()
 		%ActionPanel/Pause/Selection.hide()
 		%ActionPanel/Pause.show()
 		%ActionPanel/Play.hide()
 	else:
-		owner.pause()
+		Main.node.pause()
 		%ActionPanel/Play/Selection.hide()
 		%ActionPanel/Pause.hide()
 		%ActionPanel/Play.show()

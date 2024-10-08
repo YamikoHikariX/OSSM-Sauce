@@ -42,7 +42,7 @@ func _on_path_list_item_selected(_index):
 
 func _on_add_path_pressed():
 	var file_name: String = $FileList.get_item_text($FileList.selected_index)
-	if owner.load_path(file_name):
+	if Main.node.load_path(file_name):
 		%Menu/Playlist.add_item(file_name)
 	%Menu.show()
 	hide()
@@ -60,8 +60,8 @@ func _on_load_playlist_pressed():
 			var begin_index = line.find("(") + 1
 			var end_index = line.find(")") - begin_index
 			var delay_duration = float(line.substr(begin_index, end_index))
-			owner.create_delay(delay_duration)
-		elif owner.load_path(line):
+			Main.node.create_delay(delay_duration)
+		elif Main.node.load_path(line):
 			%Menu/Playlist.add_item(line)
 	%Menu.show()
 	hide()

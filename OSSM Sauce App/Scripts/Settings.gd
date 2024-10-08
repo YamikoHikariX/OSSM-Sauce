@@ -56,14 +56,14 @@ func _on_connect_pressed():
             $Network/Address/TextEdit.text = address
     else:
         address = server_address
-    owner.websocket.connect_to_url("ws://" + address + ":" + port)
+    Main.node.websocket.connect_to_url("ws://" + address + ":" + port)
     print("Setting up connection to " + address + ":" + port)
     
-    owner.set_process(true)
+    Main.node.set_process(true)
 
 
 func _on_get_range_pressed():
-    owner.websocket.send_text('G')
+    Main.node.websocket.send_text('G')
 
 
 func _on_network_address_text_changed():
@@ -105,24 +105,24 @@ func set_max_acceleration(value):
 func _on_speed_input_changed():
     var value = int($Sliders/MaxSpeed/TextEdit.text)
     value = clamp(value, 100, 200000)
-    owner.max_speed = value
+    Main.node.max_speed = value
     UserSettings.cfg.set_value('speed_slider', 'max_speed', value)
 
 
 func _on_acceleration_input_changed():
     var value = int($Sliders/MaxAcceleration/TextEdit.text)
     value = clamp(value, 5000, 9000000)
-    owner.max_acceleration = value
+    Main.node.max_acceleration = value
     UserSettings.cfg.set_value('accel_slider', 'max_acceleration', value)
 
 
 func send_homing_speed():
-    if owner.connected_to_server:
+    if Main.node.connected_to_server:
         var command: PackedByteArray
         command.resize(5)
         command.encode_u32(0, Enums.CommandType.SET_HOMING_SPEED)
         command.encode_u32(1, $HomingSpeed/SpinBox.value)
-        owner.websocket.send(command)
+        Main.node.websocket.send(command)
 
 
 func _on_homing_speed_changed(value):

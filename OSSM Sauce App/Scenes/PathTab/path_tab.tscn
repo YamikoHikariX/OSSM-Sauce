@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://dyp7ll8oa0ey2"]
+
+[ext_resource type="Script" path="res://Scripts/path_area.gd" id="1_5u8rp"]
+[ext_resource type="Texture2D" uid="uid://da3nxjs8pqcoy" path="res://Textures/Dot Small.svg" id="2_po4er"]
+
+[node name="PathTab" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PathArea" type="Control" parent="."]
+layout_mode = 1
+anchor_top = 0.0625
+anchor_right = 1.0
+anchor_bottom = 0.84375
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5u8rp")
+metadata/_edit_use_anchors_ = true
+
+[node name="Timer" type="Timer" parent="PathArea"]
+wait_time = 0.3
+
+[node name="Paths" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Ball" type="Sprite2D" parent="."]
+self_modulate = Color(1, 0.384314, 0.47451, 1)
+position = Vector2(540, 960)
+texture = ExtResource("2_po4er")
+
+[connection signal="gui_input" from="PathArea" to="PathArea" method="_on_gui_input"]
+[connection signal="timeout" from="PathArea/Timer" to="PathArea" method="_on_timer_timeout"]

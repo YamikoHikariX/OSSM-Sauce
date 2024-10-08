@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://br3u6hagl3m37"]
 
-[ext_resource type="Texture2D" uid="uid://cnyl16jr7jd8g" path="res://Textures/Dot.svg" id="1_cb64d"]
+[ext_resource type="Texture2D" uid="uid://cnyl16jr7jd8g" path="res://Textures/Dot.svg" id="1_8xfuk"]
 
 [node name="Deviation" type="TextureRect"]
 anchors_preset = 7
@@ -14,4 +14,4 @@ offset_right = 69.0
 grow_horizontal = 2
 grow_vertical = 0
 pivot_offset = Vector2(69, 69)
-texture = ExtResource("1_cb64d")
+texture = ExtResource("1_8xfuk")

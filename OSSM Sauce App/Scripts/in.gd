@@ -64,8 +64,8 @@ func map_stroke_duration():
 			slider.position.y,
 			slider_min_pos,
 			slider_max_pos,
-			owner.min_stroke_duration,
-			owner.max_stroke_duration), 0.01)
+			Main.node.min_stroke_duration,
+			Main.node.max_stroke_duration), 0.01)
 
 
 func reset_stroke_duration_slider():
@@ -74,9 +74,9 @@ func reset_stroke_duration_slider():
 			slider.position.y,
 			slider_min_pos,
 			slider_max_pos,
-			owner.min_stroke_duration,
-			owner.max_stroke_duration), 0.01)
-	if owner.connected_to_server:
+			Main.node.min_stroke_duration,
+			Main.node.max_stroke_duration), 0.01)
+	if Main.node.connected_to_server:
 		get_parent().send_command()
 	update_stroke_duration_text()
 
@@ -92,7 +92,8 @@ func update_stroke_duration_text():
 		$StrokeDurationLabel.text = "IN: OFF"
 	else:
 		var display_text: String
-		if %Menu/LoopSettings/DisplayMode/OptionButton.selected == 0:
+		# if %Menu/LoopSettings/DisplayMode/OptionButton.selected == 0:
+		if true:
 			display_text = "IN: " + str(stroke_duration) + "s"
 		else:
 			var map = snappedf(remap(
@@ -109,9 +110,11 @@ func _on_transition_item_selected(index):
 	if link_button.button_pressed:
 		out.get_node('AccelerationControls/Transition').select(index)
 	get_parent().send_command()
+	get_parent()._on_bpm_button_pressed()
 
 
 func _on_easing_item_selected(index):
 	if link_button.button_pressed:
 		out.get_node('AccelerationControls/Easing').select(index)
 	get_parent().send_command()
+	get_parent()._on_bpm_button_pressed()
