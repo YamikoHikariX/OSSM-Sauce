@@ -1224,7 +1224,7 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 40
 text = "App v1.1.0"
 
-[node name="Settings" type="Panel" parent="."]
+[node name="SettingsPage" type="Panel" parent="."]
 unique_name_in_owner = true
 visible = false
 self_modulate = Color(0.364706, 0.364706, 0.364706, 1)
@@ -1236,7 +1236,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("41_m8wy6")
 
-[node name="Back" type="TextureButton" parent="Settings"]
+[node name="Back" type="TextureButton" parent="SettingsPage"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0675926
@@ -1248,7 +1248,7 @@ texture_normal = ExtResource("27_62j01")
 stretch_mode = 3
 metadata/_edit_use_anchors_ = true
 
-[node name="Network" type="VBoxContainer" parent="Settings"]
+[node name="Network" type="VBoxContainer" parent="SettingsPage"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -1260,52 +1260,52 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 15
 
-[node name="Address" type="VBoxContainer" parent="Settings/Network"]
+[node name="Address" type="VBoxContainer" parent="SettingsPage/Network"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Settings/Network/Address"]
+[node name="Label" type="Label" parent="SettingsPage/Network/Address"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 54
 text = "WebSocket Server Address:"
 
-[node name="TextEdit" type="TextEdit" parent="Settings/Network/Address"]
+[node name="TextEdit" type="TextEdit" parent="SettingsPage/Network/Address"]
 custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
 theme_override_font_sizes/font_size = 54
 placeholder_text = "192.168.254..."
 
-[node name="Port" type="VBoxContainer" parent="Settings/Network"]
+[node name="Port" type="VBoxContainer" parent="SettingsPage/Network"]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Settings/Network/Port"]
+[node name="Label" type="Label" parent="SettingsPage/Network/Port"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 54
 text = "Port:"
 
-[node name="TextEdit" type="TextEdit" parent="Settings/Network/Port"]
+[node name="TextEdit" type="TextEdit" parent="SettingsPage/Network/Port"]
 custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
 theme_override_font_sizes/font_size = 54
 text = "120"
 placeholder_text = "120"
 
-[node name="Connect" type="Button" parent="Settings/Network"]
+[node name="Connect" type="Button" parent="SettingsPage/Network"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 64
 text = "Connect To Server"
 
-[node name="Status" type="Label" parent="Settings/Network"]
+[node name="Status" type="Label" parent="SettingsPage/Network"]
 visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 64
 text = "CONNECTED"
 
-[node name="ConnectionTimeout" type="Timer" parent="Settings/Network"]
+[node name="ConnectionTimeout" type="Timer" parent="SettingsPage/Network"]
 wait_time = 3.0
 one_shot = true
 
-[node name="Sliders" type="VBoxContainer" parent="Settings"]
+[node name="Sliders" type="VBoxContainer" parent="SettingsPage"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -1317,55 +1317,55 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 
-[node name="MaxSpeed" type="VBoxContainer" parent="Settings/Sliders"]
+[node name="MaxSpeed" type="VBoxContainer" parent="SettingsPage/Sliders"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Settings/Sliders/MaxSpeed"]
+[node name="Label" type="Label" parent="SettingsPage/Sliders/MaxSpeed"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 54
 text = "Speed Slider Max:"
 
-[node name="TextEdit" type="TextEdit" parent="Settings/Sliders/MaxSpeed"]
+[node name="TextEdit" type="TextEdit" parent="SettingsPage/Sliders/MaxSpeed"]
 custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
 theme_override_font_sizes/font_size = 54
 text = "25000"
 placeholder_text = "25000"
 
-[node name="MaxAcceleration" type="VBoxContainer" parent="Settings/Sliders"]
+[node name="MaxAcceleration" type="VBoxContainer" parent="SettingsPage/Sliders"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Settings/Sliders/MaxAcceleration"]
+[node name="Label" type="Label" parent="SettingsPage/Sliders/MaxAcceleration"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 54
 text = "Acceleration Slider Max:"
 
-[node name="TextEdit" type="TextEdit" parent="Settings/Sliders/MaxAcceleration"]
+[node name="TextEdit" type="TextEdit" parent="SettingsPage/Sliders/MaxAcceleration"]
 custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
 theme_override_font_sizes/font_size = 54
 text = "500000"
 placeholder_text = "500000"
 
-[node name="HomingSpeed" type="VBoxContainer" parent="Settings"]
+[node name="HomingSpeed" type="VBoxContainer" parent="SettingsPage"]
 layout_mode = 2
 offset_top = 1120.0
 offset_right = 1080.0
 offset_bottom = 1288.0
 
-[node name="Label" type="Label" parent="Settings/HomingSpeed"]
+[node name="Label" type="Label" parent="SettingsPage/HomingSpeed"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 54
 text = "Homing Speed:"
 
-[node name="SpinBox" type="SpinBox" parent="Settings/HomingSpeed"]
+[node name="SpinBox" type="SpinBox" parent="SettingsPage/HomingSpeed"]
 layout_mode = 2
 min_value = 1.0
 max_value = 99999.0
 value = 1000.0
 suffix = "steps/sec"
 
-[node name="Window" type="Control" parent="Settings"]
+[node name="Window" type="Control" parent="SettingsPage"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -1376,7 +1376,7 @@ offset_bottom = 652.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="AlwaysOnTop" type="Control" parent="Settings/Window"]
+[node name="AlwaysOnTop" type="Control" parent="SettingsPage/Window"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -1389,7 +1389,7 @@ offset_bottom = -2.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CheckBox" type="CheckBox" parent="Settings/Window/AlwaysOnTop"]
+[node name="CheckBox" type="CheckBox" parent="SettingsPage/Window/AlwaysOnTop"]
 layout_mode = 2
 offset_top = 2.0
 offset_right = 24.0
@@ -1397,7 +1397,7 @@ offset_bottom = 26.0
 scale = Vector2(3, 3)
 theme_override_font_sizes/font_size = 54
 
-[node name="Label" type="Label" parent="Settings/Window/AlwaysOnTop"]
+[node name="Label" type="Label" parent="SettingsPage/Window/AlwaysOnTop"]
 layout_mode = 0
 offset_left = 75.0
 offset_top = -1.0
@@ -1406,7 +1406,7 @@ offset_bottom = 73.0
 theme_override_font_sizes/font_size = 54
 text = "Always on top"
 
-[node name="TransparentBg" type="Control" parent="Settings/Window"]
+[node name="TransparentBg" type="Control" parent="SettingsPage/Window"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -1419,7 +1419,7 @@ offset_bottom = 82.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CheckBox" type="CheckBox" parent="Settings/Window/TransparentBg"]
+[node name="CheckBox" type="CheckBox" parent="SettingsPage/Window/TransparentBg"]
 layout_mode = 2
 offset_top = 2.0
 offset_right = 24.0
@@ -1427,7 +1427,7 @@ offset_bottom = 26.0
 scale = Vector2(3, 3)
 theme_override_font_sizes/font_size = 54
 
-[node name="Label" type="Label" parent="Settings/Window/TransparentBg"]
+[node name="Label" type="Label" parent="SettingsPage/Window/TransparentBg"]
 layout_mode = 0
 offset_left = 75.0
 offset_top = -1.0
@@ -1698,14 +1698,14 @@ script = ExtResource("45_ndop1")
 [connection signal="pressed" from="Menu/SavePlaylist/HBox/Save" to="Menu/SavePlaylist" method="_on_save_pressed"]
 [connection signal="pressed" from="Menu/SavePlaylist/HBox/Back" to="Menu/SavePlaylist" method="_on_back_pressed"]
 [connection signal="text_changed" from="Menu/SavePlaylist/TextEdit" to="Menu/SavePlaylist" method="_on_text_edit_text_changed"]
-[connection signal="pressed" from="Settings/Back" to="Settings" method="_on_Back_pressed"]
-[connection signal="text_changed" from="Settings/Network/Address/TextEdit" to="Settings" method="_on_network_address_text_changed"]
-[connection signal="pressed" from="Settings/Network/Connect" to="Settings" method="_on_connect_pressed"]
-[connection signal="text_changed" from="Settings/Sliders/MaxSpeed/TextEdit" to="Settings" method="_on_speed_input_changed"]
-[connection signal="text_changed" from="Settings/Sliders/MaxAcceleration/TextEdit" to="Settings" method="_on_acceleration_input_changed"]
-[connection signal="value_changed" from="Settings/HomingSpeed/SpinBox" to="Settings" method="_on_homing_speed_changed"]
-[connection signal="toggled" from="Settings/Window/AlwaysOnTop/CheckBox" to="Settings" method="_on_always_on_top_toggled"]
-[connection signal="toggled" from="Settings/Window/TransparentBg/CheckBox" to="Settings" method="_on_transparent_background_toggled"]
+[connection signal="pressed" from="SettingsPage/Back" to="SettingsPage" method="_on_Back_pressed"]
+[connection signal="text_changed" from="SettingsPage/Network/Address/TextEdit" to="SettingsPage" method="_on_network_address_text_changed"]
+[connection signal="pressed" from="SettingsPage/Network/Connect" to="SettingsPage" method="_on_connect_pressed"]
+[connection signal="text_changed" from="SettingsPage/Sliders/MaxSpeed/TextEdit" to="SettingsPage" method="_on_speed_input_changed"]
+[connection signal="text_changed" from="SettingsPage/Sliders/MaxAcceleration/TextEdit" to="SettingsPage" method="_on_acceleration_input_changed"]
+[connection signal="value_changed" from="SettingsPage/HomingSpeed/SpinBox" to="SettingsPage" method="_on_homing_speed_changed"]
+[connection signal="toggled" from="SettingsPage/Window/AlwaysOnTop/CheckBox" to="SettingsPage" method="_on_always_on_top_toggled"]
+[connection signal="toggled" from="SettingsPage/Window/TransparentBg/CheckBox" to="SettingsPage" method="_on_transparent_background_toggled"]
 [connection signal="pressed" from="AddFile/HBox/AddPath" to="AddFile" method="_on_add_path_pressed"]
 [connection signal="pressed" from="AddFile/HBox/LoadPlaylist" to="AddFile" method="_on_load_playlist_pressed"]
 [connection signal="pressed" from="AddFile/HBox/Back" to="AddFile" method="_on_back_pressed"]

@@ -20,16 +20,9 @@ func _ready():
 	min_range_pos = min_slider.position.y
 	max_range_pos = max_slider.position.y
 
-	if UserSettings.cfg.has_section_key('range_slider_min', 'position_percent'):
-		set_min_slider_pos(UserSettings.cfg.get_value('range_slider_min', 'position_percent'))
-	else:
-		set_min_slider_pos(0)
+	set_min_slider_pos(Settings.get_setting(Section.RANGE_SLIDER_MIN, Key.POSITION_PERCENT))
 
-	if UserSettings.cfg.has_section_key('range_slider_max', 'position_percent'):
-		set_max_slider_pos(UserSettings.cfg.get_value('range_slider_max', 'position_percent'))
-	else:
-		set_max_slider_pos(1)
-
+	set_max_slider_pos(Settings.get_setting(Section.RANGE_SLIDER_MAX, Key.POSITION_PERCENT))
 
 
 func min_slider_gui_input(event):
@@ -57,7 +50,7 @@ func update_min_range():
 	var slider_pos = min_slider.position.y
 	var range_map = remap(slider_pos, min_range_pos, max_range_pos, 0, 10000)
 	var percent = remap(slider_pos, min_range_pos, max_range_pos, 0, 1)
-	UserSettings.cfg.set_value('range_slider_min', 'position_percent', percent)
+	Settings.set_setting(Section.RANGE_SLIDER_MIN, Key.POSITION_PERCENT, percent)
 	if Main.node.connected_to_server:
 		const MIN_RANGE = 0
 		var command: PackedByteArray
@@ -77,7 +70,7 @@ func update_max_range(position: float = 0):
 	if position:
 		range_map = remap(position, 0, 100, 0, 10000)
 	var percent = remap(slider_pos, min_range_pos, max_range_pos, 0, 1)
-	UserSettings.cfg.set_value('range_slider_max', 'position_percent', percent)
+	Settings.set_setting(Section.RANGE_SLIDER_MAX, Key.POSITION_PERCENT, percent)
 	if Main.node.connected_to_server:
 		const MAX_RANGE = 1
 		var command: PackedByteArray

@@ -3,36 +3,23 @@ extends Panel
 @onready var address_input = $Network/Address/TextEdit
 
 func _ready():
-    if UserSettings.cfg.has_section_key('window', 'always_on_top'):
-            var checkbox = $Window/AlwaysOnTop/CheckBox
-            checkbox.button_pressed = UserSettings.cfg.get_value('window', 'always_on_top')
+    var checkbox = $Window/TransparentBg/CheckBox
+    checkbox.button_pressed = Settings.get_setting(Section.WINDOW, Key.TRANSPARENT_BACKGROUND)
 
-    if UserSettings.cfg.has_section_key('window', 'transparent_background'):
-        var checkbox = $Window/TransparentBg/CheckBox
-        checkbox.button_pressed = UserSettings.cfg.get_value('window', 'transparent_background')
+    $Network/Address/TextEdit.text = Settings.get_setting(Section.APP_SETTINGS, Key.LAST_SERVER_CONNECTION)
+    _on_connect_pressed()
+    $Network/ConnectionTimeout.start()
 
-    if UserSettings.cfg.has_section_key('app_settings', 'last_server_connection'):
-        $Network/Address/TextEdit.text = UserSettings.cfg.get_value(
-                'app_settings',
-                'last_server_connection')
+    await $Network/ConnectionTimeout.timeout
+    %ActionPanel.show()
+    %ConnectingLabel.hide()
 
-        _on_connect_pressed()
-        $Network/ConnectionTimeout.start()
+    set_max_speed(Settings.get_setting(Section.SPEED_SLIDER, Key.MAX_SPEED))
 
-        await $Network/ConnectionTimeout.timeout
-        %ActionPanel.show()
-        %ConnectingLabel.hide()
+    set_max_acceleration(Settings.get_setting(Section.ACCEL_SLIDER, Key.MAX_ACCELERATION))
 
-    if UserSettings.cfg.has_section_key('speed_slider', 'max_speed'):
-        set_max_speed(UserSettings.cfg.get_value('speed_slider', 'max_speed'))
-
-    if UserSettings.cfg.has_section_key('accel_slider', 'max_acceleration'):
-        set_max_acceleration(UserSettings.cfg.get_value('accel_slider', 'max_acceleration'))
-
-    if UserSettings.cfg.has_section_key('device_settings', 'homing_speed'):
-        $HomingSpeed/SpinBox.value = UserSettings.cfg.get_value('device_settings', 'homing_speed')
-        send_homing_speed()
-
+    $HomingSpeed/SpinBox.value = Settings.get_setting(Section.DEVICE_SETTINGS, Key.HOMING_SPEED)
+    send_homing_speed()
 
     if OS.get_name() == "Android":
         $Window.hide()
@@ -101,20 +88,17 @@ func set_max_acceleration(value):
     $Sliders/MaxAcceleration/TextEdit.text = str(value)
     _on_acceleration_input_changed()
 
-
 func _on_speed_input_changed():
     var value = int($Sliders/MaxSpeed/TextEdit.text)
     value = clamp(value, 100, 200000)
     Main.node.max_speed = value
-    UserSettings.cfg.set_value('speed_slider', 'max_speed', value)
-
+    Settings.set_setting(Section.SPEED_SLIDER, Key.MAX_SPEED, value)
 
 func _on_acceleration_input_changed():
     var value = int($Sliders/MaxAcceleration/TextEdit.text)
     value = clamp(value, 5000, 9000000)
     Main.node.max_acceleration = value
-    UserSettings.cfg.set_value('accel_slider', 'max_acceleration', value)
-
+    Settings.set_setting(Section.ACCEL_SLIDER, Key.MAX_ACCELERATION, value)
 
 func send_homing_speed():
     if Main.node.connected_to_server:
@@ -124,17 +108,14 @@ func send_homing_speed():
         command.encode_u32(1, $HomingSpeed/SpinBox.value)
         Main.node.ossm_websocket.send(command)
 
-
 func _on_homing_speed_changed(value):
     send_homing_speed()
-    UserSettings.cfg.set_value('device_settings', 'homing_speed', value)
-
+    Settings.set_setting(Section.DEVICE_SETTINGS, Key.HOMING_SPEED, value)
 
 func _on_always_on_top_toggled(toggled):
     DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, toggled)
-    UserSettings.cfg.set_value('window', 'always_on_top', toggled)
-
+    Settings.set_setting(Section.WINDOW, Key.ALWAYS_ON_TOP, toggled)
 
 func _on_transparent_background_toggled(toggled):
     DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_TRANSPARENT, toggled)
-    UserSettings.cfg.set_value('window', 'transparent_background', toggled)
+    Settings.set_setting(Section.WINDOW, Key.TRANSPARENT_BACKGROUND, toggled)

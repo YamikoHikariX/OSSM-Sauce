@@ -9,8 +9,8 @@ func _ready():
     Main.node.gamepad_stick_input.connect(%PositionBar._on_stick_input)
     Main.node.gamepad_axis_input.connect(%PositionBar._on_axis_input)
     
-    if UserSettings.cfg.has_section_key('app_settings', 'smoothing_slider'):
-        %SmoothingSlider/HSlider.set_value(UserSettings.cfg.get_value('app_settings', 'smoothing_slider'))
+    var smoothing_slider = Settings.get_setting(Section.APP_SETTINGS, Key.SMOOTHING_SLIDER)
+    %SmoothingSlider/HSlider.set_value(smoothing_slider)
 
 func _input(event: InputEvent) -> void:
     if event.is_action_pressed("D-pad Up"):
@@ -37,7 +37,7 @@ func disable():
     set_process_input(false)
 
 func _on_smoothing_slider_value_changed(value: float):
-    UserSettings.cfg.set_value('app_settings', 'smoothing_slider', value)
+    Settings.set_setting(Section.APP_SETTINGS, Key.SMOOTHING_SLIDER, value)
 
 func _on_position_changed(new_position: float):
     set_ossm_position(int(new_position))

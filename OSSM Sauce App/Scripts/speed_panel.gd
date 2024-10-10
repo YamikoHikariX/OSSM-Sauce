@@ -22,17 +22,11 @@ func _ready():
 	$AccelerationBar.value_changed.connect(_on_acceleration_changed)
 	$AccelerationBar.set_output_range(1000, Main.node.max_acceleration)
 
-	if UserSettings.cfg.has_section_key('speed_slider', 'position_percent'):
-		set_speed_slider_pos(UserSettings.cfg.get_value('speed_slider', 'position_percent'))
-	else:
-		set_speed_slider_pos(0.6)
+	set_speed_slider_pos(Settings.get_setting(Section.SPEED_SLIDER, Key.POSITION_PERCENT))
 
-	if UserSettings.cfg.has_section_key('accel_slider', 'position_percent'):
-		$AccelerationBar.set_starting_percentage(UserSettings.cfg.get_value('accel_slider', 'position_percent'))
-		print("accel_slider: ", UserSettings.cfg.get_value('accel_slider', 'position_percent'))
-	else:
-		$AccelerationBar.set_starting_percentage(0.4)
-		print("accel_slider: ", 0.4)
+	$AccelerationBar.set_starting_percentage(Settings.get_setting(Section.ACCEL_SLIDER, Key.POSITION_PERCENT))
+	print("accel_slider: ", Settings.get_setting(Section.ACCEL_SLIDER, Key.POSITION_PERCENT))
+
 
 
 func reset():
@@ -46,7 +40,7 @@ func set_speed_slider_pos(percent):
 			speed_slider_min_pos,
 			speed_slider_max_pos)
 	speed_slider.position.y = slider_map
-	UserSettings.cfg.set_value('speed_slider', 'position_percent', percent)
+	Settings.set_setting(Section.SPEED_SLIDER, Key.POSITION_PERCENT, percent)
 	update_speed()
 
 
@@ -68,7 +62,7 @@ func update_speed():
 func _on_acceleration_changed(new_value: float):
 	update_acceleration(int(new_value))
 	var new_percentage = remap(new_value, 1000, Main.node.max_acceleration, 0, 1)
-	UserSettings.cfg.set_value('accel_slider', 'position_percent', new_percentage)
+	Settings.set_setting(Section.ACCEL_SLIDER, Key.POSITION_PERCENT, new_percentage)
 	print("new_percentage: ", new_percentage)
 
 func update_acceleration(new_value: int) -> void:
@@ -99,11 +93,7 @@ func speed_slider_gui_input(event):
 					speed_slider_max_pos,
 					0,
 					1)
-			UserSettings.cfg.set_value(
-					'speed_slider',
-					'position_percent',
-					slider_position_percent)
-
+			Settings.set_setting(Section.SPEED_SLIDER, Key.POSITION_PERCENT, slider_position_percent)
 
 func tween(activating: bool = true):
 	var tween = get_tree().create_tween()

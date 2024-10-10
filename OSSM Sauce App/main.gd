@@ -1,7 +1,5 @@
 extends Control
 
-var app_version_number: String = "1.1.0"
-
 const ANIM_TIME = 0.65
 
 var ossm_websocket = WebSocketPeer.new()
@@ -48,10 +46,12 @@ signal homing_complete
 @onready var PATH_TOP = %PathTab/PathArea.position.y
 @onready var PATH_BOTTOM = PATH_TOP + %PathTab/PathArea.size.y
 
-@onready var ossm_connection_timeout: Timer = %Settings/Network/ConnectionTimeout
+@onready var ossm_connection_timeout: Timer = %SettingsPage/Network/ConnectionTimeout
 
 var position_drag: float = 0.0
 var position_axis: float = 0.0
+var previous_position_drag: float = 0.0
+var previous_position_axis: float = 0.0
 
 signal gamepad_stick_input(position: float)
 signal gamepad_axis_input(axis: float)
@@ -74,28 +74,17 @@ func _ready():
     min_stroke_duration = %Menu/LoopSettings/MinStrokeDuration/SpinBox.value
     max_stroke_duration = %Menu/LoopSettings/MaxStrokeDuration/SpinBox.value
     
-    max_speed = int(%Settings/Sliders/MaxSpeed/TextEdit.text)
-    max_acceleration = int(%Settings/Sliders/MaxAcceleration/TextEdit.text)
+    max_speed = int(%SettingsPage/Sliders/MaxSpeed/TextEdit.text)
+    max_acceleration = int(%SettingsPage/Sliders/MaxAcceleration/TextEdit.text)
     
-    for node in [%Menu, %Settings, %SpeedPanel, %RangePanel]:
+    for node in [%Menu, %SettingsPage, %SpeedPanel, %RangePanel]:
         node.self_modulate.a = 1.65
     
     %PathTab/Ball.position.x = %PathTab/PathArea.size.x / 2
     
     check_root_directory()
 
-    UserSettings.restore_window_size()
-    center_window()
-
-func center_window():
-    if OS.get_name() != 'Android':
-        var window_size = get_viewport().size
-        var screen_size = DisplayServer.screen_get_size()
-        var centered_position = Vector2(
-            (screen_size.x - window_size.x) / 2,
-            (screen_size.y - window_size.y) / 2)
-        DisplayServer.window_set_position(centered_position)
-        get_viewport().size_changed.connect(_on_window_size_changed)
+    Settings.restore_window_settings()
 
 var marker_index: int
 func _physics_process(_delta):
@@ -104,9 +93,6 @@ func _physics_process(_delta):
 
     if app_mode == Enums.AppMode.MOVE:
         handle_path_mode_physics()
-
-var previous_position_drag: float = 0.0
-var previous_position_axis: float = 0.0
 
 func handle_gamepad_input():
     position_axis = Input.get_action_strength("position_axis")
@@ -198,10 +184,7 @@ func _process(_delta):
     var ossm_ws_state = ossm_websocket.get_ready_state()
     if ossm_ws_state == WebSocketPeer.STATE_OPEN:
         if not connected_to_server:
-            UserSettings.cfg.set_value(
-                'app_settings',
-                'last_server_connection',
-                %Settings/Network/Address/TextEdit.text)
+            Settings.set_setting(Section.APP_SETTINGS, Key.LAST_SERVER_CONNECTION, %SettingsPage/Network/Address/TextEdit.text)
             connected_to_server = true
             send_command(Enums.CommandType.CONNECTION)
         while ossm_websocket.get_available_packet_count():
@@ -216,7 +199,7 @@ func _process(_delta):
                         %SpeedPanel/AccelerationBar.reset()
                         %RangePanel.update_min_range()
                         %RangePanel.update_max_range()
-                        %Settings.send_homing_speed()
+                        %SettingsPage.send_homing_speed()
                         %Menu.select_mode(%Menu/Main/Mode.selected)
                     
                     Enums.CommandType.HOMING:
@@ -310,22 +293,6 @@ func check_root_directory():
         if not root_dir.dir_exists(dir):
             root_dir.make_dir(dir)
 
-
-func apply_user_settings():
-    UserSettings.load()
-    
-    UserSettings.update_version()
-    
-    UserSettings.restore_window_size()
-    
-    UserSettings.start_server_connection()
-    
-    UserSettings.load_saved_settings()
-    
-    UserSettings.draw_easing()
-    
-    UserSettings.select_app_mode()
-    
 
 func load_path(file_name: String) -> bool:
     var file = FileAccess.open(Dirs.paths_dir + file_name, FileAccess.READ)
@@ -451,15 +418,10 @@ func render_depth(depth) -> float:
     return PATH_BOTTOM + depth * (PATH_TOP - PATH_BOTTOM)
 
 
-func _on_window_size_changed():
-    if OS.get_name() != "Android":
-        var window_size = DisplayServer.window_get_size()
-        UserSettings.cfg.set_value('window', 'size', window_size)
-
 
 func _notification(what):
     if what == NOTIFICATION_WM_CLOSE_REQUEST:
-        UserSettings.cfg.save(Dirs.cfg_path)
+        Settings.save()
         if connected_to_server:
             const MIN_RANGE = 0
             var command: PackedByteArray

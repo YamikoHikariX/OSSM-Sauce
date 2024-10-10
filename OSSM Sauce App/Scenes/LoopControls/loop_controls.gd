@@ -41,17 +41,17 @@ func _ready():
 
     $BPMSend.pressed.connect(_on_bpm_button_pressed)
 
-    if UserSettings.cfg.has_section_key('stroke_settings', 'in_trans'):
-        %LoopControls/In/AccelerationControls/Transition.select(UserSettings.cfg.get_value('stroke_settings', 'in_trans'))
+    var in_trans = Settings.get_setting(Section.STROKE_SETTINGS, Key.IN_TRANS)
+    %LoopControls/In/AccelerationControls/Transition.select(in_trans)
     
-    if UserSettings.cfg.has_section_key('stroke_settings', 'in_ease'):
-        %LoopControls/In/AccelerationControls/Easing.select(UserSettings.cfg.get_value('stroke_settings', 'in_ease'))
+    var in_ease = Settings.get_setting(Section.STROKE_SETTINGS, Key.IN_EASE)
+    %LoopControls/In/AccelerationControls/Easing.select(in_ease)
     
-    if UserSettings.cfg.has_section_key('stroke_settings', 'out_trans'):
-        %LoopControls/Out/AccelerationControls/Transition.select(UserSettings.cfg.get_value('stroke_settings', 'out_trans'))
-    
-    if UserSettings.cfg.has_section_key('stroke_settings', 'out_ease'):
-        %LoopControls/Out/AccelerationControls/Easing.select(UserSettings.cfg.get_value('stroke_settings', 'out_ease'))
+    var out_trans = Settings.get_setting(Section.STROKE_SETTINGS, Key.OUT_TRANS)
+    %LoopControls/Out/AccelerationControls/Transition.select(out_trans)
+
+    var out_ease = Settings.get_setting(Section.STROKE_SETTINGS, Key.OUT_EASE)
+    %LoopControls/Out/AccelerationControls/Easing.select(out_ease)
 
     draw_easing()
 
@@ -106,10 +106,10 @@ func set_loop_bpm(bpm: float):
     var out_trans:int = $Out/AccelerationControls/Transition.selected
     var out_ease:int = $Out/AccelerationControls/Easing.selected
     var out_auxiliary:int
-    UserSettings.cfg.set_value('stroke_settings', 'in_trans', in_trans)
-    UserSettings.cfg.set_value('stroke_settings', 'in_ease', in_ease)
-    UserSettings.cfg.set_value('stroke_settings', 'out_trans', out_trans)
-    UserSettings.cfg.set_value('stroke_settings', 'out_ease', out_ease)
+    Settings.set_setting(Section.STROKE_SETTINGS, Key.OUT_TRANS, out_trans)
+    Settings.set_setting(Section.STROKE_SETTINGS, Key.OUT_EASE, out_ease)
+    Settings.set_setting(Section.STROKE_SETTINGS, Key.IN_TRANS, in_trans)
+    Settings.set_setting(Section.STROKE_SETTINGS, Key.IN_EASE, in_ease)
     
     print("In Duration: ", in_duration)
     print("Out Duration: ", out_duration)
@@ -136,7 +136,7 @@ func set_loop_bpm(bpm: float):
         elif not active:
             Main.node.play()
             active = true
-                
+
 func send_command():
     draw_easing()
     var in_duration:float = $In.stroke_duration
@@ -147,10 +147,10 @@ func send_command():
     var out_trans:int = $Out/AccelerationControls/Transition.selected
     var out_ease:int = $Out/AccelerationControls/Easing.selected
     var out_auxiliary:int
-    UserSettings.cfg.set_value('stroke_settings', 'in_trans', in_trans)
-    UserSettings.cfg.set_value('stroke_settings', 'in_ease', in_ease)
-    UserSettings.cfg.set_value('stroke_settings', 'out_trans', out_trans)
-    UserSettings.cfg.set_value('stroke_settings', 'out_ease', out_ease)
+    Settings.set_setting(Section.STROKE_SETTINGS, Key.OUT_TRANS, out_trans)
+    Settings.set_setting(Section.STROKE_SETTINGS, Key.OUT_EASE, out_ease)
+    Settings.set_setting(Section.STROKE_SETTINGS, Key.IN_TRANS, in_trans)
+    Settings.set_setting(Section.STROKE_SETTINGS, Key.IN_EASE, in_ease)
     
     var loop_command:PackedByteArray
     loop_command.resize(19)

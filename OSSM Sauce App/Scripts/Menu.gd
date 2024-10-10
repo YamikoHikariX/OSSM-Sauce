@@ -9,19 +9,13 @@ extends Panel
     $PathControls/HBox/Delete]
 
 func _ready() -> void:
-    if UserSettings.cfg.has_section_key('stroke_settings', 'min_duration'):
-        set_min_stroke_duration(UserSettings.cfg.get_value('stroke_settings', 'min_duration'))
-    
-    if UserSettings.cfg.has_section_key('stroke_settings', 'max_duration'):
-        set_max_stroke_duration(UserSettings.cfg.get_value('stroke_settings', 'max_duration'))
-    
-    if UserSettings.cfg.has_section_key('stroke_settings', 'display_mode'):
-        set_stroke_duration_display_mode(UserSettings.cfg.get_value('stroke_settings', 'display_mode'))
+    set_min_stroke_duration(Settings.get_setting(Section.STROKE_SETTINGS, Key.MIN_DURATION))
 
-    if UserSettings.cfg.has_section_key('app_settings', 'mode'):
-        select_mode(UserSettings.cfg.get_value('app_settings', 'mode'))
-    else:
-        select_mode(0)
+    set_max_stroke_duration(Settings.get_setting(Section.STROKE_SETTINGS, Key.MAX_DURATION))
+
+    set_stroke_duration_display_mode(Settings.get_setting(Section.STROKE_SETTINGS, Key.DISPLAY_MODE))
+
+    select_mode(Settings.get_setting(Section.APP_SETTINGS, Key.MODE))
 
 func _on_Back_pressed():
     tween(false)
@@ -29,12 +23,12 @@ func _on_Back_pressed():
 
 
 func _on_Settings_pressed():
-    %Settings.show()
+    %SettingsPage.show()
     hide()
 
 
 func _on_Exit_pressed():
-    UserSettings.cfg.save(Dirs.cfg_path)
+    Settings.save()
     get_tree().quit()
 
 
@@ -216,23 +210,19 @@ func set_stroke_duration_display_mode(value):
     $LoopSettings/DisplayMode/OptionButton.select(value)
     _on_stroke_duration_display_mode_changed(value)
 
-
 func _on_min_stroke_duration_changed(value):
     Main.node.min_stroke_duration = value
     %LoopControls.reset_stroke_duration_sliders()
-    UserSettings.cfg.set_value('stroke_settings', 'min_duration', value)
-
+    Settings.set_setting(Section.STROKE_SETTINGS, Key.MIN_DURATION, value)
 
 func _on_max_stroke_duration_changed(value):
     Main.node.max_stroke_duration = value
     %LoopControls.reset_stroke_duration_sliders()
-    UserSettings.cfg.set_value('stroke_settings', 'max_duration', value)
-
+    Settings.set_setting(Section.STROKE_SETTINGS, Key.MAX_DURATION, value)
 
 func _on_stroke_duration_display_mode_changed(index):
-    UserSettings.cfg.set_value('stroke_settings', 'display_mode', index)
+    Settings.set_setting(Section.STROKE_SETTINGS, Key.DISPLAY_MODE, index)
     %LoopControls.update_stroke_duration_text()
-
 
 func select_mode(index):
     $Main/Mode.select(index)
@@ -244,7 +234,7 @@ signal app_mode_changed(new_mode: Enums.AppMode)
 func _on_mode_selected(index: int):
     var mode_id: int = $Main/Mode.get_item_id(index)
     Main.node.app_mode = mode_id
-    UserSettings.cfg.set_value('app_settings', 'mode', index)
+    Settings.set_setting(Section.APP_SETTINGS, Key.MODE, mode_id)
     Main.node.send_command(Enums.CommandType.RESET)
     Main.node.home_to(0)
     if Main.node.connected_to_ossm:
