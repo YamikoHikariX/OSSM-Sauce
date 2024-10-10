@@ -4,11 +4,22 @@ var app_version_number: String = "1.1.0"
 
 const ANIM_TIME = 0.65
 
-var websocket = WebSocketPeer.new()
+var ossm_websocket = WebSocketPeer.new()
 var xtoys_websocket = WebSocketPeer.new()
 
-var connected_to_server: bool
-var connected_to_ossm: bool
+var connected_to_server: bool:
+    set(value):
+        connected_to_server = value
+        connected_to_server_changed.emit(connected_to_server)
+
+signal connected_to_server_changed(connected: bool)
+
+var connected_to_ossm: bool:
+    set(value):
+        connected_to_ossm = value
+        connected_to_ossm_changed.emit(connected_to_ossm)
+
+signal connected_to_ossm_changed(connected: bool)
 
 var ticks_per_second: int
 
@@ -89,7 +100,7 @@ func center_window():
 var marker_index: int
 func _physics_process(_delta):
     if app_mode == Enums.AppMode.POSITION:
-        handle_position_mode_gamepad_input()
+        handle_gamepad_input()
 
     if app_mode == Enums.AppMode.MOVE:
         handle_path_mode_physics()
@@ -97,7 +108,7 @@ func _physics_process(_delta):
 var previous_position_drag: float = 0.0
 var previous_position_axis: float = 0.0
 
-func handle_position_mode_gamepad_input():
+func handle_gamepad_input():
     position_axis = Input.get_action_strength("position_axis")
     position_drag = Input.get_axis("position_in", "position_out")
     position_drag = position_drag if abs(position_drag) > 0.02 else 0.0
@@ -116,7 +127,7 @@ func handle_path_mode_physics():
         if network_paths.size() > active_path_index + 1:
             var overreach_index = marker_index - network_paths[active_path_index].size() + 1
             var next_path = network_paths[active_path_index + 1]
-            websocket.send(next_path[overreach_index])
+            ossm_websocket.send(next_path[overreach_index])
         
         if active_path_index < paths.size() - 1:
             var path_list = %Menu/Playlist/Scroll/VBox
@@ -141,11 +152,11 @@ func handle_path_mode_physics():
     if frame == current_marker_frame:
         if connected_to_server:
             if marker_index < active_path.size():
-                websocket.send(active_path[marker_index])
+                ossm_websocket.send(active_path[marker_index])
             elif network_paths.size() > active_path_index + 1:
                 var overreach_index = marker_index - active_path.size()
                 var next_path = network_paths[active_path_index + 1]
-                websocket.send(next_path[overreach_index])
+                ossm_websocket.send(next_path[overreach_index])
         if current_marker < marker_list.size() - 1:
             marker_index += 1
     
@@ -157,11 +168,11 @@ func handle_path_mode_physics():
 
 func _process(_delta):
     xtoys_websocket.poll()
-    var xtoys_state = xtoys_websocket.get_ready_state()
+    var xtoys_ws_state = xtoys_websocket.get_ready_state()
 
-    if xtoys_state == WebSocketPeer.STATE_OPEN:
+    if xtoys_ws_state == WebSocketPeer.STATE_OPEN:
         if app_mode == Enums.AppMode.LOOP:
-            if xtoys_websocket.get_available_packet_count() > 0:
+            while xtoys_websocket.get_available_packet_count():
                 var packet: PackedByteArray = xtoys_websocket.get_packet()
                 if xtoys_websocket.was_string_packet():
                     var message: String = packet.get_string_from_utf8()
@@ -183,9 +194,9 @@ func _process(_delta):
     
 
 
-    websocket.poll()
-    var state = websocket.get_ready_state()
-    if state == WebSocketPeer.STATE_OPEN:
+    ossm_websocket.poll()
+    var ossm_ws_state = ossm_websocket.get_ready_state()
+    if ossm_ws_state == WebSocketPeer.STATE_OPEN:
         if not connected_to_server:
             UserSettings.cfg.set_value(
                 'app_settings',
@@ -193,18 +204,14 @@ func _process(_delta):
                 %Settings/Network/Address/TextEdit.text)
             connected_to_server = true
             send_command(Enums.CommandType.CONNECTION)
-            %Wifi.self_modulate = Color.WHITE
-            %Wifi.show()
-        while websocket.get_available_packet_count():
-            var packet: PackedByteArray = websocket.get_packet()
+        while ossm_websocket.get_available_packet_count():
+            var packet: PackedByteArray = ossm_websocket.get_packet()
             if packet[0] == Enums.CommandType.RESPONSE:
                 match packet[1]:
-                    
                     Enums.CommandType.CONNECTION:
                         connected_to_ossm = true
                         ossm_connection_timeout.emit_signal('timeout')
                         ossm_connection_timeout.stop()
-                        %Wifi.self_modulate = Color.SEA_GREEN
                         %SpeedPanel.update_speed()
                         %SpeedPanel/AccelerationBar.reset()
                         %RangePanel.update_min_range()
@@ -230,23 +237,22 @@ func _process(_delta):
                         elif %Menu/Main/Mode.selected == 1:
                             play()
     
-    elif state == WebSocketPeer.STATE_CLOSING:
+    elif ossm_ws_state == WebSocketPeer.STATE_CLOSING:
         pass # Keep polling to achieve proper close.
-    elif state == WebSocketPeer.STATE_CLOSED:
-        var code = websocket.get_close_code()
-        var reason = websocket.get_close_reason()
+    elif ossm_ws_state == WebSocketPeer.STATE_CLOSED:
+        var code = ossm_websocket.get_close_code()
+        var reason = ossm_websocket.get_close_reason()
         var text = "Webwebsocket closed with code: %d, reason %s. Clean: %s"
         print(text % [code, reason, code != -1])
         connected_to_server = false
         # set_process(false)
-        %Wifi.hide()
 
 func send_command(value: int):
     if connected_to_server:
         var command: PackedByteArray
         command.resize(1)
         command[0] = value
-        websocket.send(command)
+        ossm_websocket.send(command)
 
 
 func home_to(target_position: int):
@@ -264,7 +270,7 @@ func home_to(target_position: int):
         command.resize(5)
         command.encode_u8(0, Enums.CommandType.HOMING)
         command.encode_s32(1, target_position)
-        websocket.send(command)
+        ossm_websocket.send(command)
 
 
 func play(_play_time_ms = null):
@@ -277,13 +283,13 @@ func play(_play_time_ms = null):
             #command.encode_u8(1, app_mode)
             #command.encode_u32(2, play_time_ms)
             #if connected_to_server:
-                #websocket.send(command)
+                #ossm_websocket.send(command)
             #return
     command.resize(2)
     command.encode_u8(0, Enums.CommandType.PLAY)
     command.encode_u8(1, app_mode)
     if connected_to_server:
-        websocket.send(command)
+        ossm_websocket.send(command)
 
 
 func pause():
@@ -291,7 +297,7 @@ func pause():
         var command: PackedByteArray
         command.resize(1)
         command[0] = Enums.CommandType.PAUSE
-        websocket.send(command)
+        ossm_websocket.send(command)
     paused = true
 
 
@@ -422,7 +428,7 @@ func display_active_path_index(is_paused := true, send_buffer := true):
         if connected_to_server:
             send_command(Enums.CommandType.RESET)
             while marker_index < 6:
-                websocket.send(network_paths[active_path_index][marker_index])
+                ossm_websocket.send(network_paths[active_path_index][marker_index])
                 marker_index += 1
     else:
         marker_index = 6
@@ -461,5 +467,5 @@ func _notification(what):
             command.encode_u8(0, Enums.CommandType.SET_RANGE_LIMIT)
             command.encode_u8(1, MIN_RANGE)
             command.encode_u16(2, 0)
-            websocket.send(command)
+            ossm_websocket.send(command)
             home_to(0)

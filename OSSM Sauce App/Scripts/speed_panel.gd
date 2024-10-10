@@ -7,8 +7,6 @@ var speed_slider_max_pos: float
 
 var accel_slider_min_pos: float
 var accel_slider_max_pos: float
-# @onready var acceleration_slider: TextureRect = $AccelerationBar/Slider
-# @onready var acceleration_bottom: TextureRect = $AccelerationBar/SliderBottom
 
 
 func _ready():
@@ -23,10 +21,6 @@ func _ready():
 	
 	$AccelerationBar.value_changed.connect(_on_acceleration_changed)
 	$AccelerationBar.set_output_range(1000, Main.node.max_acceleration)
-	
-	# acceleration_slider.connect('gui_input', acceleration_slider_gui_input)
-	# accel_slider_max_pos = acceleration_slider.position.y
-	# accel_slider_min_pos = acceleration_bottom.position.y
 
 	if UserSettings.cfg.has_section_key('speed_slider', 'position_percent'):
 		set_speed_slider_pos(UserSettings.cfg.get_value('speed_slider', 'position_percent'))
@@ -56,18 +50,6 @@ func set_speed_slider_pos(percent):
 	update_speed()
 
 
-# func set_acceleration_slider_pos(percent):
-# 	var slider_map = remap(
-# 			percent,
-# 			0,
-# 			1,
-# 			accel_slider_min_pos,
-# 			accel_slider_max_pos)
-# 	acceleration_slider.position.y = slider_map
-# 	UserSettings.cfg.set_value('accel_slider', 'position_percent', percent)
-# 	update_acceleration()
-
-
 func update_speed():
 	var speed_map = round(remap(
 			speed_slider.position.y,
@@ -80,7 +62,7 @@ func update_speed():
 		command.resize(5)
 		command.encode_u8(0, Enums.CommandType.SET_SPEED_LIMIT)
 		command.encode_u32(1, speed_map)
-		Main.node.websocket.send(command)
+		Main.node.ossm_websocket.send(command)
 	$LabelTop.text = "Max Speed:\n" + str(speed_map) + " steps/sec"
 
 func _on_acceleration_changed(new_value: float):
@@ -97,7 +79,7 @@ func update_acceleration(new_value: int) -> void:
 		command.encode_u8(0, Enums.CommandType.SET_GLOBAL_ACCELERATION)
 		command.encode_u32(1, new_value)
 		print(new_value)
-		Main.node.websocket.send(command)
+		Main.node.ossm_websocket.send(command)
 	$LabelBot.text = "Acceleration:\n" + str(new_value) + " steps/sec²"
 
 
@@ -121,28 +103,6 @@ func speed_slider_gui_input(event):
 					'speed_slider',
 					'position_percent',
 					slider_position_percent)
-
-
-# func acceleration_slider_gui_input(event):
-# 	if 'relative' in event and event is InputEventMouseMotion:
-# 		if event.button_mask & MOUSE_BUTTON_LEFT:
-# 			var drag_pos = acceleration_slider.position.y + event.relative.y
-# 			var new_slider_pos = clamp(
-# 					drag_pos,
-# 					accel_slider_max_pos,
-# 					accel_slider_min_pos)
-# 			acceleration_slider.position.y = new_slider_pos
-# 			update_acceleration()
-# 			var slider_position_percent = remap(
-# 					new_slider_pos,
-# 					speed_slider_min_pos,
-# 					speed_slider_max_pos,
-# 					0,
-# 					1)
-# 			UserSettings.cfg.set_value(
-# 					'accel_slider',
-# 					'position_percent',
-# 					slider_position_percent)
 
 
 func tween(activating: bool = true):

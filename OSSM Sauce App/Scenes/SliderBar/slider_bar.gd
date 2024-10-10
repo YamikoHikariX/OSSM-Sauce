@@ -28,7 +28,9 @@ var ostop: float = 10000.0
 var deviation: float = 0.0
 
 @export var smoothing_slider: HSlider
+@export var stick_speed_slider: HSlider
 var smoothing: float = 0.02
+var stick_speed: float = 1.0
 
 var slider_position: float:
 	get:
@@ -46,14 +48,11 @@ func _ready() -> void:
 	if not show_target: %Target.hide()
 	%Slider.self_modulate = slider_color
 	if smoothing_slider: smoothing_slider.value_changed.connect(_on_smoothing_slider_value_changed)
+	if stick_speed_slider: stick_speed_slider.value_changed.connect(_on_stick_speed_slider_value_changed)
 	%Slider.gui_input.connect(_on_slider_gui_input)
 	reset()
 
 func reset() -> void:
-	if self.name == "AccelerationBar":
-		print()
-		print("starting_pos: ", starting_pos)
-		print("min_pos: ", min_pos)
 	if starting_pos:
 		target_pos = starting_pos
 	else:
@@ -62,11 +61,18 @@ func reset() -> void:
 	last_slider_position = slider_position
 	send_signal()
 
-
-
 func _physics_process(delta: float) -> void:
 	%Deviation.position.y = target_pos + deviation
 	%Target.position.y = target_pos
+	
+	# var lerped = lerp(slider_position, target_pos + deviation, delta / smoothing)
+	# var distance = abs(slider_position - lerped)
+	# if distance < 100:
+	# 	print(lerped)
+	# 	print(distance)
+	# 	slider_position = lerp(slider_position, target_pos + deviation, delta)
+	# else:
+	# 	slider_position = lerp(slider_position, target_pos + deviation, delta / smoothing)
 	slider_position = lerp(slider_position, target_pos + deviation, delta / smoothing)
 	# if abs(slider_position - last_slider_position) < 5: return
 		
@@ -78,17 +84,12 @@ func _physics_process(delta: float) -> void:
 
 func send_signal() -> void:
 	var mapped_pos = round(remap(slider_position, max_pos, min_pos, ostop, ostart))
-	if self.name == "AccelerationBar":
-		print("mapped_pos: ", mapped_pos)
 	value_changed.emit(mapped_pos)
 	last_slider_position = slider_position
-
-
 
 func _input(event) -> void:
 	if input_active:
 		process_target_pos(event.position.y - click_offset)
-
 	# elif event is InputEventMouseButton:
 	# 	if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 	# 		target_pos += 100
@@ -130,8 +131,11 @@ func _on_slider_gui_input(event) -> void:
 func _on_smoothing_slider_value_changed(value: float) -> void:
 	smoothing = value
 
+func _on_stick_speed_slider_value_changed(value: float) -> void:
+	stick_speed = value
+
 func _on_stick_input(position_change: float) -> void:
-	target_pos += position_change * 10.0
+	target_pos += position_change * 10.0 * stick_speed
 
 func _on_axis_input(position_axis: float) -> void:
 	# deviation = remap(-position_axis, 0.0, 1.0, 0.0, target_pos)

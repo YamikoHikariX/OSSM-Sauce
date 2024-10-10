@@ -56,14 +56,14 @@ func _on_connect_pressed():
             $Network/Address/TextEdit.text = address
     else:
         address = server_address
-    Main.node.websocket.connect_to_url("ws://" + address + ":" + port)
+    Main.node.ossm_websocket.connect_to_url("ws://" + address + ":" + port)
     print("Setting up connection to " + address + ":" + port)
     
     Main.node.set_process(true)
 
 
 func _on_get_range_pressed():
-    Main.node.websocket.send_text('G')
+    Main.node.ossm_websocket.send_text('G')
 
 
 func _on_network_address_text_changed():
@@ -122,7 +122,7 @@ func send_homing_speed():
         command.resize(5)
         command.encode_u32(0, Enums.CommandType.SET_HOMING_SPEED)
         command.encode_u32(1, $HomingSpeed/SpinBox.value)
-        Main.node.websocket.send(command)
+        Main.node.ossm_websocket.send(command)
 
 
 func _on_homing_speed_changed(value):

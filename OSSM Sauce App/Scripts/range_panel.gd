@@ -65,7 +65,7 @@ func update_min_range():
 		command.encode_u8(0, Enums.CommandType.SET_RANGE_LIMIT)
 		command.encode_u8(1, MIN_RANGE)
 		command.encode_u16(2, range_map)
-		Main.node.websocket.send(command)
+		Main.node.ossm_websocket.send(command)
 	var text_value = str(snapped(range_map, 0.01))
 	$LabelBot.text = "Min Position:\n" + text_value + "%"
 
@@ -85,7 +85,7 @@ func update_max_range(position: float = 0):
 		command.encode_u8(0, Enums.CommandType.SET_RANGE_LIMIT)
 		command.encode_u8(1, MAX_RANGE)
 		command.encode_u16(2, range_map)
-		Main.node.websocket.send(command)
+		Main.node.ossm_websocket.send(command)
 	var text_value = str(snapped(range_map, 0.01))
 	$LabelTop.text = "Max Position:\n" + text_value + "%"
 

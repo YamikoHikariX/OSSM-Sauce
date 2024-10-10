@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://d3cq3b5o0feo0"]
+[gd_scene load_steps=51 format=3 uid="uid://d3cq3b5o0feo0"]
 
 [ext_resource type="Theme" uid="uid://dqhnc02ffxjr2" path="res://Theme.tres" id="1_vq4js"]
 [ext_resource type="Script" path="res://main.gd" id="2_jo8ih"]
@@ -38,6 +38,7 @@
 [ext_resource type="Script" path="res://Scripts/save_playlist.gd" id="40_jjxyt"]
 [ext_resource type="Script" path="res://Scripts/settings.gd" id="41_m8wy6"]
 [ext_resource type="Script" path="res://Scripts/add_file.gd" id="42_p7l1i"]
+[ext_resource type="Script" path="res://Scenes/WifiIcon/wifi_icon.gd" id="42_yfho7"]
 [ext_resource type="Script" path="res://Scripts/file_list.gd" id="43_ypxlb"]
 [ext_resource type="Script" path="res://Scripts/scroll_item.gd" id="44_rs8f6"]
 [ext_resource type="Texture2D" uid="uid://c0bgeto1j6das" path="res://Textures/wifi.svg" id="45_jo84y"]
@@ -1557,11 +1558,12 @@ grow_vertical = 2
 wait_time = 0.5
 one_shot = true
 
-[node name="Wifi" type="Sprite2D" parent="."]
+[node name="WifiIcon" type="Sprite2D" parent="."]
 unique_name_in_owner = true
 visible = false
 position = Vector2(1031, 45)
 texture = ExtResource("45_jo84y")
+script = ExtResource("42_yfho7")
 
 [node name="Splash" type="Panel" parent="."]
 unique_name_in_owner = true

@@ -2,7 +2,7 @@ extends Control
 
 
 func _ready():
-    %Smoothing/HSlider.value_changed.connect(_on_smoothing_slider_value_changed)
+    %SmoothingSlider/HSlider.value_changed.connect(_on_smoothing_slider_value_changed)
     %PositionBar.value_changed.connect(_on_position_changed)
     %PositionBar.set_output_range(0, 10000)
     %Menu.app_mode_changed.connect(_on_app_mode_changed)
@@ -10,7 +10,13 @@ func _ready():
     Main.node.gamepad_axis_input.connect(%PositionBar._on_axis_input)
     
     if UserSettings.cfg.has_section_key('app_settings', 'smoothing_slider'):
-        %Smoothing/HSlider.set_value(UserSettings.cfg.get_value('app_settings', 'smoothing_slider'))
+        %SmoothingSlider/HSlider.set_value(UserSettings.cfg.get_value('app_settings', 'smoothing_slider'))
+
+func _input(event: InputEvent) -> void:
+    if event.is_action_pressed("D-pad Up"):
+        %SpeedSlider/HSlider.value += %SpeedSlider/HSlider.step
+    elif event.is_action_pressed("D-pad Down"):
+        %SpeedSlider/HSlider.value -= %SpeedSlider/HSlider.step
 
 func _on_app_mode_changed(new_mode: Enums.AppMode):
     $PositionBar.reset()
@@ -43,4 +49,4 @@ func set_ossm_position(new_position: int) -> void:
         command.encode_u8(0, Enums.CommandType.POSITION)
         command.encode_u32(1, new_position)
         print("Sending position command: ", new_position)
-        Main.node.websocket.send(command)
+        Main.node.ossm_websocket.send(command)

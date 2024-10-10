@@ -129,14 +129,14 @@ func set_loop_bpm(bpm: float):
     loop_command.encode_u8(17, out_ease)
     loop_command.encode_u8(18, out_auxiliary)
     if Main.node.connected_to_server:
-        Main.node.websocket.send(loop_command)
+        Main.node.ossm_websocket.send(loop_command)
         if in_duration + out_duration == 0:
             Main.node.pause()
             active = false
         elif not active:
             Main.node.play()
             active = true
-
+                
 func send_command():
     draw_easing()
     var in_duration:float = $In.stroke_duration
@@ -167,7 +167,7 @@ func send_command():
     loop_command.encode_u8(17, out_ease)
     loop_command.encode_u8(18, out_auxiliary)
     if Main.node.connected_to_server:
-        Main.node.websocket.send(loop_command)
+        Main.node.ossm_websocket.send(loop_command)
         if in_duration + out_duration == 0:
             Main.node.pause()
             active = false
@@ -195,7 +195,7 @@ func _on_tap_pressed():
         duration = tap_time
     prev_ms = Time.get_ticks_msec()
     if Main.node.connected_to_server and $ActiveSwitch.button_pressed:
-        Main.node.websocket.send_text(
+        Main.node.ossm_websocket.send_text(
             'L' + str((duration) * 0.5) + 
             "T" + str($Controls/Transitions/In.selected) + 
             "E" + str($Controls/Easings/In.selected) + 
