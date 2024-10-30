@@ -7,7 +7,7 @@ var default_settings: Dictionary = {
     Section.APP_SETTINGS: {
         Key.VERSION_NUMBER: app_version_number,
         Key.SHOW_SPLASH: true,
-        Key.MODE: 0,
+        Key.MODE: 2,
         Key.SMOOTHING_SLIDER: 0.02,
         Key.LAST_SERVER_CONNECTION: '',
     },
@@ -75,19 +75,25 @@ func merge_defaults() -> void:
         save()
 
 func get_setting(section: String, key: String, default_value: Variant = null) -> Variant:
+    # print("Getting setting for section: ", section, ", key: ", key)
     if cfg.has_section_key(section, key):
-        return cfg.get_value(section, key)
+        var value = cfg.get_value(section, key)
+        # print("Found setting: ", value)
+        return value
     else:
         var value = default_value
         if default_value == null:
             value = default_settings.get(section, {}).get(key, null)
+        # print("Setting not found, using default value: ", value)
         cfg.set_value(section, key, value)
         save()
         return value
 
 func set_setting(section: String, key: String, value: Variant) -> void:
+    # print("Setting value for section: ", section, ", key: ", key, ", value: ", value)
     cfg.set_value(section, key, value)
     save()
+    # print("Value set and saved for section: ", section, ", key: ", key)
 
 func has_setting(section: String, key: String) -> bool:
     return cfg.has_section_key(section, key)

@@ -8,6 +8,12 @@ extends Panel
     $PathControls/HBox/Restart,
     $PathControls/HBox/Delete]
 
+const TabIndexToMode = {
+    0: Enums.AppMode.MOVE,
+    1: Enums.AppMode.POSITION,
+    2: Enums.AppMode.LOOP,
+}
+
 func _ready() -> void:
     set_min_stroke_duration(Settings.get_setting(Section.STROKE_SETTINGS, Key.MIN_DURATION))
 
@@ -224,24 +230,26 @@ func _on_stroke_duration_display_mode_changed(index):
     Settings.set_setting(Section.STROKE_SETTINGS, Key.DISPLAY_MODE, index)
     %LoopControls.update_stroke_duration_text()
 
-func select_mode(index):
-    $Main/Mode.select(index)
-    _on_mode_selected(index)
+func select_mode(new_app_mode: Enums.AppMode):
+    print("Selecting mode: ", new_app_mode)
+    var new_tab_index = TabIndexToMode.find_key(new_app_mode)
+    print("New tab index: ", new_tab_index)
 
+    $Main/Mode.select(new_tab_index)
+    _on_mode_selected(new_tab_index)
 
-signal app_mode_changed(new_mode: Enums.AppMode)
 
 func _on_mode_selected(index: int):
-    var mode_id: int = $Main/Mode.get_item_id(index)
-    Main.node.app_mode = mode_id
-    Settings.set_setting(Section.APP_SETTINGS, Key.MODE, mode_id)
+    var mode_id: int = TabIndexToMode[index]
+
     Main.node.send_command(Enums.CommandType.RESET)
     Main.node.home_to(0)
     if Main.node.connected_to_ossm:
         await Main.node.homing_complete
+
+    Main.node.app_mode = mode_id
     match mode_id:
         Enums.AppMode.MOVE:
-            app_mode_changed.emit(Enums.AppMode.MOVE)
             %LoopControls/In.set_physics_process(false)
             %LoopControls/Out.set_physics_process(false)
             %ActionPanel.clear_selections()
@@ -260,7 +268,6 @@ func _on_mode_selected(index: int):
             refresh_selection()
         
         Enums.AppMode.POSITION:
-            app_mode_changed.emit(Enums.AppMode.POSITION)
             Main.node.paused = true
             %LoopControls/In.set_physics_process(false)
             %LoopControls/Out.set_physics_process(false)
@@ -278,7 +285,6 @@ func _on_mode_selected(index: int):
             Main.node.play()
         
         Enums.AppMode.LOOP:
-            app_mode_changed.emit(Enums.AppMode.LOOP)
             Main.node.paused = true
             var stop_pos = %LoopControls/In.slider_max_pos
             %LoopControls/In.touch_pos = stop_pos
@@ -292,7 +298,6 @@ func _on_mode_selected(index: int):
             %LoopControls/Out.set_physics_process(true)
             %LoopControls/In.input_active = false
             %LoopControls/Out.input_active = false
-            %LoopControls.active = false
             %LoopControls/Pause.hide()
             %ActionPanel.clear_selections()
             %ActionPanel/Play.hide()

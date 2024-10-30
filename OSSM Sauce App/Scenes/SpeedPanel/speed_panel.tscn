@@ -1,0 +1,111 @@
+[gd_scene load_steps=5 format=3 uid="uid://cphap3q53w4vh"]
+
+[ext_resource type="Script" path="res://Scripts/speed_panel.gd" id="1_x78we"]
+[ext_resource type="Texture2D" uid="uid://cb703kraugp85" path="res://Textures/S32.svg" id="2_1ja7a"]
+[ext_resource type="Texture2D" uid="uid://cnyl16jr7jd8g" path="res://Textures/Dot.svg" id="3_a5hbi"]
+[ext_resource type="PackedScene" uid="uid://upbk6seiqbg0" path="res://Scenes/SliderBar/slider_bar.tscn" id="4_hprdo"]
+
+[node name="SpeedPanel" type="Panel"]
+anchors_preset = -1
+anchor_left = -0.5
+anchor_bottom = 1.0
+grow_vertical = 2
+script = ExtResource("1_x78we")
+metadata/_edit_use_anchors_ = true
+
+[node name="SpeedBar" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -171.0
+offset_top = -806.5
+offset_right = 1.0
+offset_bottom = 806.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_1ja7a")
+patch_margin_top = 80
+patch_margin_bottom = 80
+
+[node name="Slider" type="TextureRect" parent="SpeedBar"]
+self_modulate = Color(0.498039, 1, 0.831373, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -69.0
+offset_top = -791.0
+offset_right = 69.0
+offset_bottom = -653.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_a5hbi")
+
+[node name="SliderBottom" type="TextureRect" parent="SpeedBar"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -69.0
+offset_top = 652.0
+offset_right = 69.0
+offset_bottom = 790.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_a5hbi")
+
+[node name="AccelerationBar" parent="." instance=ExtResource("4_hprdo")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 1.0
+offset_top = -805.0
+offset_right = 173.0
+offset_bottom = 807.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_offset = 225
+
+[node name="LabelTop" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_right = 150.0
+offset_bottom = 151.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 54
+text = "Max Speed:
+20000 steps/sec"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelBot" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -151.0
+offset_right = 150.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 54
+text = "Acceleration:
+200000 steps/sec²"
+horizontal_alignment = 1
+vertical_alignment = 1

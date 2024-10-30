@@ -22,7 +22,7 @@ func _ready():
 func _physics_process(delta):
 	if not input_active:
 		return
-	var slider_resist = get_parent().slider_resist
+	var slider_resist = owner.slider_resist
 	var pos = lerp(slider.position.y, touch_pos, delta * slider_resist)
 	var clamped_pos = clamp(pos, slider_max_pos, slider_min_pos)
 	slider.position.y = clamped_pos
@@ -32,7 +32,7 @@ func _physics_process(delta):
 		_in.update_stroke_duration_text()
 	map_stroke_duration()
 	update_stroke_duration_text()
-	get_parent().send_command()
+	owner.set_loop_from_sliders()
 
 
 var input_active: bool
@@ -77,7 +77,7 @@ func reset_stroke_duration_slider():
 		Main.node.min_stroke_duration,
 		Main.node.max_stroke_duration), 0.01)
 	if Main.node.connected_to_server:
-		get_parent().send_command()
+		owner.set_loop_from_sliders()
 	update_stroke_duration_text()
 
 
@@ -109,12 +109,12 @@ func update_stroke_duration_text():
 func _on_transition_item_selected(index):
 	if link_button.button_pressed:
 		_in.get_node('AccelerationControls/Transition').select(index)
-	get_parent().send_command()
-	get_parent()._on_bpm_button_pressed()
+	owner.set_loop_from_sliders()
+	# owner._on_bpm_button_pressed()
 
 
 func _on_easing_item_selected(index):
 	if link_button.button_pressed:
 		_in.get_node('AccelerationControls/Easing').select(index)
-	get_parent().send_command()
-	get_parent()._on_bpm_button_pressed()
+	owner.set_loop_from_sliders()
+	# owner._on_bpm_button_pressed()

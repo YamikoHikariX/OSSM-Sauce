@@ -33,6 +33,10 @@ window/size/viewport_height=1920
 window/stretch/mode="canvas_items"
 window/handheld/orientation=1
 
+[dotnet]
+
+project/assembly_name="OSSM Sauce"
+
 [input]
 
 position_in={

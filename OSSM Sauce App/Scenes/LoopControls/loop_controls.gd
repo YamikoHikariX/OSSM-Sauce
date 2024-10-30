@@ -1,7 +1,5 @@
 extends Control
 
-var active:bool
-
 enum Trans {
     LINEAR,
     SINE,
@@ -42,16 +40,16 @@ func _ready():
     $BPMSend.pressed.connect(_on_bpm_button_pressed)
 
     var in_trans = Settings.get_setting(Section.STROKE_SETTINGS, Key.IN_TRANS)
-    %LoopControls/In/AccelerationControls/Transition.select(in_trans)
+    $In/AccelerationControls/Transition.select(in_trans)
     
     var in_ease = Settings.get_setting(Section.STROKE_SETTINGS, Key.IN_EASE)
-    %LoopControls/In/AccelerationControls/Easing.select(in_ease)
+    $In/AccelerationControls/Easing.select(in_ease)
     
     var out_trans = Settings.get_setting(Section.STROKE_SETTINGS, Key.OUT_TRANS)
-    %LoopControls/Out/AccelerationControls/Transition.select(out_trans)
+    $Out/AccelerationControls/Transition.select(out_trans)
 
     var out_ease = Settings.get_setting(Section.STROKE_SETTINGS, Key.OUT_EASE)
-    %LoopControls/Out/AccelerationControls/Easing.select(out_ease)
+    $Out/AccelerationControls/Easing.select(out_ease)
 
     draw_easing()
 
@@ -93,87 +91,65 @@ func set_loop_bpm(bpm: float):
     if %ActionPanel.get_node("Play").is_visible(): return
     if bpm <= 0:
         Main.node.pause()
-        active = false
         return
 
     $BPMText.text = str(bpm)
+
+    var in_duration: float = 60.0 / bpm / 2.0
+    var out_duration: float = 60.0 / bpm / 2.0
+
+    send_loop_command(in_duration, out_duration)
+
+func set_loop_from_sliders():
+    var in_duration: float = $In.stroke_duration
+    var out_duration: float = $Out.stroke_duration
+
+    send_loop_command(in_duration, out_duration)
+
+func send_loop_command(in_duration: float, out_duration: float):
     draw_easing()
-    var in_duration:float = 60.0 / bpm / 2.0
-    var in_trans:int = $In/AccelerationControls/Transition.selected
-    var in_ease:int = $In/AccelerationControls/Easing.selected
-    var in_auxiliary:int
-    var out_duration:float = 60.0 / bpm / 2.0
-    var out_trans:int = $Out/AccelerationControls/Transition.selected
-    var out_ease:int = $Out/AccelerationControls/Easing.selected
-    var out_auxiliary:int
-    Settings.set_setting(Section.STROKE_SETTINGS, Key.OUT_TRANS, out_trans)
-    Settings.set_setting(Section.STROKE_SETTINGS, Key.OUT_EASE, out_ease)
+
+    if in_duration + out_duration == 0:
+        Main.node.pause()
+        return
+    
+    if %ActionPanel.get_node("Play").is_visible(): return
+
+    var in_trans: int = $In/AccelerationControls/Transition.selected
+    var in_ease: int = $In/AccelerationControls/Easing.selected
+    var out_trans: int = $Out/AccelerationControls/Transition.selected
+    var out_ease: int = $Out/AccelerationControls/Easing.selected
+    var in_auxiliary: int = 0
+    var out_auxiliary: int = 0
+
     Settings.set_setting(Section.STROKE_SETTINGS, Key.IN_TRANS, in_trans)
     Settings.set_setting(Section.STROKE_SETTINGS, Key.IN_EASE, in_ease)
-    
-    print("In Duration: ", in_duration)
-    print("Out Duration: ", out_duration)
+    Settings.set_setting(Section.STROKE_SETTINGS, Key.OUT_TRANS, out_trans)
+    Settings.set_setting(Section.STROKE_SETTINGS, Key.OUT_EASE, out_ease)
 
-    var loop_command:PackedByteArray
+    var loop_command = PackedByteArray()
     loop_command.resize(19)
-    
+
     loop_command.encode_u8(0, Enums.CommandType.LOOP)
-    loop_command.encode_u32(1, in_duration * 1000)
+    loop_command.encode_u32(1, int(in_duration * 1000))
     loop_command.encode_u16(5, 10000)
     loop_command.encode_u8(7, in_trans)
     loop_command.encode_u8(8, in_ease)
     loop_command.encode_u8(9, in_auxiliary)
-    loop_command.encode_u32(10, out_duration * 1000)
+    loop_command.encode_u32(10, int(out_duration * 1000))
     loop_command.encode_u16(14, 0)
     loop_command.encode_u8(16, out_trans)
     loop_command.encode_u8(17, out_ease)
     loop_command.encode_u8(18, out_auxiliary)
-    if Main.node.connected_to_server:
-        Main.node.ossm_websocket.send(loop_command)
-        if in_duration + out_duration == 0:
-            Main.node.pause()
-            active = false
-        elif not active:
-            Main.node.play()
-            active = true
 
-func send_command():
-    draw_easing()
-    var in_duration:float = $In.stroke_duration
-    var in_trans:int = $In/AccelerationControls/Transition.selected
-    var in_ease:int = $In/AccelerationControls/Easing.selected
-    var in_auxiliary:int
-    var out_duration:float = $Out.stroke_duration
-    var out_trans:int = $Out/AccelerationControls/Transition.selected
-    var out_ease:int = $Out/AccelerationControls/Easing.selected
-    var out_auxiliary:int
-    Settings.set_setting(Section.STROKE_SETTINGS, Key.OUT_TRANS, out_trans)
-    Settings.set_setting(Section.STROKE_SETTINGS, Key.OUT_EASE, out_ease)
-    Settings.set_setting(Section.STROKE_SETTINGS, Key.IN_TRANS, in_trans)
-    Settings.set_setting(Section.STROKE_SETTINGS, Key.IN_EASE, in_ease)
+    if in_duration + out_duration == 0:
+        Main.node.pause()
+        return
     
-    var loop_command:PackedByteArray
-    loop_command.resize(19)
-    
-    loop_command.encode_u8(0, Enums.CommandType.LOOP)
-    loop_command.encode_u32(1, in_duration * 1000)
-    loop_command.encode_u16(5, 10000)
-    loop_command.encode_u8(7, in_trans)
-    loop_command.encode_u8(8, in_ease)
-    loop_command.encode_u8(9, in_auxiliary)
-    loop_command.encode_u32(10, out_duration * 1000)
-    loop_command.encode_u16(14, 0)
-    loop_command.encode_u8(16, out_trans)
-    loop_command.encode_u8(17, out_ease)
-    loop_command.encode_u8(18, out_auxiliary)
     if Main.node.connected_to_server:
-        Main.node.ossm_websocket.send(loop_command)
-        if in_duration + out_duration == 0:
-            Main.node.pause()
-            active = false
-        elif not active:
+        if Main.node.paused:
             Main.node.play()
-            active = true
+        Main.node.ossm_websocket.send(loop_command)
 
 
 func _on_ttc_toggled(toggled_on):
@@ -183,7 +159,6 @@ func _on_ttc_toggled(toggled_on):
     else:
         $Controls/ttc.self_modulate = Color.WHITE
         $Controls/ttc.text = "Tap to Cycle: OFF"
-
 
 var prev_ms:int
 func _on_tap_pressed():

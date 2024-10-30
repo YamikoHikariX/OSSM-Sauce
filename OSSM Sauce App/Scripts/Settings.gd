@@ -6,6 +6,9 @@ func _ready():
     var checkbox = $Window/TransparentBg/CheckBox
     checkbox.button_pressed = Settings.get_setting(Section.WINDOW, Key.TRANSPARENT_BACKGROUND)
 
+    var always_on_top = $Window/AlwaysOnTop/CheckBox
+    always_on_top.button_pressed = Settings.get_setting(Section.WINDOW, Key.ALWAYS_ON_TOP)
+
     $Network/Address/TextEdit.text = Settings.get_setting(Section.APP_SETTINGS, Key.LAST_SERVER_CONNECTION)
     _on_connect_pressed()
     $Network/ConnectionTimeout.start()
@@ -114,6 +117,7 @@ func _on_homing_speed_changed(value):
 
 func _on_always_on_top_toggled(toggled):
     DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, toggled)
+    print("Setting always on top to: ", toggled)
     Settings.set_setting(Section.WINDOW, Key.ALWAYS_ON_TOP, toggled)
 
 func _on_transparent_background_toggled(toggled):

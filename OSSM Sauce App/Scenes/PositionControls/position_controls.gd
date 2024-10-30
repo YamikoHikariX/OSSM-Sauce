@@ -5,7 +5,7 @@ func _ready():
     %SmoothingSlider/HSlider.value_changed.connect(_on_smoothing_slider_value_changed)
     %PositionBar.value_changed.connect(_on_position_changed)
     %PositionBar.set_output_range(0, 10000)
-    %Menu.app_mode_changed.connect(_on_app_mode_changed)
+    Main.node.app_mode_changed.connect(_on_app_mode_changed)
     Main.node.gamepad_stick_input.connect(%PositionBar._on_stick_input)
     Main.node.gamepad_axis_input.connect(%PositionBar._on_axis_input)
     

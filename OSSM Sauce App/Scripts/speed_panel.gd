@@ -1,4 +1,4 @@
-extends Panel
+extends BasePanel
 
 var speed_slider_min_pos: float
 var speed_slider_max_pos: float
@@ -8,12 +8,11 @@ var speed_slider_max_pos: float
 var accel_slider_min_pos: float
 var accel_slider_max_pos: float
 
+func initialize_panel() -> void:
+	slide_direction = SlideDirection.SLIDE_FROM_LEFT
 
-func _ready():
 	$LabelTop.self_modulate.a = 0
 	$LabelBot.self_modulate.a = 0
-	$BackTexture.self_modulate.a = 0
-	$BackButton.hide()
 	
 	speed_slider.connect('gui_input', speed_slider_gui_input)
 	speed_slider_max_pos = speed_slider.position.y
@@ -25,9 +24,6 @@ func _ready():
 	set_speed_slider_pos(Settings.get_setting(Section.SPEED_SLIDER, Key.POSITION_PERCENT))
 
 	$AccelerationBar.set_starting_percentage(Settings.get_setting(Section.ACCEL_SLIDER, Key.POSITION_PERCENT))
-	print("accel_slider: ", Settings.get_setting(Section.ACCEL_SLIDER, Key.POSITION_PERCENT))
-
-
 
 func reset():
 	$AccelerationBar.reset()
@@ -94,45 +90,3 @@ func speed_slider_gui_input(event):
 					0,
 					1)
 			Settings.set_setting(Section.SPEED_SLIDER, Key.POSITION_PERCENT, slider_position_percent)
-
-func tween(activating: bool = true):
-	var tween = get_tree().create_tween()
-	tween.set_trans(Tween.TRANS_QUART)
-	tween.set_ease(Tween.EASE_OUT)
-	tween.set_parallel()
-	var outside_pos := Vector2(-size.x, position.y)
-	var inside_pos := Vector2(0, outside_pos.y)
-	var positions: Array = [outside_pos, inside_pos]
-	if not activating:
-		positions.reverse()
-	tween.tween_method(set_position, position, positions[1], Main.node.ANIM_TIME)
-	var start_color: Color = $BackTexture.self_modulate
-	var end_color: Color = start_color
-	start_color.a = 0
-	end_color.a = 1
-	var colors: Array = [start_color, end_color]
-	if not activating:
-		colors.reverse()
-		$BackButton.hide()
-		tween.tween_callback(anim_finished).set_delay(Main.node.ANIM_TIME)
-	else:
-		$BackButton.show()
-	var visuals = [$BackTexture, $LabelTop, $LabelBot]
-	for node in visuals:
-		tween.tween_method(
-			node.set_self_modulate,
-			colors[0],
-			colors[1],
-			Main.node.ANIM_TIME)
-
-
-func anim_finished():
-	%ActionPanel/Speed/Selection.hide()
-	%ActionPanel.self_modulate.a = 1
-	$BackButton.hide()
-
-
-func _on_back_button_pressed():
-	tween(false)
-	$BackButton.hide()
-	%ActionPanel.show()

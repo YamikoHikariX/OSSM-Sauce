@@ -20,7 +20,6 @@ func _on_play_button_pressed():
                 $Pause/Selection.show()
                 $Pause.show()
         Enums.AppMode.LOOP:
-            %LoopControls.active = true
             Main.node.play()
             %LoopControls/Pause.hide()
             $Play.hide()
@@ -49,7 +48,6 @@ func _on_pause_button_pressed():
             $Play.show()
         Enums.AppMode.LOOP:
             Main.node.pause()
-            %LoopControls.active = false
             %LoopControls/Pause.show()
             %LoopControls.set_loop_bpm(0)
             $Play.show()
@@ -69,9 +67,8 @@ func _on_speed_button_pressed():
     self_modulate.a = 1.2
     %CircleSelection.hide_and_reset()
     $Speed/Selection.show()
-    %SpeedPanel.tween()
+    %SpeedPanel.open()
     $Timer.stop()
-    hide()
 
 
 func _on_range_button_pressed():
@@ -79,10 +76,8 @@ func _on_range_button_pressed():
     self_modulate.a = 1.2
     %CircleSelection.hide_and_reset()
     $Range/Selection.show()
-    %RangePanel.tween()
+    %RangePanel.open()
     $Timer.stop()
-    hide()
-
 
 func _on_menu_button_pressed():
     clear_selections()
