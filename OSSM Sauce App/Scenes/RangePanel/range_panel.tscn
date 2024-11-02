@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bay00h3vqieoe"]
 
-[ext_resource type="Script" path="res://Scripts/range_panel.gd" id="1_flitj"]
+[ext_resource type="Script" path="res://Scenes/RangePanel/range_panel.gd" id="1_flitj"]
 [ext_resource type="Texture2D" uid="uid://cb703kraugp85" path="res://Textures/S32.svg" id="2_rgv2g"]
 [ext_resource type="Texture2D" uid="uid://cnyl16jr7jd8g" path="res://Textures/Dot.svg" id="3_vv6un"]
 

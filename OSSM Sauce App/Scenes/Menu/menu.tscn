@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://fxyub7xy8ha5" path="res://Textures/Pause.svg" id="8_huu33"]
 [ext_resource type="Texture2D" uid="uid://rcaxkukbqghe" path="res://Textures/Restart.svg" id="9_7njog"]
 [ext_resource type="Texture2D" uid="uid://bd8t1o4bylcx0" path="res://Textures/Trash.svg" id="10_lir8u"]
-[ext_resource type="Script" path="res://Scripts/Playlist.gd" id="11_dki7w"]
+[ext_resource type="Script" path="res://Scenes/Menu/Playlist/playlist.gd" id="11_jf15y"]
 [ext_resource type="Script" path="res://Scripts/item.gd" id="12_v5twj"]
 [ext_resource type="Texture2D" uid="uid://6v1hvd7m2vhs" path="res://Textures/t3.svg" id="13_31ld8"]
 [ext_resource type="Script" path="res://Scripts/add_delay.gd" id="14_4fx0v"]
@@ -288,7 +288,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("11_dki7w")
+script = ExtResource("11_jf15y")
 metadata/_edit_use_anchors_ = true
 
 [node name="Scroll" type="ScrollContainer" parent="Playlist"]
