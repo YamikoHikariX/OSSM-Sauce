@@ -63,6 +63,7 @@ func _on_load_playlist_pressed():
 			Main.node.create_delay(delay_duration)
 		elif Main.node.load_path(line):
 			%Menu/Playlist.add_item(line)
+	Main.node.send_command(Enums.CommandType.RESET)
 	%Menu.show()
 	hide()
 

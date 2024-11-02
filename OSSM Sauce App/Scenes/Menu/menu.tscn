@@ -94,8 +94,8 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = -723.0
-offset_bottom = -307.0
+offset_top = -715.0
+offset_bottom = -197.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 71
@@ -144,6 +144,72 @@ text = "Add Path"
 layout_mode = 2
 theme_override_font_sizes/font_size = 64
 text = "Add Delay"
+
+[node name="LoopPlaylistButton" type="Button" parent="Main"]
+layout_mode = 2
+theme_override_colors/font_pressed_color = Color(0, 0.815686, 0.627451, 1)
+theme_override_font_sizes/font_size = 54
+toggle_mode = true
+text = "Loop Playlist: OFF"
+
+[node name="PathControls" type="Control" parent="Main"]
+unique_name_in_owner = true
+layout_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Down" type="TextureButton" parent="Main/PathControls"]
+layout_mode = 0
+offset_left = 46.0
+offset_top = -29.5
+offset_right = 169.0
+offset_bottom = 39.5
+texture_normal = ExtResource("5_4uor1")
+
+[node name="Up" type="TextureButton" parent="Main/PathControls"]
+layout_mode = 0
+offset_left = 200.0
+offset_top = -29.5
+offset_right = 323.0
+offset_bottom = 39.5
+texture_normal = ExtResource("6_1uycb")
+
+[node name="HBox" type="HBoxContainer" parent="Main/PathControls"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -484.0
+offset_top = -57.5
+offset_right = -53.0
+offset_bottom = 57.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 83
+alignment = 2
+
+[node name="Play" type="TextureButton" parent="Main/PathControls/HBox"]
+layout_mode = 2
+texture_normal = ExtResource("7_ibqvd")
+stretch_mode = 3
+
+[node name="Pause" type="TextureButton" parent="Main/PathControls/HBox"]
+visible = false
+layout_mode = 2
+texture_normal = ExtResource("8_huu33")
+stretch_mode = 3
+
+[node name="Restart" type="TextureButton" parent="Main/PathControls/HBox"]
+visible = false
+layout_mode = 2
+texture_normal = ExtResource("9_7njog")
+stretch_mode = 3
+
+[node name="Delete" type="TextureButton" parent="Main/PathControls/HBox"]
+layout_mode = 2
+texture_normal = ExtResource("10_lir8u")
+stretch_mode = 3
 
 [node name="LoopSettings" type="VBoxContainer" parent="."]
 visible = false
@@ -213,67 +279,6 @@ max_value = 9999.0
 step = 0.01
 value = 0.2
 suffix = "sec"
-
-[node name="PathControls" type="Control" parent="."]
-anchors_preset = 0
-anchor_top = 0.35625
-anchor_right = 1.0
-anchor_bottom = 0.446354
-metadata/_edit_use_anchors_ = true
-
-[node name="Down" type="TextureButton" parent="PathControls"]
-layout_mode = 0
-offset_left = 46.0
-offset_top = 58.0
-offset_right = 169.0
-offset_bottom = 127.0
-texture_normal = ExtResource("5_4uor1")
-
-[node name="Up" type="TextureButton" parent="PathControls"]
-layout_mode = 0
-offset_left = 200.0
-offset_top = 58.0
-offset_right = 323.0
-offset_bottom = 127.0
-texture_normal = ExtResource("6_1uycb")
-
-[node name="HBox" type="HBoxContainer" parent="PathControls"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -484.0
-offset_top = -57.5
-offset_right = -53.0
-offset_bottom = 57.5
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_constants/separation = 83
-alignment = 2
-
-[node name="Play" type="TextureButton" parent="PathControls/HBox"]
-layout_mode = 2
-texture_normal = ExtResource("7_ibqvd")
-stretch_mode = 3
-
-[node name="Pause" type="TextureButton" parent="PathControls/HBox"]
-visible = false
-layout_mode = 2
-texture_normal = ExtResource("8_huu33")
-stretch_mode = 3
-
-[node name="Restart" type="TextureButton" parent="PathControls/HBox"]
-visible = false
-layout_mode = 2
-texture_normal = ExtResource("9_7njog")
-stretch_mode = 3
-
-[node name="Delete" type="TextureButton" parent="PathControls/HBox"]
-layout_mode = 2
-texture_normal = ExtResource("10_lir8u")
-stretch_mode = 3
 
 [node name="Playlist" type="Panel" parent="."]
 layout_mode = 1
@@ -412,7 +417,7 @@ offset_right = 156.5
 offset_bottom = 41.0
 grow_horizontal = 2
 grow_vertical = 2
-min_value = 0.01
+min_value = 0.2
 max_value = 999999.0
 step = 0.01
 value = 1.5
@@ -432,6 +437,17 @@ grow_horizontal = 0
 grow_vertical = 2
 theme_override_font_sizes/font_size = 54
 text = "sec"
+
+[node name="Panel" type="Panel" parent="AddDelay/Box"]
+modulate = Color(0.27, 0.27, 0.27, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 176.0
+offset_bottom = 176.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="SavePlaylist" type="Control" parent="."]
 visible = false
@@ -506,6 +522,15 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 54
 text = ".bxpl"
 
+[node name="Panel" type="Panel" parent="SavePlaylist"]
+modulate = Color(0.27, 0.27, 0.27, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
@@ -524,7 +549,7 @@ offset_bottom = -5.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 40
-text = "App v1.1.0"
+text = "App v1.1.1"
 
 [connection signal="pressed" from="Header/Back" to="." method="_on_Back_pressed"]
 [connection signal="pressed" from="Header/Settings" to="." method="_on_Settings_pressed"]
@@ -534,15 +559,16 @@ text = "App v1.1.0"
 [connection signal="pressed" from="Main/PlaylistButtons/SavePlaylist" to="." method="_on_save_playlist_pressed"]
 [connection signal="pressed" from="Main/PathButtons/AddPath" to="." method="_on_add_path_pressed"]
 [connection signal="pressed" from="Main/PathButtons/AddDelay" to="." method="_on_add_delay_pressed"]
+[connection signal="toggled" from="Main/LoopPlaylistButton" to="." method="_on_loop_playlist_button_toggled"]
+[connection signal="pressed" from="Main/PathControls/Down" to="." method="_on_down_pressed"]
+[connection signal="pressed" from="Main/PathControls/Up" to="." method="_on_up_pressed"]
+[connection signal="pressed" from="Main/PathControls/HBox/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Main/PathControls/HBox/Pause" to="." method="_on_pause_pressed"]
+[connection signal="pressed" from="Main/PathControls/HBox/Restart" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="Main/PathControls/HBox/Delete" to="." method="_on_delete_pressed"]
 [connection signal="item_selected" from="LoopSettings/DisplayMode/OptionButton" to="." method="_on_stroke_duration_display_mode_changed"]
 [connection signal="value_changed" from="LoopSettings/MaxStrokeDuration/SpinBox" to="." method="_on_max_stroke_duration_changed"]
 [connection signal="value_changed" from="LoopSettings/MinStrokeDuration/SpinBox" to="." method="_on_min_stroke_duration_changed"]
-[connection signal="pressed" from="PathControls/Down" to="." method="_on_down_pressed"]
-[connection signal="pressed" from="PathControls/Up" to="." method="_on_up_pressed"]
-[connection signal="pressed" from="PathControls/HBox/Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="PathControls/HBox/Pause" to="." method="_on_pause_pressed"]
-[connection signal="pressed" from="PathControls/HBox/Restart" to="." method="_on_restart_pressed"]
-[connection signal="pressed" from="PathControls/HBox/Delete" to="." method="_on_delete_pressed"]
 [connection signal="pressed" from="AddDelay/Box/HBox/AddDelay" to="AddDelay" method="_on_add_delay_pressed"]
 [connection signal="pressed" from="AddDelay/Box/HBox/Back" to="AddDelay" method="_on_back_pressed"]
 [connection signal="pressed" from="SavePlaylist/HBox/Save" to="SavePlaylist" method="_on_save_pressed"]

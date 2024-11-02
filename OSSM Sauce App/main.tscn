@@ -82,6 +82,7 @@ script = ExtResource("2_jo8ih")
 
 [node name="PathTab" parent="." instance=ExtResource("3_ujiel")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 
 [node name="PositionControls" parent="." instance=ExtResource("5_d77dx")]
@@ -419,7 +420,7 @@ offset_right = 273.5
 offset_bottom = -118.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 88
-text = "HOMING
+text = "SYNCING
 PLEASE WAIT"
 horizontal_alignment = 1
 

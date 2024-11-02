@@ -11,6 +11,7 @@ func show_menu_buttons():
 	var buttons = [
 		%Menu/Main/PlaylistButtons,
 		%Menu/Main/PathButtons,
+		%Menu/Main/LoopPlaylistButton,
 		%Menu/PathControls,
 		%Menu/Header,
 		%Menu/Main/Mode]

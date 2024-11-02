@@ -6,6 +6,8 @@ var selected_index
 
 var drag_delta: float
 
+@onready var menu = Main.node.get_node("%Menu")
+@onready var path_tab = Main.node.get_node("%PathTab")
 
 func _ready():
 	$Scroll/VBox.remove_child(Item)
@@ -14,24 +16,28 @@ func _ready():
 func _on_item_selected(item):
 	if drag_delta > 7:
 		return
+	
 	deselect_all()
 	item.select()
+	
 	var index = item.get_index()
 	selected_index = index
-	var restart_button = %Menu/PathControls/HBox/Restart
+	
+	var restart_button = %PathControls/HBox/Restart
 	if Main.node.active_path_index == index and Main.node.frame > 0:
 		restart_button.show()
 	else:
 		restart_button.hide()
 	if not Main.node.paused and Main.node.active_path_index == index:
-		%Menu.show_pause()
+		menu.show_pause()
 	else:
-		%Menu.show_play()
-	var timer = item.get_node('Timer')
-	if timer.time_left:
-		%Menu._on_play_pressed()
+		menu.show_play()
+	
+	var double_tap_timer = item.get_node('Timer')
+	if double_tap_timer.time_left:
+		menu._on_play_pressed()
 	else:
-		timer.start()
+		double_tap_timer.start()
 
 
 func add_item(item_text: String):
@@ -40,14 +46,14 @@ func add_item(item_text: String):
 	$Scroll/VBox.add_child(item)
 	var item_button = item.get_node('Button')
 	item_button.connect('pressed', _on_item_selected.bind(item))
-	%Menu/Main/PlaylistButtons/SavePlaylist.disabled = false
+	Main.node.get_node("%Menu/Main/PlaylistButtons/SavePlaylist").disabled = false
 
 
 func move_item(current_index, new_index):
 	var item = $Scroll/VBox.get_child(current_index)
-	var path = %PathTab/Paths.get_child(current_index)
+	var path = path_tab.get_node("Paths").get_child(current_index)
 	$Scroll/VBox.move_child(item, new_index)
-	%PathTab/Paths.move_child(path, new_index)
+	path_tab.get_node("Paths").move_child(path, new_index)
 	selected_index = new_index
 	
 	var path_data = Main.node.paths[current_index]
@@ -92,12 +98,13 @@ func deselect_all():
 func clear():
 	if Main.node.active_path_index != null:
 		Main.node.active_path_index = null
-		%Menu/PathControls.hide()
+		menu.get_node("PathControls").hide()
 		if not Main.node.paused:
-			%Menu._on_pause_pressed()
+			menu._on_pause_pressed()
 	Main.node.paths.clear()
 	for item in $Scroll/VBox.get_children():
 		$Scroll/VBox.remove_child(item)
-	for path in %PathTab/Paths.get_children():
-		%PathTab/Paths.remove_child(path)
-	%PathTab/Ball.hide()
+	#  Temporary get_node fix. This Playlist node should not access another node's child in the first place
+	for path in path_tab.get_node("Paths").get_children():
+		path_tab.get_node("Paths").remove_child(path)
+	path_tab.get_node("Ball").hide()
