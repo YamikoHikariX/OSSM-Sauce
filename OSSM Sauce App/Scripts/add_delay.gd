@@ -8,16 +8,8 @@ func _on_add_delay_pressed():
 
 
 func show_menu_buttons():
-	var buttons = [
-		%Menu/Main/PlaylistButtons,
-		%Menu/Main/PathButtons,
-		%Menu/Main/LoopPlaylistButton,
-		%Menu/PathControls,
-		%Menu/Header,
-		%Menu/Main/Mode]
-	for button in buttons:
-		button.show()
-	%Menu.refresh_selection()
+	%Main.show()
+	owner.refresh_selection()
 	hide()
 
 

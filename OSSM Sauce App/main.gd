@@ -41,7 +41,15 @@ var app_mode: Enums.AppMode:
 
 signal app_mode_changed(new_mode: Enums.AppMode)
 
-var max_speed: int
+var max_speed: int:
+	get:
+		return max_speed
+	set(value):
+		max_speed = value
+		if %SpeedPanel:
+			%SpeedPanel.reset()
+
+
 var max_acceleration: int
 
 var min_stroke_duration: float
@@ -103,7 +111,7 @@ func handle_gamepad_input():
 	position_axis = Input.get_action_strength("position_axis")
 	position_drag = Input.get_axis("position_in", "position_out")
 	position_drag = position_drag if abs(position_drag) > 0.02 else 0.0
-	if not (previous_position_drag == 0.0 and position_drag == previous_position_drag): 
+	if not (previous_position_drag == 0.0 and position_drag == previous_position_drag):
 		gamepad_stick_input.emit(position_drag)
 		previous_position_drag = position_drag
 	if not (previous_position_axis == 0.0 and position_axis == previous_position_axis):
@@ -111,29 +119,37 @@ func handle_gamepad_input():
 		previous_position_axis = position_axis
 
 func handle_path_mode_physics():
-	if paused or paths[active_path_index].is_empty(): return
+	if paused or paths[active_path_index].is_empty():
+		return
 	
 	if frame >= paths[active_path_index].size() - 1:
-		
-		if network_paths.size() > active_path_index + 1:
+		if active_path_index < network_paths.size() - 1:
 			var overreach_index = marker_index - network_paths[active_path_index].size() + 1
 			var next_path = network_paths[active_path_index + 1]
 			ossm_websocket.send(next_path[overreach_index])
-		
-		if active_path_index < paths.size() - 1:
-			var path_list = %Menu/Playlist/Scroll/VBox
+			var path_list = $Menu/Playlist/Scroll/VBox
 			var next_index = active_path_index + 1
-			var next_path = path_list.get_child(next_index)
+			var next_path_item = path_list.get_child(next_index) 
 			active_path_index = next_index
 			display_active_path_index(false, false)
-			%Menu/Playlist._on_item_selected(next_path)
+			%Menu/Playlist._on_item_selected(next_path_item)
 			path_list.get_child(next_index).set_active()
 		else:
-			pause()
-			%Menu.show_play()
-			%CircleSelection.show_restart()
-			paused = true
-		
+			if %Menu.loop_playlist:
+				var overreach_index = marker_index - network_paths[active_path_index].size() + 1
+				var next_path = network_paths[0]
+				ossm_websocket.send(next_path[overreach_index])
+				var path_list = %Menu/Playlist/Scroll/VBox
+				var next_path_item = path_list.get_child(0) 
+				active_path_index = 0
+				display_active_path_index(false, false)
+				%Menu/Playlist._on_item_selected(next_path_item)
+				path_list.get_child(0).set_active()
+			else:
+				pause()
+				%Menu.show_play()
+				%CircleSelection.show_restart()
+				paused = true
 		return
 	
 	var marker_list = markers[active_path_index]
@@ -144,18 +160,22 @@ func handle_path_mode_physics():
 		if connected_to_server:
 			if marker_index < active_path.size():
 				ossm_websocket.send(active_path[marker_index])
-			elif network_paths.size() > active_path_index + 1:
+			elif active_path_index < network_paths.size() - 1:
 				var overreach_index = marker_index - active_path.size()
 				var next_path = network_paths[active_path_index + 1]
+				ossm_websocket.send(next_path[overreach_index])
+			elif $Menu.loop_playlist:
+				var overreach_index = marker_index - active_path.size()
+				var next_path = network_paths[0]
 				ossm_websocket.send(next_path[overreach_index])
 		if current_marker < marker_list.size() - 1:
 			marker_index += 1
 	
-	var depth: float = paths[active_path_index][frame]
+	var depth:float = paths[active_path_index][frame]
 	frame += 1
 
-	%PathTab/Paths.get_child(active_path_index).position.x -= path_speed
-	%PathTab/Ball.position.y = render_depth(depth)
+	$PathTab/Paths.get_child(active_path_index).position.x -= path_speed
+	$PathTab/Ball.position.y = render_depth(depth)
 
 func _process(_delta):
 	xtoys_websocket.poll()
@@ -183,8 +203,6 @@ func _process(_delta):
 							%RangePanel.update_max_range(depth)
 
 	
-
-
 	ossm_websocket.poll()
 	var ossm_ws_state = ossm_websocket.get_ready_state()
 	if ossm_ws_state == WebSocketPeer.STATE_OPEN:
@@ -200,12 +218,11 @@ func _process(_delta):
 						connected_to_ossm = true
 						ossm_connection_timeout.emit_signal('timeout')
 						ossm_connection_timeout.stop()
-						%SpeedPanel.update_speed()
+						# %SpeedPanel._on_speed_changed()
 						%SpeedPanel/AccelerationBar.reset()
 						%RangePanel.update_min_range()
 						%RangePanel.update_max_range()
 						%SettingsPage.send_homing_speed()
-						# %Menu.select_mode(%Menu/Main/Mode.selected)
 					
 					Enums.CommandType.HOMING:
 						%CircleSelection.hide()
@@ -230,7 +247,7 @@ func _process(_delta):
 	elif ossm_ws_state == WebSocketPeer.STATE_CLOSED:
 		var code = ossm_websocket.get_close_code()
 		var reason = ossm_websocket.get_close_reason()
-		var text = "Webwebsocket closed with code: %d, reason %s. Clean: %s"
+		var text = "Websocket closed with code: %d, reason %s. Clean: %s"
 		print(text % [code, reason, code != -1])
 		connected_to_server = false
 		# set_process(false)
@@ -299,14 +316,29 @@ func check_root_directory():
 			root_dir.make_dir(dir)
 
 
+func create_move_command(ms_timing:int, depth:float, trans:int, ease:int, auxiliary:int):
+	var network_packet:PackedByteArray
+	network_packet.resize(10)
+	network_packet.encode_u8(0, Enums.CommandType.MOVE)
+	network_packet.encode_u32(1, ms_timing)
+	network_packet.encode_u16(5, round(remap(depth, 0, 1, 0, 10000)))
+	network_packet.encode_u8(7, trans)
+	network_packet.encode_u8(8, ease)
+	network_packet.encode_u8(9, auxiliary)
+	return network_packet
+
 func load_path(file_name: String) -> bool:
 	var file = FileAccess.open(Dirs.paths_dir + file_name, FileAccess.READ)
 	if not file:
+		printerr("Error: Failed to read file.")
 		return false
 	var file_data = JSON.parse_string(file.get_line())
 	if not file_data:
+		printerr("Error: No JSON data found in file.")
 		return false
 	var marker_data: Dictionary = file_data
+	if marker_data.size() < 6:
+		printerr("Error: Insufficient path data in file.")
 	
 	if marker_data.is_empty():
 		return false
@@ -377,19 +409,27 @@ func load_path(file_name: String) -> bool:
 	return true
 
 
-func create_delay(duration: float):
-	var delay_path: PackedFloat32Array
-	var path_line: Line2D = Line2D.new()
+func create_delay(duration:float):
+	var delay_path:PackedFloat32Array
+	var path_line:Line2D = Line2D.new()
 	path_line.hide()
-	var headers: String = "M%sD%sT%sE%s"
-	var message: String = headers % [0, duration * 1000, 0, 2]
+	var headers:String = "M%sD%sT%sE%s"
+	var message:String = headers%[0, duration * 1000, 0, 2]
 	for point in round(duration * ticks_per_second):
 		delay_path.append(-1)
+	var marker_path:Dictionary
+	var network_packets:Array
+	for timing in 6:
+		var move_command = create_move_command(timing, 0, 0, 0, 0)
+		network_packets.append(move_command)
+		marker_path[timing] = message
+	var end_move = create_move_command(duration * 1000, 0, 0, 0, 0)
+	network_packets.append(end_move)
+	network_paths.append(network_packets)
 	paths.append(delay_path)
-	markers.append({0: message})
+	markers.append(marker_path)
 	%PathTab/Paths.add_child(path_line)
 	%Menu/Playlist.add_item("delay(%s)" % [duration])
-
 
 func display_active_path_index(is_paused := true, send_buffer := true):
 	paused = is_paused
@@ -421,7 +461,6 @@ func display_active_path_index(is_paused := true, send_buffer := true):
 
 func render_depth(depth) -> float:
 	return PATH_BOTTOM + depth * (PATH_TOP - PATH_BOTTOM)
-
 
 
 func _notification(what):

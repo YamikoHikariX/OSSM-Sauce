@@ -137,10 +137,7 @@ func _on_add_delay_pressed():
 
 
 func hide_menu_buttons():
-	$Main/PlaylistButtons.hide()
-	$Main/PathButtons.hide()
-	%PathControls.hide()
-	$Main/Mode.hide()
+	$Main.hide()
 
 
 func refresh_selection():
@@ -239,9 +236,7 @@ func _on_stroke_duration_display_mode_changed(index):
 	%LoopControls.update_stroke_duration_text()
 
 func select_mode(new_app_mode: Enums.AppMode):
-	print("Selecting mode: ", new_app_mode)
 	var new_tab_index = TabIndexToMode.find_key(new_app_mode)
-	print("New tab index: ", new_tab_index)
 
 	$Main/Mode.select(new_tab_index)
 	_on_mode_selected(new_tab_index)

@@ -1,6 +1,6 @@
 extends Node
 
-var app_version_number: String = '1.1.0'
+var app_version_number: String = '1.1.1'
 var cfg: ConfigFile = ConfigFile.new()
 
 var default_settings: Dictionary = {
@@ -12,7 +12,7 @@ var default_settings: Dictionary = {
         Key.LAST_SERVER_CONNECTION: '',
     },
     Section.WINDOW: {
-        Key.SIZE: Vector2(540, 950),
+        Key.SIZE: Vector2(435, 774),
         Key.ALWAYS_ON_TOP: false,
         Key.TRANSPARENT_BACKGROUND: false,
     },
@@ -75,26 +75,21 @@ func merge_defaults() -> void:
         save()
 
 func get_setting(section: String, key: String, default_value: Variant = null) -> Variant:
-    # print("Getting setting for section: ", section, ", key: ", key)
     if cfg.has_section_key(section, key):
         var value = cfg.get_value(section, key)
-        # print("Found setting: ", value)
         return value
     else:
         var value = default_value
         if default_value == null:
             value = default_settings.get(section, {}).get(key, null)
-        # print("Setting not found, using default value: ", value)
         cfg.set_value(section, key, value)
         save()
         return value
 
 func set_setting(section: String, key: String, value: Variant) -> void:
-    # print("Setting value for section: ", section, ", key: ", key, ", value: ", value)
     cfg.set_value(section, key, value)
     save()
-    # print("Value set and saved for section: ", section, ", key: ", key)
-
+    
 func has_setting(section: String, key: String) -> bool:
     return cfg.has_section_key(section, key)
 

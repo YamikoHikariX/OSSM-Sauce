@@ -24,7 +24,6 @@ func _on_outside_click():
 	tween(false)
 
 func tween(activating: bool = true):
-	print("Opening: ", activating)
 	set_process_input(activating)
 	var tween = get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_QUART)
@@ -40,7 +39,6 @@ func tween(activating: bool = true):
 			open_pos = Vector2(size.x, position.y)
 
 	var positions: Array = [open_pos, closed_pos]
-	print("Positions: ", positions)
 	if activating:
 		positions.reverse()
 	tween.tween_method(set_position, position, positions[1], Main.node.ANIM_TIME)

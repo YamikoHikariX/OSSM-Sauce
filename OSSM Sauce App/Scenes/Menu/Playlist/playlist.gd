@@ -98,13 +98,13 @@ func deselect_all():
 func clear():
 	if Main.node.active_path_index != null:
 		Main.node.active_path_index = null
-		menu.get_node("PathControls").hide()
+		%PathControls.hide()
 		if not Main.node.paused:
 			menu._on_pause_pressed()
 	Main.node.paths.clear()
 	for item in $Scroll/VBox.get_children():
 		$Scroll/VBox.remove_child(item)
-	#  Temporary get_node fix. This Playlist node should not access another node's child in the first place
+	# FIXME: Temporary get_node fix. This Playlist node should not access another node's child in the first place
 	for path in path_tab.get_node("Paths").get_children():
 		path_tab.get_node("Paths").remove_child(path)
 	path_tab.get_node("Ball").hide()

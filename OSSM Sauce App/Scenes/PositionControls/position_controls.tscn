@@ -150,5 +150,17 @@ grow_vertical = 2
 smoothing_slider = NodePath("../SmoothingSlider/HSlider")
 stick_speed_slider = NodePath("../SpeedSlider/HSlider")
 
+[node name="TriggerToggle" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 703.0
+offset_top = 664.0
+offset_right = 853.0
+offset_bottom = 814.0
+theme_override_font_sizes/font_size = 40
+toggle_mode = true
+text = "Trigger
+Control"
+
 [connection signal="value_changed" from="SmoothingSlider/HSlider" to="." method="_on_smoothing_slider_value_changed"]
 [connection signal="value_changed" from="SpeedSlider/HSlider" to="." method="_on_smoothing_slider_value_changed"]

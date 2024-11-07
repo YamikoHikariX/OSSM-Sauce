@@ -7,7 +7,6 @@ class_name SliderBar
 @export var slider_color: Color = Color(0.941176, 0.501961, 0.501961, 1)
 @export var top_slider_color: Color = Color(0.941176, 0.501961, 0.501961, 1)
 
-var starting_pos: float = 0
 
 @export var custom_offset: int = 265
 var slider_top_offset: int = 16
@@ -15,6 +14,7 @@ var slider_bottom_offset: int = 156
 
 @onready var max_pos: float = slider_top_offset
 @onready var min_pos: float = max(size.y, size.x) - slider_bottom_offset
+@onready var starting_pos: float = min_pos
 
 var ostart: float = 0.0
 var ostop: float = 10000.0
@@ -31,6 +31,8 @@ var deviation: float = 0.0
 @export var stick_speed_slider: HSlider
 var smoothing: float = 0.02
 var stick_speed: float = 1.0
+
+var axis_input_enabled: bool = false
 
 var slider_position: float:
 	get:
@@ -53,39 +55,34 @@ func _ready() -> void:
 	reset()
 
 func reset() -> void:
-	if starting_pos:
+	print("Starting pos: ", starting_pos) if name == "PositionBar" else null
+	print("Min pos: ", min_pos) if name == "PositionBar" else null
+	if starting_pos != min_pos:
+		print("Using Starting pos") if name == "PositionBar" else null
 		target_pos = starting_pos
 	else:
+		print("Using Min pos") if name == "PositionBar" else null
 		target_pos = min_pos
 	slider_position = target_pos
 	last_slider_position = slider_position
-	send_signal()
+	# send_signal()
 
 func _physics_process(delta: float) -> void:
 	%Deviation.position.y = target_pos + deviation
 	%Target.position.y = target_pos
 	
-	# var lerped = lerp(slider_position, target_pos + deviation, delta / smoothing)
-	# var distance = abs(slider_position - lerped)
-	# if distance < 100:
-	# 	print(lerped)
-	# 	print(distance)
-	# 	slider_position = lerp(slider_position, target_pos + deviation, delta)
-	# else:
-	# 	slider_position = lerp(slider_position, target_pos + deviation, delta / smoothing)
 	slider_position = lerp(slider_position, target_pos + deviation, delta / smoothing)
-	# if abs(slider_position - last_slider_position) < 5: return
 		
 	if slider_position != last_slider_position:
-		# print(max_pos)
-		# print(min_pos)
-		# print(slider_position)
 		send_signal()
 
 func send_signal() -> void:
 	var mapped_pos = round(remap(slider_position, max_pos, min_pos, ostop, ostart))
 	value_changed.emit(mapped_pos)
 	last_slider_position = slider_position
+
+func get_current_value() -> float:
+	return round(remap(slider_position, max_pos, min_pos, ostop, ostart))
 
 func _input(event) -> void:
 	if input_active:
@@ -102,7 +99,7 @@ func set_output_range(new_ostart: float, new_ostop: float) -> void:
 	reset()
 
 func set_starting_percentage(new_percentage: float) -> void:
-	starting_pos = remap(new_percentage, 0.0, 1.0, max_pos, min_pos)
+	starting_pos = remap(new_percentage, 1.0, 0.0, max_pos, min_pos)
 	reset()
 
 func set_target_pos(new_pos: float) -> void:
@@ -138,5 +135,9 @@ func _on_stick_input(position_change: float) -> void:
 	target_pos += position_change * 10.0 * stick_speed
 
 func _on_axis_input(position_axis: float) -> void:
-	# deviation = remap(-position_axis, 0.0, 1.0, 0.0, target_pos)
-	return
+	if axis_input_enabled:
+		deviation = remap(-position_axis, 0.0, 1.0, 0.0, target_pos)
+
+func _on_trigger_toggled(active: bool) -> void:
+	axis_input_enabled = active
+	deviation = 0.0

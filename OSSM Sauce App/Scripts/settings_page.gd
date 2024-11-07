@@ -94,8 +94,8 @@ func set_max_acceleration(value):
 func _on_speed_input_changed():
     var value = int($Sliders/MaxSpeed/TextEdit.text)
     value = clamp(value, 100, 200000)
-    Main.node.max_speed = value
     Settings.set_setting(Section.SPEED_SLIDER, Key.MAX_SPEED, value)
+    Main.node.max_speed = value
 
 func _on_acceleration_input_changed():
     var value = int($Sliders/MaxAcceleration/TextEdit.text)

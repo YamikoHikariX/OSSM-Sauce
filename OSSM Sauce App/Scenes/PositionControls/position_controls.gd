@@ -8,6 +8,7 @@ func _ready():
     Main.node.app_mode_changed.connect(_on_app_mode_changed)
     Main.node.gamepad_stick_input.connect(%PositionBar._on_stick_input)
     Main.node.gamepad_axis_input.connect(%PositionBar._on_axis_input)
+    %TriggerToggle.toggled.connect(%PositionBar._on_trigger_toggled)
     
     var smoothing_slider = Settings.get_setting(Section.APP_SETTINGS, Key.SMOOTHING_SLIDER)
     %SmoothingSlider/HSlider.set_value(smoothing_slider)
@@ -48,5 +49,4 @@ func set_ossm_position(new_position: int) -> void:
         command.resize(5)
         command.encode_u8(0, Enums.CommandType.POSITION)
         command.encode_u32(1, new_position)
-        print("Sending position command: ", new_position)
         Main.node.ossm_websocket.send(command)

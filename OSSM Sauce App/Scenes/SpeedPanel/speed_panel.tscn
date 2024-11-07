@@ -13,7 +13,8 @@ grow_vertical = 2
 script = ExtResource("1_x78we")
 metadata/_edit_use_anchors_ = true
 
-[node name="SpeedBar" type="NinePatchRect" parent="."]
+[node name="SpeedBarOld" type="NinePatchRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -30,7 +31,7 @@ texture = ExtResource("2_1ja7a")
 patch_margin_top = 80
 patch_margin_bottom = 80
 
-[node name="Slider" type="TextureRect" parent="SpeedBar"]
+[node name="Slider" type="TextureRect" parent="SpeedBarOld"]
 self_modulate = Color(0.498039, 1, 0.831373, 1)
 layout_mode = 1
 anchors_preset = 8
@@ -46,7 +47,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_a5hbi")
 
-[node name="SliderBottom" type="TextureRect" parent="SpeedBar"]
+[node name="SliderBottom" type="TextureRect" parent="SpeedBarOld"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -61,6 +62,21 @@ offset_bottom = 790.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_a5hbi")
+
+[node name="SpeedBar" parent="." instance=ExtResource("4_hprdo")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -173.0
+offset_top = -806.0
+offset_right = -1.0
+offset_bottom = 806.0
+grow_horizontal = 2
+grow_vertical = 2
+slider_color = Color(0.498039, 1, 0.831373, 1)
 
 [node name="AccelerationBar" parent="." instance=ExtResource("4_hprdo")]
 layout_mode = 1
