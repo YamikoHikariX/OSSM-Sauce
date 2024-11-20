@@ -20,9 +20,32 @@ var ticks_per_second:int
 
 var path_speed:int = 30
 
-var paused:bool = true
+var paused:bool = true:
+	set(value):
+		paused = value
+		%AudioStreamPlayer.stream_paused = value
 
-var active_path_index
+var active_path_index:
+	set(value):
+		active_path_index = value
+		load_track()
+
+func load_track():
+	print("Loading track")
+	if %Playlist.get_items()[active_path_index].find('delay') != -1:
+		return
+	var track_name = %Playlist.get_items()[active_path_index]
+	if track_name.find('Pers ') != -1:
+		track_name = track_name.replace('Pers ', '')
+	track_name = track_name.left(track_name.length() - 3)
+	var resource = %Playlist.tracks.get(track_name)
+	if resource:
+		print("Loaded: " + track_name)
+		%AudioStreamPlayer.set_stream(resource)
+		%AudioStreamPlayer.play()
+		%AudioStreamPlayer.stream_paused = true
+	else:
+		print("Track not found: " + track_name)
 
 var paths:Array
 var markers:Array
@@ -116,6 +139,9 @@ var marker_index:int
 func _physics_process(delta):
 	if paused or paths[active_path_index].is_empty():
 		return
+
+	if %AudioStreamPlayer.stream_paused:
+		%AudioStreamPlayer.stream_paused = false
 	
 	if frame >= paths[active_path_index].size() - 1:
 		if active_path_index < network_paths.size() - 1:
@@ -140,6 +166,8 @@ func _physics_process(delta):
 				display_active_path_index(false, false)
 				$Menu/Playlist._on_item_selected(next_path_item)
 				path_list.get_child(0).set_active()
+				# %AudioStreamPlayer.play()
+				# %AudioStreamPlayer.stream_paused = false
 			else:
 				pause()
 				$Menu.show_play()

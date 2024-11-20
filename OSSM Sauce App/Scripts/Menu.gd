@@ -36,6 +36,7 @@ func _on_play_pressed():
 	var index = $Playlist.selected_index
 	if not owner.active_path_index == index:
 		owner.active_path_index = index
+		# load_track()
 		owner.display_active_path_index()
 		$Playlist/Scroll/VBox.get_child(index).set_active()
 		if owner.connected_to_ossm:
@@ -45,12 +46,23 @@ func _on_play_pressed():
 			return
 	%CircleSelection.show_play()
 
+# func load_track():
+# 	var track_path = 'res://Tracks/' + %Playlist.get_items()[owner.active_path_index]
+# 	track_path = track_path.left(track_path.length() - 3)
+# 	if track_path.find('Pers ') != -1:
+# 		track_path = track_path.replace('Pers ', '')
+	
+# 	%AudioStreamPlayer.set_stream(load(track_path))
+# 	%AudioStreamPlayer.play()
+# 	%AudioStreamPlayer.stream_paused = true
+
 
 func _on_pause_pressed():
 	owner.pause()
 	%ActionPanel.clear_selections()
 	%ActionPanel/Play.show()
 	%ActionPanel/Pause.hide()
+	%AudioStreamPlayer.stream_paused = true
 	refresh_selection()
 
 
@@ -60,6 +72,7 @@ func _on_restart_pressed():
 	flash_button($PathControls/HBox/Restart)
 	owner.display_active_path_index()
 	refresh_selection()
+	owner.active_path_index = owner.active_path_index
 	if owner.connected_to_ossm:
 		%CircleSelection.show_hourglass()
 		%PathDisplay.modulate.a = 0.05

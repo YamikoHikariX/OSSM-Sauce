@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://d3cq3b5o0feo0"]
+[gd_scene load_steps=53 format=3 uid="uid://cs276fkbsj4jg"]
 
 [ext_resource type="Theme" uid="uid://dqhnc02ffxjr2" path="res://Theme.tres" id="1_2qx77"]
 [ext_resource type="Script" path="res://Scripts/OSSM Sauce.gd" id="2_7liag"]
@@ -1863,6 +1863,7 @@ texture_normal = ExtResource("27_jm1bm")
 stretch_mode = 3
 
 [node name="Playlist" type="Panel" parent="Menu"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.492708
@@ -2566,6 +2567,9 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 64
 text = "Connecting to network..."
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
 
 [connection signal="gui_input" from="PathDisplay/PathArea" to="PathDisplay/PathArea" method="_on_gui_input"]
 [connection signal="timeout" from="PathDisplay/PathArea/Timer" to="PathDisplay/PathArea" method="_on_timer_timeout"]

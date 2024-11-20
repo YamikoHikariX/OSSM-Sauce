@@ -11,6 +11,7 @@ func _on_play_button_pressed():
 		owner.Mode.MOVE:
 			if owner.active_path_index != null:
 				owner.play()
+				%AudioStreamPlayer.stream_paused = false
 				$Play.hide()
 				$Pause/Selection.show()
 				$Pause.show()
@@ -33,6 +34,7 @@ func _on_play_button_pressed():
 func _on_pause_button_pressed():
 	match owner.app_mode:
 		owner.Mode.MOVE:
+			%AudioStreamPlayer.stream_paused = true
 			clear_selections()
 			self_modulate.a = 1.2
 			%CircleSelection.hide_and_reset()

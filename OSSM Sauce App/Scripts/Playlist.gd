@@ -6,20 +6,39 @@ var selected_index
 
 var drag_delta:float
 
+var tracks: Dictionary = {}
+
 
 func _ready():
+	# Populate tracks with files in the Tracks folder
+	
 	$Scroll/VBox.remove_child(Item)
+	
+	var dir = DirAccess.open("res://Tracks/")
+	if dir:
+		var files = dir.get_files()
+		for file_name in files:
+			if not file_name.ends_with(".import"):
+				var file_path = "res://Tracks/" + file_name
+				var resource = load(file_path)
+				tracks[file_name] = resource
+	else:
+		print("Failed to open directory")
 
+	print(tracks)
 
 func _on_item_selected(item):
 	if drag_delta > 7:
 		return
+
 	
 	deselect_all()
 	item.select()
 	
 	var index = item.get_index()
 	selected_index = index
+	# load_track()
+
 	
 	var restart_button = %Menu/PathControls/HBox/Restart
 	if owner.active_path_index == index and owner.frame > 0:
@@ -38,6 +57,20 @@ func _on_item_selected(item):
 	else:
 		double_tap_timer.start()
 
+
+# func load_track():
+# 	print("Loading track")
+# 	if get_items()[selected_index].find('delay') != -1:
+# 		return
+# 	var track_name = get_items()[selected_index]
+# 	var resource = tracks.get(track_name)
+# 	if resource:
+# 		print("Loaded: " + track_name)
+# 		%AudioStreamPlayer.set_stream(resource)
+# 		%AudioStreamPlayer.play()
+# 		%AudioStreamPlayer.stream_paused = true
+# 	else:
+# 		print("Track not found: " + track_name)
 
 func add_item(item_text:String):
 	var item = Item.duplicate()
