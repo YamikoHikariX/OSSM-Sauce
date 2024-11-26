@@ -34,6 +34,7 @@ func _on_play_pressed():
 	tween(false)
 	%ActionPanel.clear_selections()
 	var index = $Playlist.selected_index
+	%AudioStreamPlayer.seek(0.0)
 	if not owner.active_path_index == index:
 		owner.active_path_index = index
 		# load_track()

@@ -1,8 +1,9 @@
-[gd_scene load_steps=53 format=3 uid="uid://cs276fkbsj4jg"]
+[gd_scene load_steps=55 format=3 uid="uid://dkatsr8v1itr5"]
 
 [ext_resource type="Theme" uid="uid://dqhnc02ffxjr2" path="res://Theme.tres" id="1_2qx77"]
 [ext_resource type="Script" path="res://Scripts/OSSM Sauce.gd" id="2_7liag"]
 [ext_resource type="Texture2D" uid="uid://da3nxjs8pqcoy" path="res://Textures/Dot Small.svg" id="3_4fxdc"]
+[ext_resource type="Script" path="res://audio_label.gd" id="4_fdrpt"]
 [ext_resource type="Script" path="res://Scripts/Position Controls.gd" id="4_juubk"]
 [ext_resource type="Texture2D" uid="uid://du8j273r744tn" path="res://Textures/Straight.svg" id="5_assl3"]
 [ext_resource type="Texture2D" uid="uid://bm14gbhhm3uqb" path="res://Textures/Smooth.svg" id="6_w7w2d"]
@@ -38,6 +39,7 @@
 [ext_resource type="Texture2D" uid="uid://dtor82hfkxpes" path="res://Textures/Restart Large.svg" id="35_yhpak"]
 [ext_resource type="Texture2D" uid="uid://ceniqb8fv6rr" path="res://Textures/hourglass.svg" id="36_fybvn"]
 [ext_resource type="Texture2D" uid="uid://c0bgeto1j6das" path="res://Textures/wifi.svg" id="37_kag8w"]
+[ext_resource type="Script" path="res://audio_stream_player.gd" id="40_fl6f5"]
 
 [sub_resource type="GDScript" id="GDScript_o3urw"]
 script/source = "extends Control
@@ -540,6 +542,17 @@ anchors_preset = 0
 self_modulate = Color(1, 0.384314, 0.47451, 1)
 position = Vector2(540, 960)
 texture = ExtResource("3_4fxdc")
+
+[node name="AudioLabel" type="Label" parent="PathDisplay"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 355.0
+offset_top = 173.0
+offset_right = 512.0
+offset_bottom = 283.0
+theme_override_font_sizes/font_size = 106
+script = ExtResource("4_fdrpt")
 
 [node name="PositionControls" type="Control" parent="."]
 unique_name_in_owner = true
@@ -2570,6 +2583,7 @@ text = "Connecting to network..."
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
+script = ExtResource("40_fl6f5")
 
 [connection signal="gui_input" from="PathDisplay/PathArea" to="PathDisplay/PathArea" method="_on_gui_input"]
 [connection signal="timeout" from="PathDisplay/PathArea/Timer" to="PathDisplay/PathArea" method="_on_timer_timeout"]

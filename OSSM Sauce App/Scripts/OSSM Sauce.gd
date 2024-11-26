@@ -32,6 +32,8 @@ var active_path_index:
 
 func load_track():
 	print("Loading track")
+	if active_path_index == null:
+		return
 	if %Playlist.get_items()[active_path_index].find('delay') != -1:
 		return
 	var track_name = %Playlist.get_items()[active_path_index]
@@ -140,8 +142,8 @@ func _physics_process(delta):
 	if paused or paths[active_path_index].is_empty():
 		return
 
-	if %AudioStreamPlayer.stream_paused:
-		%AudioStreamPlayer.stream_paused = false
+	# if %AudioStreamPlayer.stream_paused:
+	# 	%AudioStreamPlayer.stream_paused = false
 	
 	if frame >= paths[active_path_index].size() - 1:
 		if active_path_index < network_paths.size() - 1:

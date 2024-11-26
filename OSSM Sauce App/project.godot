@@ -18,6 +18,15 @@ config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://S-curve.svg"
 config/windows_native_icon="res://S-curve.ico"
 
+[autoload]
+
+Main="*res://globals/Main.gd"
+Enums="*res://globals/Enums.gd"
+Section="*res://globals/Section.gd"
+Key="*res://globals/Key.gd"
+Dirs="*res://globals/Dirs.gd"
+Settings="*res://globals/Settings.gd"
+
 [display]
 
 window/size/viewport_width=1080
@@ -28,6 +37,34 @@ window/handheld/orientation=1
 [dotnet]
 
 project/assembly_name="OSSM Sauce"
+
+[input]
+
+position_in={
+"deadzone": 0.02,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":3,"axis_value":-1.0,"script":null)
+]
+}
+position_out={
+"deadzone": 0.02,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":3,"axis_value":1.0,"script":null)
+]
+}
+position_axis={
+"deadzone": 0.02,
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":5,"axis_value":1.0,"script":null)
+]
+}
+"D-pad Up"={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":11,"pressure":0.0,"pressed":true,"script":null)
+]
+}
+"D-pad Down"={
+"deadzone": 0.5,
+"events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":12,"pressure":0.0,"pressed":true,"script":null)
+]
+}
 
 [input_devices]
 
