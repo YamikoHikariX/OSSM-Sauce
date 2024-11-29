@@ -31,15 +31,21 @@ var active_path_index:
 		load_track()
 
 func load_track():
-	print("Loading track")
 	if active_path_index == null:
 		return
 	if %Playlist.get_items()[active_path_index].find('delay') != -1:
+		# Unload the stream
+		%AudioStreamPlayer.set_stream(null)
 		return
 	var track_name = %Playlist.get_items()[active_path_index]
-	if track_name.find('Pers ') != -1:
-		track_name = track_name.replace('Pers ', '')
-	track_name = track_name.left(track_name.length() - 3)
+	track_name = track_name.replace(".bx", "")
+	
+	# Go through every key in %Playlist.tracks and if the key is a substring of track_name, load the track.
+	for key in %Playlist.tracks.keys():
+		if key.find(track_name) != -1:
+			track_name = key
+			break
+
 	var resource = %Playlist.tracks.get(track_name)
 	if resource:
 		print("Loaded: " + track_name)
@@ -149,7 +155,8 @@ func _physics_process(delta):
 		if active_path_index < network_paths.size() - 1:
 			var overreach_index = marker_index - network_paths[active_path_index].size() + 1
 			var next_path = network_paths[active_path_index + 1]
-			websocket.send(next_path[overreach_index])
+			if next_path.has(overreach_index):
+				websocket.send(next_path[overreach_index])
 			var path_list = $Menu/Playlist/Scroll/VBox
 			var next_index = active_path_index + 1
 			var next_path_item = path_list.get_child(next_index) 

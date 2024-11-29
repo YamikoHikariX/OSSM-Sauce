@@ -10,8 +10,6 @@ var tracks: Dictionary = {}
 
 
 func _ready():
-	# Populate tracks with files in the Tracks folder
-	
 	$Scroll/VBox.remove_child(Item)
 	
 	var dir = DirAccess.open("res://Tracks/")
@@ -21,6 +19,7 @@ func _ready():
 			if not file_name.ends_with(".import"):
 				var file_path = "res://Tracks/" + file_name
 				var resource = load(file_path)
+				file_name = file_name.replace(".mp3", "")
 				tracks[file_name] = resource
 	else:
 		print("Failed to open directory")
