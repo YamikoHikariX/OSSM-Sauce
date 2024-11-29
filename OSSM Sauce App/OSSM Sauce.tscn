@@ -1,9 +1,8 @@
-[gd_scene load_steps=55 format=3 uid="uid://oxbd83u7sfuj"]
+[gd_scene load_steps=54 format=3 uid="uid://oxbd83u7sfuj"]
 
 [ext_resource type="Theme" uid="uid://dqhnc02ffxjr2" path="res://Theme.tres" id="1_2qx77"]
 [ext_resource type="Script" path="res://Scripts/OSSM Sauce.gd" id="2_7liag"]
 [ext_resource type="Texture2D" uid="uid://da3nxjs8pqcoy" path="res://Textures/Dot Small.svg" id="3_4fxdc"]
-[ext_resource type="Script" path="res://audio_label.gd" id="4_fdrpt"]
 [ext_resource type="Script" path="res://Scripts/Position Controls.gd" id="4_juubk"]
 [ext_resource type="Texture2D" uid="uid://du8j273r744tn" path="res://Textures/Straight.svg" id="5_assl3"]
 [ext_resource type="Texture2D" uid="uid://bm14gbhhm3uqb" path="res://Textures/Smooth.svg" id="6_w7w2d"]
@@ -542,17 +541,6 @@ anchors_preset = 0
 self_modulate = Color(1, 0.384314, 0.47451, 1)
 position = Vector2(540, 960)
 texture = ExtResource("3_4fxdc")
-
-[node name="AudioLabel" type="Label" parent="PathDisplay"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-offset_left = 355.0
-offset_top = 173.0
-offset_right = 512.0
-offset_bottom = 283.0
-theme_override_font_sizes/font_size = 106
-script = ExtResource("4_fdrpt")
 
 [node name="PositionControls" type="Control" parent="."]
 unique_name_in_owner = true

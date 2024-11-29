@@ -142,14 +142,10 @@ func _ready():
 		DisplayServer.window_set_position(centered_position)
 		get_viewport().size_changed.connect(_on_window_size_changed)
 
-
 var marker_index:int
 func _physics_process(delta):
 	if paused or paths[active_path_index].is_empty():
 		return
-
-	# if %AudioStreamPlayer.stream_paused:
-	# 	%AudioStreamPlayer.stream_paused = false
 	
 	if frame >= paths[active_path_index].size() - 1:
 		if active_path_index < network_paths.size() - 1:
@@ -175,8 +171,6 @@ func _physics_process(delta):
 				display_active_path_index(false, false)
 				$Menu/Playlist._on_item_selected(next_path_item)
 				path_list.get_child(0).set_active()
-				# %AudioStreamPlayer.play()
-				# %AudioStreamPlayer.stream_paused = false
 			else:
 				pause()
 				$Menu.show_play()
