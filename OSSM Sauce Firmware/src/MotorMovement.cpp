@@ -8,7 +8,7 @@
 #define limitSwitchPin 12
 #define powerSensorPin 36
 
-const int powerAvgRangeMultiplier = 1.5; //raise to decrease, or lower to increase sensitivity of sensorless homing
+const int powerAvgRangeMultiplier = 1.8; //raise to decrease, or lower to increase sensitivity of sensorless homing
 const int outliersSampleSize = 10;
 const int powerSampleSize = 10;
 const int deltaSampleLength = 6000;
@@ -47,7 +47,6 @@ void initializeMotor() {
   if (stepper) {
     stepper->setDirectionPin(motorDirectionPin);
     stepper->setEnablePin(motorEnablePin);
-    stepper->setAutoEnable(true);
   } else {
     Serial.println("Stepper Not initialized!");
     delay(1000);
@@ -152,6 +151,8 @@ void sensorlessHoming() {
   Serial.println("Beginning sensorless homing...");
   Serial.println("");
 
+  stepper->setAutoEnable(true);
+
   //find physical maximum limit
   powerEMAFast = powerEMASlowDoubleSmooth;
   powerSpikeTriggered = false;
@@ -185,8 +186,6 @@ void sensorlessHoming() {
   stepper->setAutoEnable(false);
   digitalWrite(motorEnablePin, LOW);
 
-  stepper->moveTo(rangeLimitHardMin);
-
   //set hard limits
   float hardLimitBuffer = abs(limitPhysicalMax - limitPhysicalMin) * 0.06;
   rangeLimitHardMin = limitPhysicalMin + hardLimitBuffer;
@@ -194,6 +193,8 @@ void sensorlessHoming() {
 
   rangeLimitUserMin = rangeLimitHardMin;
   rangeLimitUserMax = rangeLimitHardMax;
+
+  stepper->moveTo(rangeLimitHardMin);
 
   Serial.println("");
   Serial.print("MINIMUM RANGE LIMIT: ");
