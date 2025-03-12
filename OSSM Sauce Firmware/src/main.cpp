@@ -36,6 +36,7 @@ enum CommandType:byte {
   SET_GLOBAL_ACCELERATION,
   SET_RANGE_LIMIT,
   SET_HOMING_SPEED,
+  ADJUST_RANGE_LIMIT,
 };
 
 struct Response {
@@ -275,6 +276,47 @@ void parseMessage(esp_websocket_event_data_t *data) {
       u32_t homingSpeedInputHz;
       memcpy(&homingSpeedInputHz, message + 1, 4);
       homingSpeedHz = min(globalSpeedLimitHz, homingSpeedInputHz);
+      break;
+    }
+
+    case ADJUST_RANGE_LIMIT: {
+      if (messageLength != 5)  // 1 byte command + 4 bytes int32_t adjustment
+        break;
+      
+      int32_t adjustment;
+      memcpy(&adjustment, message + 1, 4);
+      adjustment = constrain(adjustment, -100, 100);  // Limit adjustment to ±100
+
+      // Store original values for logging
+      int oldMinHard = rangeLimitHardMin;
+      int oldMaxHard = rangeLimitHardMax;
+      int oldMinUser = rangeLimitUserMin;
+      int oldMaxUser = rangeLimitUserMax;
+
+      // Adjust both hard and user limits
+      rangeLimitHardMin += adjustment;
+      rangeLimitHardMax += adjustment;
+      rangeLimitUserMin += adjustment;
+      rangeLimitUserMax += adjustment;
+
+      Serial.print("Range limits adjusted by ");
+      Serial.println(adjustment);
+      Serial.print("Hard limits: ");
+      Serial.print(oldMinHard);
+      Serial.print("→");
+      Serial.print(rangeLimitHardMin);
+      Serial.print(", ");
+      Serial.print(oldMaxHard);
+      Serial.print("→");
+      Serial.println(rangeLimitHardMax);
+      Serial.print("User limits: ");
+      Serial.print(oldMinUser);
+      Serial.print("→");
+      Serial.print(rangeLimitUserMin);
+      Serial.print(", ");
+      Serial.print(oldMaxUser);
+      Serial.print("→");
+      Serial.println(rangeLimitUserMax);
       break;
     }
   }

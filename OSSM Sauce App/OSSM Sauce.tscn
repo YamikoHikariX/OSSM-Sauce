@@ -1,17 +1,17 @@
 [gd_scene load_steps=56 format=3 uid="uid://d3cq3b5o0feo0"]
 
 [ext_resource type="Theme" uid="uid://dqhnc02ffxjr2" path="res://Theme.tres" id="1_2qx77"]
-[ext_resource type="Script" path="res://Scripts/OSSM Sauce.gd" id="2_7liag"]
+[ext_resource type="Script" uid="uid://0gngr0qtr2hh" path="res://Scripts/OSSM Sauce.gd" id="2_7liag"]
 [ext_resource type="Texture2D" uid="uid://da3nxjs8pqcoy" path="res://Textures/Dot Small.svg" id="3_4fxdc"]
-[ext_resource type="Script" path="res://Scripts/Position Controls.gd" id="4_juubk"]
+[ext_resource type="Script" uid="uid://c2406rtj1nlfc" path="res://Scripts/Position Controls.gd" id="4_juubk"]
 [ext_resource type="Texture2D" uid="uid://du8j273r744tn" path="res://Textures/Straight.svg" id="5_assl3"]
 [ext_resource type="Texture2D" uid="uid://bm14gbhhm3uqb" path="res://Textures/Smooth.svg" id="6_w7w2d"]
 [ext_resource type="Texture2D" uid="uid://cb703kraugp85" path="res://Textures/S32.svg" id="7_vkr47"]
 [ext_resource type="Texture2D" uid="uid://cnyl16jr7jd8g" path="res://Textures/Dot.svg" id="8_gc26k"]
-[ext_resource type="Script" path="res://Scripts/Loop Controls.gd" id="9_ggpkr"]
+[ext_resource type="Script" uid="uid://btr7f0nwbrikw" path="res://Scripts/Loop Controls.gd" id="9_ggpkr"]
 [ext_resource type="Texture2D" uid="uid://bssf5wkfubmdu" path="res://Textures/PauseLarge.svg" id="10_txgs1"]
-[ext_resource type="Script" path="res://Scripts/Vibration Controls.gd" id="11_nekr0"]
-[ext_resource type="Script" path="res://Scripts/Action Panel.gd" id="11_ovb0l"]
+[ext_resource type="Script" uid="uid://c2bdvmwbel0tu" path="res://Scripts/Vibration Controls.gd" id="11_nekr0"]
+[ext_resource type="Script" uid="uid://ycgqif6h3f23" path="res://Scripts/Action Panel.gd" id="11_ovb0l"]
 [ext_resource type="Texture2D" uid="uid://dkpllak4evknm" path="res://Textures/Play.svg" id="12_5566s"]
 [ext_resource type="Texture2D" uid="uid://bsgwwhgpuqxap" path="res://Textures/Wave Triangle.svg" id="12_uvqyu"]
 [ext_resource type="Texture2D" uid="uid://dcx71x8114vuv" path="res://Textures/Selection.svg" id="13_5y1j6"]
@@ -20,10 +20,10 @@
 [ext_resource type="Texture2D" uid="uid://dd4yrbph2jgxm" path="res://Textures/Speed.svg" id="15_h1yph"]
 [ext_resource type="Texture2D" uid="uid://df1fg8fsnax6k" path="res://Textures/Range.svg" id="16_6gn0p"]
 [ext_resource type="Texture2D" uid="uid://biyi8wy11rxn2" path="res://Textures/Menu.svg" id="17_qgwvh"]
-[ext_resource type="Script" path="res://Scripts/Speed Panel.gd" id="18_xiv3r"]
+[ext_resource type="Script" uid="uid://c8kmh4ndv2obq" path="res://Scripts/Speed Panel.gd" id="18_xiv3r"]
 [ext_resource type="Texture2D" uid="uid://btmbmu74nqhry" path="res://Textures/Back.svg" id="19_cpmuu"]
-[ext_resource type="Script" path="res://Scripts/Range Panel.gd" id="20_ogp2k"]
-[ext_resource type="Script" path="res://Scripts/Menu.gd" id="21_khfk6"]
+[ext_resource type="Script" uid="uid://qlmfs3y2uex7" path="res://Scripts/Range Panel.gd" id="20_ogp2k"]
+[ext_resource type="Script" uid="uid://drgfnrm71vnv1" path="res://Scripts/Menu.gd" id="21_khfk6"]
 [ext_resource type="Texture2D" uid="uid://1yuj650f5xs" path="res://Textures/Gear.svg" id="22_2ruby"]
 [ext_resource type="Texture2D" uid="uid://o6gdsdww0cu4" path="res://Textures/Exit.svg" id="23_nlut4"]
 [ext_resource type="Texture2D" uid="uid://bvlmowqblmdgt" path="res://Textures/Down.svg" id="24_n8lpp"]
@@ -31,11 +31,11 @@
 [ext_resource type="Texture2D" uid="uid://rcaxkukbqghe" path="res://Textures/Restart.svg" id="26_aqrhn"]
 [ext_resource type="Texture2D" uid="uid://bd8t1o4bylcx0" path="res://Textures/Trash.svg" id="27_jm1bm"]
 [ext_resource type="Texture2D" uid="uid://6v1hvd7m2vhs" path="res://Textures/t3.svg" id="28_wynws"]
-[ext_resource type="Script" path="res://Scripts/Playlist.gd" id="28_ycvea"]
-[ext_resource type="Script" path="res://Scripts/Settings.gd" id="29_ui4fx"]
-[ext_resource type="Script" path="res://Scripts/Add File.gd" id="30_0ohdi"]
-[ext_resource type="Script" path="res://Scripts/File List.gd" id="31_476hc"]
-[ext_resource type="Script" path="res://Scripts/Circle Selection.gd" id="32_6g672"]
+[ext_resource type="Script" uid="uid://bugjhb5xk1th7" path="res://Scripts/Playlist.gd" id="28_ycvea"]
+[ext_resource type="Script" uid="uid://cefvn1ksi1kgd" path="res://Scripts/Settings.gd" id="29_ui4fx"]
+[ext_resource type="Script" uid="uid://dvc1vejcakcsv" path="res://Scripts/Add File.gd" id="30_0ohdi"]
+[ext_resource type="Script" uid="uid://d1e56753bnbpe" path="res://Scripts/File List.gd" id="31_476hc"]
+[ext_resource type="Script" uid="uid://co4cn5yx044ed" path="res://Scripts/Circle Selection.gd" id="32_6g672"]
 [ext_resource type="Texture2D" uid="uid://8r6wnojlpyb2" path="res://Textures/Circle Selection.svg" id="33_onotn"]
 [ext_resource type="Texture2D" uid="uid://ceigu0byvwpor" path="res://Textures/Play Large.svg" id="34_0psch"]
 [ext_resource type="Texture2D" uid="uid://dtor82hfkxpes" path="res://Textures/Restart Large.svg" id="35_yhpak"]
@@ -334,8 +334,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_u5ydg"]
 _data = {
-"RESET": SubResource("Animation_il416"),
-"Spin": SubResource("Animation_7gpwe")
+&"RESET": SubResource("Animation_il416"),
+&"Spin": SubResource("Animation_7gpwe")
 }
 
 [sub_resource type="GDScript" id="GDScript_pigvm"]
@@ -395,8 +395,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_avydh"]
 _data = {
-"RESET": SubResource("Animation_4ant3"),
-"Spin": SubResource("Animation_cbmbt")
+&"RESET": SubResource("Animation_4ant3"),
+&"Spin": SubResource("Animation_cbmbt")
 }
 
 [sub_resource type="GDScript" id="GDScript_3psro"]
@@ -761,6 +761,7 @@ size_flags_horizontal = 0
 selected = 1
 item_count = 8
 popup/item_0/text = "Linear"
+popup/item_0/id = 0
 popup/item_1/text = "Sine"
 popup/item_1/id = 1
 popup/item_2/text = "Circ"
@@ -782,6 +783,7 @@ size_flags_horizontal = 8
 selected = 2
 item_count = 4
 popup/item_0/text = "Ease In"
+popup/item_0/id = 0
 popup/item_1/text = "Ease Out"
 popup/item_1/id = 1
 popup/item_2/text = "Ease In/Out"
@@ -878,6 +880,7 @@ size_flags_horizontal = 0
 selected = 1
 item_count = 8
 popup/item_0/text = "Linear"
+popup/item_0/id = 0
 popup/item_1/text = "Sine"
 popup/item_1/id = 1
 popup/item_2/text = "Circ"
@@ -899,6 +902,7 @@ size_flags_horizontal = 8
 selected = 2
 item_count = 4
 popup/item_0/text = "Ease In"
+popup/item_0/id = 0
 popup/item_1/text = "Ease Out"
 popup/item_1/id = 1
 popup/item_2/text = "Ease In/Out"
@@ -1724,7 +1728,7 @@ grow_vertical = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CircleSelection"]
 libraries = {
-"": SubResource("AnimationLibrary_u5ydg")
+&"": SubResource("AnimationLibrary_u5ydg")
 }
 
 [node name="SpeedPanel" type="Panel" parent="."]
@@ -2159,6 +2163,7 @@ theme_override_font_sizes/font_size = 54
 selected = 0
 item_count = 2
 popup/item_0/text = "Seconds"
+popup/item_0/id = 0
 popup/item_1/text = "Percentage"
 popup/item_1/id = 1
 
@@ -2335,7 +2340,7 @@ one_shot = true
 
 [node name="Animation" type="AnimationPlayer" parent="Menu/Playlist/Scroll/VBox/Item"]
 libraries = {
-"": SubResource("AnimationLibrary_avydh")
+&"": SubResource("AnimationLibrary_avydh")
 }
 
 [node name="AddDelay" type="Control" parent="Menu"]
@@ -2667,6 +2672,33 @@ min_value = 1.0
 max_value = 99999.0
 value = 1000.0
 suffix = "steps/sec"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Settings"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -502.0
+offset_top = 1668.0
+offset_right = 508.0
+offset_bottom = 1875.0
+grow_horizontal = 2
+theme_override_constants/separation = 100
+alignment = 1
+
+[node name="DecreaseRangeLimit" type="Button" parent="Settings/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "-50"
+
+[node name="IncreaseRangeLimit" type="Button" parent="Settings/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "+50"
 
 [node name="Window" type="Control" parent="Settings"]
 layout_mode = 1

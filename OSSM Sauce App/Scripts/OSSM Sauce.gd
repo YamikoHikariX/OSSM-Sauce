@@ -45,6 +45,7 @@ enum CommandType {
 	SET_GLOBAL_ACCELERATION,
 	SET_RANGE_LIMIT,
 	SET_HOMING_SPEED,
+	ADJUST_RANGE_LIMIT,
 }
 
 var app_mode:int

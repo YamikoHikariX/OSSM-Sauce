@@ -13,7 +13,26 @@ func _ready():
 	for node in numeric_inputs:
 		node.text_changed.connect(_on_numeric_input_changed.bind(node))
 
+	%DecreaseRangeLimit.pressed.connect(_on_decrease_range_limit_pressed)
+	%IncreaseRangeLimit.pressed.connect(_on_increase_range_limit_pressed)
 
+
+func _on_decrease_range_limit_pressed():
+	if owner.connected_to_server:
+		var command:PackedByteArray = PackedByteArray()
+		command.resize(5)  # 1 byte command + 4 bytes for int32
+		command.encode_u8(0, owner.CommandType.ADJUST_RANGE_LIMIT)
+		command.encode_s32(1, -100)  # Decrease by 100
+		owner.websocket.send(command)
+
+func _on_increase_range_limit_pressed():
+	if owner.connected_to_server:
+		var command:PackedByteArray = PackedByteArray()
+		command.resize(5)  # 1 byte command + 4 bytes for int32
+		command.encode_u8(0, owner.CommandType.ADJUST_RANGE_LIMIT)
+		command.encode_s32(1, 100)  # Increase by 100
+		owner.websocket.send(command)
+		
 func _on_connect_pressed():
 	var server_address:String = address_input.text
 	var address:String
