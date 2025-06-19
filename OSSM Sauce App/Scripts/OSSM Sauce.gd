@@ -100,6 +100,15 @@ func _init():
 	#var command = r'echo { "command": ["set_property", "pause", true] } > \\.\pipe\mpv-pipe'
 	#OS.execute("cmd", ["/c", command])
 
+# func _shortcut_input(event: InputEvent) -> void:
+# 	if event.is_action_pressed("tweak_forwards"):
+# 		if app_mode == Mode.MOVE:
+# 			frame += 10
+# 	elif event.is_action_pressed("tweak_backwards"):
+# 		if app_mode == Mode.MOVE:
+# 			frame -= 10
+# 			if frame < 0:
+# 				frame = 0
 
 func _ready():
 	#fix_path()

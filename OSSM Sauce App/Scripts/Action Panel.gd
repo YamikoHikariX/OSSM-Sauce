@@ -1,5 +1,11 @@
 extends Panel
 
+func _shortcut_input(event: InputEvent) -> void:
+	if event.is_action_released("ui_accept"):
+		if $Play.is_visible():
+			_on_play_button_pressed()
+		elif $Pause.is_visible():
+			_on_pause_button_pressed()
 
 func _on_play_button_pressed():
 	#owner.vid_play()
