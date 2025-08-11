@@ -1,5 +1,7 @@
 extends Control
 
+@onready var bpm_spin_box: SpinBox = %BPMSpinBox
+
 var active:bool
 
 enum Trans {
@@ -70,6 +72,46 @@ func draw_easing():
 			$Out/AccelerationControls/Easing.selected)
 		$Line2D.add_point(Vector2(x_pos, w - 25))
 		x_pos += 1
+
+func send_command_by_bpm(bpm: float):
+	draw_easing()
+	var in_duration:float = 60 / bpm / 2
+	var in_trans:int = $In/AccelerationControls/Transition.selected
+	var in_ease:int = $In/AccelerationControls/Easing.selected
+	var in_auxiliary:int
+	var out_duration:float = 60 / bpm / 2
+	var out_trans:int = $Out/AccelerationControls/Transition.selected
+	var out_ease:int = $Out/AccelerationControls/Easing.selected
+	var out_auxiliary:int
+	owner.user_settings.set_value('stroke_settings', 'in_trans', in_trans)
+	owner.user_settings.set_value('stroke_settings', 'in_ease', in_ease)
+	owner.user_settings.set_value('stroke_settings', 'out_trans', out_trans)
+	owner.user_settings.set_value('stroke_settings', 'out_ease', out_ease)
+
+	bpm_spin_box.value = bpm
+	
+	var loop_command:PackedByteArray
+	loop_command.resize(19)
+	
+	loop_command.encode_u8(0, OSSM.Command.LOOP)
+	loop_command.encode_u32(1, in_duration * 1000)
+	loop_command.encode_u16(5, 10000)
+	loop_command.encode_u8(7, in_trans)
+	loop_command.encode_u8(8, in_ease)
+	loop_command.encode_u8(9, in_auxiliary)
+	loop_command.encode_u32(10, out_duration * 1000)
+	loop_command.encode_u16(14, 0)
+	loop_command.encode_u8(16, out_trans)
+	loop_command.encode_u8(17, out_ease)
+	loop_command.encode_u8(18, out_auxiliary)
+	if %WebSocket.ossm_connected:
+		%WebSocket.server.broadcast_binary(loop_command)
+		if in_duration + out_duration == 0:
+			owner.pause()
+			active = false
+		elif not active:
+			owner.play()
+			active = true
 
 
 func send_command():

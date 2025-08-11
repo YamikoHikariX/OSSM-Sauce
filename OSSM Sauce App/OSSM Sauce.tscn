@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://d3cq3b5o0feo0"]
+[gd_scene load_steps=59 format=3 uid="uid://d3cq3b5o0feo0"]
 
 [ext_resource type="Theme" uid="uid://dqhnc02ffxjr2" path="res://Theme.tres" id="1_2qx77"]
 [ext_resource type="Script" uid="uid://bcl1axbtw05ci" path="res://Scripts/OSSM Sauce.gd" id="2_7liag"]
@@ -300,6 +300,9 @@ func _on_easing_item_selected(index):
 		_in.get_node('AccelerationControls/Easing').select(index)
 	get_parent().send_command()
 "
+
+[sub_resource type="Theme" id="Theme_kvii6"]
+LineEdit/constants/minimum_character_width = 2
 
 [sub_resource type="Animation" id="Animation_il416"]
 length = 0.001
@@ -689,7 +692,6 @@ texture = ExtResource("8_gc26k")
 
 [node name="LoopControls" type="Control" parent="."]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 anchor_right = 1.0
 anchor_bottom = 0.898958
@@ -1013,6 +1015,30 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="BPMContainer" type="HBoxContainer" parent="LoopControls"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -450.0
+offset_top = 449.0
+offset_right = -41.0
+offset_bottom = 531.0
+grow_horizontal = 0
+
+[node name="BPMLabel" type="Label" parent="LoopControls/BPMContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
+text = "BPM"
+
+[node name="BPMSpinBox" type="SpinBox" parent="LoopControls/BPMContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = SubResource("Theme_kvii6")
+max_value = 250.0
+rounded = true
+custom_arrow_step = 5.0
 
 [node name="VibrationControls" type="Control" parent="."]
 unique_name_in_owner = true

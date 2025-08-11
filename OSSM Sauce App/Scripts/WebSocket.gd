@@ -65,9 +65,33 @@ func _on_client_disconnected(client_id, code):
 func _on_message_received(client_id, message):
 	print("Text message from client %d: %s" % [client_id, message])
 
+	var json = JSON.new()
+	var result = json.parse(message)
+	if result != OK:
+		printerr("Failed to parse JSON message: %s" % json.error_string)
+		return
+
+	var data = json.data
+
+	if data.has("bpm"):
+		%LoopControls.send_command_by_bpm(data["bpm"])
+		print("BPM command received: %f" % data["bpm"])
+	if data.has("position_range_min"):
+		%RangePanel.set_min_slider_pos(data["position_range_min"])
+		print("Min range position received: %f" % data["position_range_min"])
+	if data.has("position_range_max"):
+		%RangePanel.set_max_slider_pos(data["position_range_max"])
+		print("Max range position received: %f" % data["position_range_max"])
+	if data.has("stop"):
+		%LoopControls.send_command_by_bpm(0)
+		print("Stop command received")
+	if data.has("pullout"):
+		%LoopControls.send_command_by_bpm(0)
+		print("Pullout command received")
+
 
 func _on_data_received(client_id, data):
-	if data[0] == OSSM.Command.RESPONSE:
+	if data[0] == OSSM.Command.RESPONSE:	
 		match data[1]:
 			OSSM.Command.CONNECTION:
 				%WiFi.self_modulate = Color.SEA_GREEN
