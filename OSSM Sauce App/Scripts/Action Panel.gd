@@ -1,5 +1,14 @@
 extends Panel
 
+func _shortcut_input(event: InputEvent) -> void:
+	if event.is_action_released(&"ui_accept"):
+		if $Play.visible:
+			print("Play button pressed")
+			_on_play_button_pressed()
+		elif $Pause.visible:
+			print("Pause button pressed")
+			_on_pause_button_pressed()
+
 func _on_play_button_pressed():
 	#owner.vid_play()
 	clear_selections()
