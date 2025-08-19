@@ -140,7 +140,7 @@ func reset_stroke_duration_slider():
 			slider_max_pos,
 			owner.min_stroke_duration,
 			owner.max_stroke_duration), 0.01)
-	if owner.connected_to_server:
+	if %WebSocket.ossm_connected:
 		get_parent().send_command()
 	update_stroke_duration_text()
 
@@ -260,7 +260,7 @@ func reset_stroke_duration_slider():
 		slider_max_pos,
 		owner.min_stroke_duration,
 		owner.max_stroke_duration), 0.01)
-	if owner.connected_to_server:
+	if %WebSocket.ossm_connected:
 		get_parent().send_command()
 	update_stroke_duration_text()
 
