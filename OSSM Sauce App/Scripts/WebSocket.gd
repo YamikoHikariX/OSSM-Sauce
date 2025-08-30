@@ -76,6 +76,9 @@ func _on_message_received(client_id, message):
 	if data.has("bpm"):
 		%LoopControls.send_command_by_bpm(data["bpm"])
 		print("BPM command received: %f" % data["bpm"])
+	if data.has("position"):
+		%PositionControls.move_slider_to(data["position"])
+		print("Position command received: %f" % data["position"])
 	if data.has("position_range_min"):
 		%RangePanel.set_min_slider_pos(data["position_range_min"])
 		print("Min range position received: %f" % data["position_range_min"])

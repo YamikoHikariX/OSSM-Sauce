@@ -30,7 +30,11 @@ func _physics_process(delta):
 		%WebSocket.server.broadcast_binary(command)
 		last_position = mapped_pos
 
-
+func move_slider_to(value: int):
+	# Remap from 0-100 to min_range-max_range
+	var remapped_value = remap(value, 0, 100, min_range, max_range)
+	touch_pos = remapped_value
+		
 func _input(event):
 	if input_active:
 		var offset = 265
