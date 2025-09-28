@@ -1,4 +1,5 @@
 extends Control
+class_name LoopControls
 
 @onready var bpm_spin_box: SpinBox = %BPMSpinBox
 
