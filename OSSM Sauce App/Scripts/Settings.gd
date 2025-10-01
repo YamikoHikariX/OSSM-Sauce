@@ -7,7 +7,7 @@ func _ready():
 	if OS.get_name() == "Android":
 		$Window.hide()
 	
-	var numeric_inputs:Array = [
+	var numeric_inputs: Array = [
 		$Network/Port/TextEdit,
 		$Sliders/MaxSpeed/TextEdit,
 		$Sliders/MaxAcceleration/TextEdit]
@@ -17,7 +17,7 @@ func _ready():
 	$Network/Address/TextEdit.text = get_primary_ip()
 
 
-func _on_numeric_input_changed(input_node:Node):
+func _on_numeric_input_changed(input_node: Node):
 	var regex = RegEx.new()
 	regex.compile("[^0-9]")
 	var filtered_text = regex.sub(input_node.text, "", true)
@@ -29,16 +29,16 @@ func _on_numeric_input_changed(input_node:Node):
 func get_primary_ip() -> String:
 	var addresses = IP.get_local_addresses()
 	for addr in addresses:
-		if is_private_ip(addr) and not addr.begins_with("127."):  # Skip localhost
+		if is_private_ip(addr) and not addr.begins_with("127."): # Skip localhost
 			return addr
 	return "No WiFi IP found"
 
 
 func is_private_ip(ip: String) -> bool:
-	return (ip.begins_with("192.168.") or   # Most home routers
-		ip.begins_with("10.") or            # Corporate/hotspots  
-		ip.begins_with("172.16.") or        # Less common private range
-		ip.begins_with("172.17.") or        # Docker networks
+	return (ip.begins_with("192.168.") or # Most home routers
+		ip.begins_with("10.") or # Corporate/hotspots
+		ip.begins_with("172.16.") or # Less common private range
+		ip.begins_with("172.17.") or # Docker networks
 		ip.begins_with("172.18.") or
 		ip.begins_with("172.31."))
 
@@ -100,7 +100,7 @@ func _on_acceleration_input_changed():
 
 func send_syncing_speed():
 	if %WebSocket.ossm_connected:
-		var command:PackedByteArray
+		var command: PackedByteArray
 		command.resize(5)
 		command.encode_u32(0, OSSM.Command.SET_HOMING_SPEED)
 		command.encode_u32(1, $SyncingSpeed/SpinBox.value)
@@ -114,7 +114,7 @@ func _on_syncing_speed_changed(value):
 
 func send_homing_trigger():
 	if %WebSocket.ossm_connected:
-		var command:PackedByteArray
+		var command: PackedByteArray
 		command.resize(5)
 		command.encode_u32(0, OSSM.Command.SET_HOMING_TRIGGER)
 		command.encode_float(1, $HomingTrigger/SpinBox.value)
@@ -126,7 +126,7 @@ func _on_homing_trigger_changed(value: float) -> void:
 
 
 func _on_homing_trigger_debounce_timer_timeout() -> void:
-	var default_string:String = "Default value: 1.5\nYour value is: "
+	var default_string: String = "Default value: 1.5\nYour value is: "
 	$HomingTriggerPopup/ValueLabel.text = default_string + str($HomingTrigger/SpinBox.value)
 	$HomingTriggerPopup.show()
 

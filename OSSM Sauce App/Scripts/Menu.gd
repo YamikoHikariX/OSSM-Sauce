@@ -143,16 +143,16 @@ func show_pause():
 	$PathControls.show()
 
 
-func flash_button(button:Node):
+func flash_button(button: Node):
 	var tween = get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_QUART)
 	tween.set_ease(Tween.EASE_OUT)
-	var start_color:Color = Color.DARK_ORANGE
-	var end_color:Color = Color.WHITE
+	var start_color: Color = Color.DARK_ORANGE
+	var end_color: Color = Color.WHITE
 	tween.tween_method(button.set_self_modulate, start_color, end_color, 0.6)
 
 
-@onready var buttons:Array = [
+@onready var buttons: Array = [
 	$PathControls/Up,
 	$PathControls/Down,
 	$PathControls/HBox/Play,
@@ -161,16 +161,16 @@ func flash_button(button:Node):
 	$PathControls/HBox/Delete]
 
 const ANIM_TIME = 0.35
-func tween(activating:bool = true):
+func tween(activating: bool = true):
 	var tween = get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_QUART)
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_parallel()
-	var start_color:Color = modulate
-	var end_color:Color = start_color
+	var start_color: Color = modulate
+	var end_color: Color = start_color
 	start_color.a = 0
 	end_color.a = 1
-	var colors:Array = [start_color, end_color]
+	var colors: Array = [start_color, end_color]
 	if activating:
 		refresh_selection()
 	else:
@@ -189,7 +189,7 @@ func anim_finished():
 	hide()
 
 
-var loop_playlist:bool
+var loop_playlist: bool
 func _on_loop_playlist_button_toggled(toggled_on: bool) -> void:
 	loop_playlist = toggled_on
 	if toggled_on:
@@ -233,8 +233,8 @@ func select_mode(index):
 	_on_mode_selected(index)
 
 
-func _on_mode_selected(index:int):
-	var mode_id:int = $Main/Mode.get_item_id(index)
+func _on_mode_selected(index: int):
+	var mode_id: int = $Main/Mode.get_item_id(index)
 	AppMode.active = mode_id
 	owner.user_settings.set_value('app_settings', 'mode', index)
 	

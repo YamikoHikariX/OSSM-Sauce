@@ -4,7 +4,7 @@
 extends Node
 
 # Reference to the MCP command server
-@export var mcp_command_server: Node  # Assign this in the editor
+@export var mcp_command_server: Node # Assign this in the editor
 
 func _ready():
 	# Connect to the MCP command server's signal

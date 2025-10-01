@@ -1,6 +1,6 @@
 extends Control
 
-var active:bool
+var active: bool
 
 enum Trans {
 	LINEAR,
@@ -13,22 +13,22 @@ enum Trans {
 	QUINT
 }
 
-var tween_map:Dictionary = {
-	Trans.LINEAR : 0,
-	Trans.SINE : 1,
-	Trans.CIRC : 8,
-	Trans.EXPO : 5,
-	Trans.QUAD : 4,
-	Trans.CUBIC : 7,
-	Trans.QUART : 3,
-	Trans.QUINT : 2
+var tween_map: Dictionary = {
+	Trans.LINEAR: 0,
+	Trans.SINE: 1,
+	Trans.CIRC: 8,
+	Trans.EXPO: 5,
+	Trans.QUAD: 4,
+	Trans.CUBIC: 7,
+	Trans.QUART: 3,
+	Trans.QUINT: 2
 }
 
-var slider_resist:float = 0.8
+var slider_resist: float = 0.8
 
-var A:Vector2
-var B:Vector2
-var C:Vector2
+var A: Vector2
+var B: Vector2
+var C: Vector2
 
 
 func _ready():
@@ -41,7 +41,7 @@ func _ready():
 	_on_link_speed_sliders_toggled(true)
 
 
-func rmt(input:int):
+func rmt(input: int):
 	return tween_map[input]
 
 
@@ -63,7 +63,7 @@ func draw_easing():
 	for i in 383:
 		var w = Tween.interpolate_value(
 			B.y,
-			-(B.y - C.y),
+			- (B.y - C.y),
 			float(i) / 383,
 			1,
 			rmt($Out/AccelerationControls/Transition.selected),
@@ -74,20 +74,20 @@ func draw_easing():
 
 func send_command():
 	draw_easing()
-	var in_duration:float = $In.stroke_duration
-	var in_trans:int = $In/AccelerationControls/Transition.selected
-	var in_ease:int = $In/AccelerationControls/Easing.selected
-	var in_auxiliary:int
-	var out_duration:float = $Out.stroke_duration
-	var out_trans:int = $Out/AccelerationControls/Transition.selected
-	var out_ease:int = $Out/AccelerationControls/Easing.selected
-	var out_auxiliary:int
+	var in_duration: float = $In.stroke_duration
+	var in_trans: int = $In/AccelerationControls/Transition.selected
+	var in_ease: int = $In/AccelerationControls/Easing.selected
+	var in_auxiliary: int
+	var out_duration: float = $Out.stroke_duration
+	var out_trans: int = $Out/AccelerationControls/Transition.selected
+	var out_ease: int = $Out/AccelerationControls/Easing.selected
+	var out_auxiliary: int
 	owner.user_settings.set_value('stroke_settings', 'in_trans', in_trans)
 	owner.user_settings.set_value('stroke_settings', 'in_ease', in_ease)
 	owner.user_settings.set_value('stroke_settings', 'out_trans', out_trans)
 	owner.user_settings.set_value('stroke_settings', 'out_ease', out_ease)
 	
-	var loop_command:PackedByteArray
+	var loop_command: PackedByteArray
 	loop_command.resize(19)
 	
 	loop_command.encode_u8(0, OSSM.Command.LOOP)

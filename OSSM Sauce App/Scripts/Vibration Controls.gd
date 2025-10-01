@@ -1,23 +1,23 @@
 extends Control
 
-var touch_pos:float
-var touch_pos_offset:int
+var touch_pos: float
+var touch_pos_offset: int
 
-var slider:TextureRect
-var slider_min:float
-var slider_max:float
+var slider: TextureRect
+var slider_min: float
+var slider_max: float
 
-var slider_resist:float = 0.8
+var slider_resist: float = 0.8
 
-var range_percent:int
-var half_period_ms:int
-var origin_position:int
+var range_percent: int
+var half_period_ms: int
+var origin_position: int
 
-var waveform:int
+var waveform: int
 
-var pulse_active:bool
-var pulse_length_ms:int
-var pulse_ms:int
+var pulse_active: bool
+var pulse_length_ms: int
+var pulse_ms: int
 
 func _ready() -> void:
 	$RangeSlider/Slider.gui_input.connect(_on_slider_gui_input.bind($RangeSlider/Slider))
@@ -51,7 +51,7 @@ func update_sliders() -> void:
 		var ms_min = 3
 		var ms_max = 1000
 		half_period_ms = round(remap(slider.position.y, slider_min, slider_max, ms_max, ms_min))
-		var hertz = snappedf(1000 / float(half_period_ms * 2), 0.01) 
+		var hertz = snappedf(1000 / float(half_period_ms * 2), 0.01)
 		$FrequencySlider/ValueLabel.text = str(half_period_ms) + "ms\n" + str(hertz) + "Hz"
 	elif slider == $PositionSlider/Slider:
 		origin_position = round(remap(slider.position.y, slider_min, slider_max, 0, 10000))
@@ -75,7 +75,7 @@ func reset_sliders() -> void:
 	var ms_min = 3
 	var ms_max = 1000
 	half_period_ms = round(remap(frequency_slider.position.y, freq_min, freq_max, ms_max, ms_min))
-	var hertz = snappedf(1000 / float(half_period_ms * 2), 0.01) 
+	var hertz = snappedf(1000 / float(half_period_ms * 2), 0.01)
 	$FrequencySlider/ValueLabel.text = str(half_period_ms) + "ms\n" + str(hertz) + "Hz"
 	
 	var position_slider = $FrequencySlider/Slider
@@ -90,7 +90,7 @@ func _on_debounce_timer_timeout() -> void:
 	send_vibrate_command()
 
 
-func _on_slider_gui_input(event:InputEvent, active_slider:Node) -> void:
+func _on_slider_gui_input(event: InputEvent, active_slider: Node) -> void:
 	if event is InputEventScreenDrag:
 		slider = active_slider
 		slider_min = slider.get_node('../SliderMin').position.y
@@ -121,8 +121,8 @@ func pulse_controller():
 		send_vibrate_command($PulseControl/OnTime.value)
 
 
-func send_vibrate_command(duration:int = -1) -> void:
-	var command:PackedByteArray
+func send_vibrate_command(duration: int = -1) -> void:
+	var command: PackedByteArray
 	command.resize(13)
 	command.encode_u8(0, OSSM.Command.VIBRATE)
 	command.encode_s32(1, duration)

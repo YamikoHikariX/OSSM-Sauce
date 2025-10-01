@@ -2,11 +2,11 @@ extends Node
 
 var server: WebSocketServer
 
-var port:int = 8008
-var host:String = "0.0.0.0"
+var port: int = 8008
+var host: String = "0.0.0.0"
 
-var server_started:bool
-var ossm_connected:bool
+var server_started: bool
+var ossm_connected: bool
 
 func _ready():
 	server = WebSocketServer.new()
@@ -28,7 +28,7 @@ func start_server():
 
 
 # Process signals from the main thread to listen for incoming messages
-func _process(delta:float) -> void:
+func _process(delta: float) -> void:
 	if server and server.is_listening():
 		server.process()
 

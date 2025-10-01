@@ -1,6 +1,6 @@
 extends Node
 
-var active:int
+var active: int
 
 enum {
 	IDLE,

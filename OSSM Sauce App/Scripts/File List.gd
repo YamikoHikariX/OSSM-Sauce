@@ -1,10 +1,10 @@
 extends Panel
 
-@onready var Item:Panel = $Scroll/VBox/Item
+@onready var Item: Panel = $Scroll/VBox/Item
 
 var selected_index
 
-var drag_delta:float
+var drag_delta: float
 
 var mode
 enum Mode {
@@ -35,7 +35,7 @@ func _on_item_selected(item):
 	else:
 		timer.start()
 
-func add_item(item_text:String):
+func add_item(item_text: String):
 	var item = Item.duplicate()
 	item.get_node('Label').text = item_text
 	$Scroll/VBox.add_child(item)

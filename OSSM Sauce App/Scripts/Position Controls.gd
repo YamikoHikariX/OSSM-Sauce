@@ -1,17 +1,17 @@
 extends Control
 
-@onready var slider:TextureRect = $MovementBar/Slider
+@onready var slider: TextureRect = $MovementBar/Slider
 
-@onready var max_range:float = $MovementBar/SliderTop.position.y
-@onready var min_range:float = slider.position.y
+@onready var max_range: float = $MovementBar/SliderTop.position.y
+@onready var min_range: float = slider.position.y
 
-@onready var touch_pos:float = min_range
+@onready var touch_pos: float = min_range
 
-var smoothing:float
+var smoothing: float
 
-var last_position:int
+var last_position: int
 
-var input_active:bool
+var input_active: bool
 
 
 func _ready():
@@ -21,9 +21,9 @@ func _ready():
 func _physics_process(delta):
 	var pos = lerp(slider.position.y, touch_pos, delta * smoothing)
 	slider.position.y = clamp(pos, max_range, min_range)
-	var mapped_pos:int = remap(slider.position.y, min_range, max_range, 0, 10000)
+	var mapped_pos: int = remap(slider.position.y, min_range, max_range, 0, 10000)
 	if %WebSocket.ossm_connected and last_position != mapped_pos:
-		var command:PackedByteArray
+		var command: PackedByteArray
 		command.resize(5)
 		command.encode_u8(0, OSSM.Command.POSITION)
 		command.encode_u32(1, mapped_pos)
