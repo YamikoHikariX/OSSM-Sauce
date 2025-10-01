@@ -1,44 +1,44 @@
 extends Control
 
-var app_version_number:String = "1.3.0"
+var app_version_number: String = "1.3.0"
 
-var storage_dir:String
-var paths_dir:String
-var playlists_dir:String
-var cfg_path:String
+var storage_dir: String
+var paths_dir: String
+var playlists_dir: String
+var cfg_path: String
 
 const ANIM_TIME = 0.65
 
 var user_settings := ConfigFile.new()
 
-var ticks_per_second:int
+var ticks_per_second: int
 
-var path_speed:int = 30
+var path_speed: int = 30
 
-var paused:bool = true
+var paused: bool = true
 
 var active_path_index
 
-var paths:Array
-var markers:Array
-var network_paths:Array
+var paths: Array
+var markers: Array
+var network_paths: Array
 
-var frame:int
+var frame: int
 
 #var app_active_mode:int
 
-var max_speed:int
-var max_acceleration:int
+var max_speed: int
+var max_acceleration: int
 
-var min_stroke_duration:float
-var max_stroke_duration:float
+var min_stroke_duration: float
+var max_stroke_duration: float
 
 signal homing_complete
 
 @onready var PATH_TOP = $PathDisplay/PathArea.position.y
 @onready var PATH_BOTTOM = PATH_TOP + $PathDisplay/PathArea.size.y
 
-@onready var ossm_connection_timeout:Timer = $Settings/Network/ConnectionTimeout
+@onready var ossm_connection_timeout: Timer = $Settings/Network/ConnectionTimeout
 
 func _init():
 	max_speed = 25000
@@ -65,7 +65,6 @@ func _ready():
 	#var command2 = 'mpv --input-ipc-server=\\\\.\\pipe\\mpv-pipe bxe.mp4'
 	#OS.create_process("cmd", ["/c", command])
 	#OS.create_process()
-	
 	OS.request_permissions()
 
 	var physics_ticks = "physics/common/physics_ticks_per_second"
@@ -109,7 +108,7 @@ func _ready():
 		get_viewport().size_changed.connect(_on_window_size_changed)
 
 
-var marker_index:int
+var marker_index: int
 func _physics_process(delta):
 	if paused or paths[active_path_index].is_empty():
 		return
@@ -121,7 +120,7 @@ func _physics_process(delta):
 			%WebSocket.server.broadcast_binary(next_path[overreach_index])
 			var path_list = $Menu/Playlist/Scroll/VBox
 			var next_index = active_path_index + 1
-			var next_path_item = path_list.get_child(next_index) 
+			var next_path_item = path_list.get_child(next_index)
 			active_path_index = next_index
 			display_active_path_index(false, false)
 			$Menu/Playlist._on_item_selected(next_path_item)
@@ -132,7 +131,7 @@ func _physics_process(delta):
 				var next_path = network_paths[0]
 				%WebSocket.server.broadcast_binary(next_path[overreach_index])
 				var path_list = $Menu/Playlist/Scroll/VBox
-				var next_path_item = path_list.get_child(0) 
+				var next_path_item = path_list.get_child(0)
 				active_path_index = 0
 				display_active_path_index(false, false)
 				$Menu/Playlist._on_item_selected(next_path_item)
@@ -164,7 +163,7 @@ func _physics_process(delta):
 		if current_marker < marker_list.size() - 1:
 			marker_index += 1
 	
-	var depth:float = paths[active_path_index][frame]
+	var depth: float = paths[active_path_index][frame]
 	frame += 1
 
 	$PathDisplay/Paths.get_child(active_path_index).position.x -= path_speed
@@ -230,15 +229,15 @@ func _physics_process(delta):
 		#$Wifi.hide()
 
 
-func send_command(value:int):
+func send_command(value: int):
 	if %WebSocket.ossm_connected:
-		var command:PackedByteArray
+		var command: PackedByteArray
 		command.resize(1)
 		command[0] = value
 		%WebSocket.server.broadcast_binary(command)
 
 
-func home_to(target_position:int):
+func home_to(target_position: int):
 	if %WebSocket.ossm_connected:
 		$CircleSelection.show_hourglass()
 		var displays = [
@@ -249,7 +248,7 @@ func home_to(target_position:int):
 			$Menu]
 		for display in displays:
 			display.modulate.a = 0.05
-		var command:PackedByteArray
+		var command: PackedByteArray
 		command.resize(5)
 		command.encode_u8(0, OSSM.Command.HOMING)
 		command.encode_s32(1, target_position)
@@ -257,7 +256,7 @@ func home_to(target_position:int):
 
 
 func play(play_time_ms = null):
-	var command:PackedByteArray
+	var command: PackedByteArray
 	if AppMode.active == AppMode.MOVE and active_path_index != null:
 		paused = false
 		#if play_time_ms != null:
@@ -277,7 +276,7 @@ func play(play_time_ms = null):
 
 func pause():
 	if %WebSocket.ossm_connected:
-		var command:PackedByteArray
+		var command: PackedByteArray
 		command.resize(1)
 		command[0] = OSSM.Command.PAUSE
 		%WebSocket.server.broadcast_binary(command)
@@ -422,8 +421,8 @@ func apply_device_settings():
 		$Settings.send_homing_trigger()
 
 
-func create_move_command(ms_timing:int, depth:float, trans:int, ease:int, auxiliary:int):
-	var network_packet:PackedByteArray
+func create_move_command(ms_timing: int, depth: float, trans: int, ease: int, auxiliary: int):
+	var network_packet: PackedByteArray
 	network_packet.resize(10)
 	network_packet.encode_u8(0, OSSM.Command.MOVE)
 	network_packet.encode_u32(1, ms_timing)
@@ -439,13 +438,13 @@ func round_to(value: float, decimals: int) -> float:
 	return round(value * factor) / factor
 
 
-func load_path(file_name:String) -> bool:
+func load_path(file_name: String) -> bool:
 	var file = FileAccess.open(paths_dir + file_name, FileAccess.READ)
 	if not file:
 		printerr("Error: Failed to read file.")
 		return false
 	
-	var file_data:Dictionary
+	var file_data: Dictionary
 	
 	if file_name.ends_with(".funscript"):
 		var file_text = file.get_as_text()
@@ -471,7 +470,7 @@ func load_path(file_name:String) -> bool:
 				#path_data[0] = [0, 1, 2, 0]
 				file_data[0] = [0, 1, 2, 0]
 				for action in actions_list:
-					var frame:int = action.at / 16.66666
+					var frame: int = action.at / 16.66666
 					var depth = round_to(clamp(action.pos / 100, 0, 1), 4)
 					#var trans = $TransitionType.get_selected_id()
 					var trans = 1
@@ -488,20 +487,20 @@ func load_path(file_name:String) -> bool:
 			printerr("Error: No JSON data found in file.")
 			return false
 	
-	var marker_data:Dictionary = file_data
+	var marker_data: Dictionary = file_data
 	if marker_data.size() < 6:
 		printerr("Error: Insufficient path data in file.")
 		return false
 	
-	var network_packets:Array
+	var network_packets: Array
 	for marker_frame in marker_data.keys():
 		var ms_timing = round((float(marker_frame) / 60) * 1000)
 		var depth = marker_data[marker_frame][0]
 		var trans = marker_data[marker_frame][1]
 		var ease = marker_data[marker_frame][2]
-		var auxiliary:int = marker_data[marker_frame][3]
+		var auxiliary: int = marker_data[marker_frame][3]
 		
-		var network_packet:PackedByteArray
+		var network_packet: PackedByteArray
 		#if auxiliary & 1 << 1:
 			#network_packet.resize(13)
 			#network_packet.encode_u8(0, OSSM.Command.VIBRATE)
@@ -527,12 +526,12 @@ func load_path(file_name:String) -> bool:
 	network_paths.append(network_packets)
 	
 	file.close()
-	var previous_depth:float
-	var previous_frame:int
-	var marker_list:Array = marker_data.keys()
-	var path:PackedFloat32Array
-	var path_new:Dictionary
-	var path_line:Line2D = Line2D.new()
+	var previous_depth: float
+	var previous_frame: int
+	var marker_list: Array = marker_data.keys()
+	var path: PackedFloat32Array
+	var path_new: Dictionary
+	var path_line: Line2D = Line2D.new()
 	path_line.width = 15
 	path_line.hide()
 	marker_list.sort()
@@ -542,14 +541,14 @@ func load_path(file_name:String) -> bool:
 		var ease = marker_data[marker_frame][2]
 		var auxiliary = marker_data[marker_frame][3]
 		if marker_frame > 0:
-			var steps:int = marker_frame - previous_frame
+			var steps: int = marker_frame - previous_frame
 			var duration = (float(steps) / ticks_per_second) * 1000
-			var scaled_depth:int = round(clamp(depth, 0, 0.9999) * 10000)
-			var headers:String = "M%sD%sT%sE%s"
-			var message:String = headers%[scaled_depth, duration, trans, ease]
+			var scaled_depth: int = round(clamp(depth, 0, 0.9999) * 10000)
+			var headers: String = "M%sD%sT%sE%s"
+			var message: String = headers % [scaled_depth, duration, trans, ease]
 			path_new[previous_frame] = message
 			for step in steps:
-				var step_depth:float = Tween.interpolate_value(
+				var step_depth: float = Tween.interpolate_value(
 						previous_depth,
 						depth - previous_depth,
 						step,
@@ -568,16 +567,16 @@ func load_path(file_name:String) -> bool:
 	return true
 
 
-func create_delay(duration:float):
-	var delay_path:PackedFloat32Array
-	var path_line:Line2D = Line2D.new()
+func create_delay(duration: float):
+	var delay_path: PackedFloat32Array
+	var path_line: Line2D = Line2D.new()
 	path_line.hide()
-	var headers:String = "M%sD%sT%sE%s"
-	var message:String = headers%[0, duration * 1000, 0, 2]
+	var headers: String = "M%sD%sT%sE%s"
+	var message: String = headers % [0, duration * 1000, 0, 2]
 	for point in round(duration * ticks_per_second):
 		delay_path.append(-1)
-	var marker_path:Dictionary
-	var network_packets:Array
+	var marker_path: Dictionary
+	var network_packets: Array
 	for timing in 6:
 		var move_command = create_move_command(timing, 0, 0, 0, 0)
 		network_packets.append(move_command)
@@ -606,7 +605,7 @@ func display_active_path_index(pause := true, send_buffer := true):
 	
 	$ActionPanel.clear_selections()
 	if pause:
-		$ActionPanel/Pause.hide() 
+		$ActionPanel/Pause.hide()
 		$ActionPanel/Play.show()
 	for path in $PathDisplay/Paths.get_children():
 		path.hide()
@@ -669,7 +668,7 @@ func exit():
 	if %WebSocket.ossm_connected:
 		pause()
 		const MIN_RANGE = 0
-		var command:PackedByteArray
+		var command: PackedByteArray
 		command.resize(4)
 		command.encode_u8(0, OSSM.Command.SET_RANGE_LIMIT)
 		command.encode_u8(1, MIN_RANGE)
