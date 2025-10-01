@@ -1404,7 +1404,7 @@ horizontal_alignment = 1
 
 [node name="OnTime" type="SpinBox" parent="VibrationControls/PulseControl"]
 custom_minimum_size = Vector2(369, 0)
-layout_mode = 2
+layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -427.0
@@ -1416,7 +1416,7 @@ suffix = "ms"
 
 [node name="OffTime" type="SpinBox" parent="VibrationControls/PulseControl"]
 custom_minimum_size = Vector2(384, 0)
-layout_mode = 2
+layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = 42.0
@@ -2115,7 +2115,7 @@ grow_vertical = 2
 
 [node name="Mode" type="OptionButton" parent="Menu/Main"]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
 offset_right = 1080.0
 offset_bottom = 82.0
 theme_override_colors/font_color = Color(1, 0.498039, 0.313726, 1)
@@ -2133,7 +2133,7 @@ popup/item_3/text = "Vibration Mode"
 popup/item_3/id = 5
 
 [node name="PlaylistButtons" type="HBoxContainer" parent="Menu/Main"]
-layout_mode = 2
+layout_mode = 0
 offset_top = 153.0
 offset_right = 1080.0
 offset_bottom = 249.0
@@ -2152,7 +2152,7 @@ disabled = true
 text = "Save Playlist"
 
 [node name="PathButtons" type="HBoxContainer" parent="Menu/Main"]
-layout_mode = 2
+layout_mode = 0
 offset_top = 299.0
 offset_right = 1080.0
 offset_bottom = 395.0
@@ -2719,7 +2719,7 @@ text = "500000"
 placeholder_text = "500000"
 
 [node name="SyncingSpeed" type="VBoxContainer" parent="Settings"]
-layout_mode = 2
+layout_mode = 0
 offset_top = 1050.0
 offset_right = 1080.0
 offset_bottom = 1218.0
@@ -2737,7 +2737,7 @@ value = 1000.0
 suffix = "steps/sec"
 
 [node name="HomingTrigger" type="VBoxContainer" parent="Settings"]
-layout_mode = 2
+layout_mode = 0
 offset_top = 1319.0
 offset_right = 1080.0
 offset_bottom = 1479.0
@@ -2783,7 +2783,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="CheckBox" type="CheckBox" parent="Settings/Window/AlwaysOnTop"]
-layout_mode = 2
+layout_mode = 0
 offset_top = 2.0
 offset_right = 24.0
 offset_bottom = 26.0
@@ -2814,7 +2814,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="CheckBox" type="CheckBox" parent="Settings/Window/TransparentBg"]
-layout_mode = 2
+layout_mode = 0
 offset_top = 2.0
 offset_right = 24.0
 offset_bottom = 26.0
@@ -3085,7 +3085,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="CheckBox" type="CheckBox" parent="Splash/DontShow"]
-layout_mode = 2
+layout_mode = 0
 offset_top = 2.0
 offset_right = 178.0
 offset_bottom = 26.0

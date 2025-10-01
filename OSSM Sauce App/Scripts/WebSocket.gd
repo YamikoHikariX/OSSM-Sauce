@@ -3,11 +3,11 @@ extends Node
 var server: WebSocketServer
 var connected_clients: Array[int] = []
 
-var port:int = 8008
-var host:String = "0.0.0.0"
+var port: int = 8008
+var host: String = "0.0.0.0"
 
-var server_started:bool
-var ossm_connected:bool
+var server_started: bool
+var ossm_connected: bool
 
 func _ready():
 	server = WebSocketServer.new()
@@ -32,7 +32,7 @@ func start_server():
 
 
 # Process signals from the main thread to listen for incoming messages
-func _process(_delta:float) -> void:
+func _process(_delta: float) -> void:
 	if server and server.is_listening():
 		server.process()
 
@@ -143,7 +143,7 @@ func _on_message_received(client_id, message):
 
 
 func _on_data_received(_client_id, data):
-	if data[0] == OSSM.Command.RESPONSE:	
+	if data[0] == OSSM.Command.RESPONSE:
 		match data[1]:
 			OSSM.Command.CONNECTION:
 				%WiFi.self_modulate = Color.SEA_GREEN
@@ -170,7 +170,7 @@ func _on_data_received(_client_id, data):
 					owner.play()
 
 
-func _on_position_move_complete(position:int):
+func _on_position_move_complete(position: int):
 	_broadcast_json({"event": "position_move_complete", "position": position})
 
 
@@ -188,16 +188,16 @@ func _exit_tree():
 
 
 # Internal utility helpers -------------------------------------------------
-func _send_json_to_client(client_id:int, data:Dictionary) -> void:
+func _send_json_to_client(client_id: int, data: Dictionary) -> void:
 	if not server or not server.is_listening():
 		return
-	var json_text:String = JSON.stringify(data)
+	var json_text: String = JSON.stringify(data)
 	server.send_text(client_id, json_text)
 	
 
-func _broadcast_json(data:Dictionary) -> void:
+func _broadcast_json(data: Dictionary) -> void:
 	if not server or not server.is_listening():
 		return
-	var json_text:String = JSON.stringify(data)
+	var json_text: String = JSON.stringify(data)
 	for client_id in server.get_client_ids():
 		server.send_text(client_id, json_text)
