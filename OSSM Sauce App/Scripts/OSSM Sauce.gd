@@ -40,6 +40,8 @@ signal homing_complete
 
 @onready var ossm_connection_timeout: Timer = $Settings/Network/ConnectionTimeout
 
+@export var music_player: AudioStreamPlayer
+
 func _init():
 	max_speed = 25000
 	max_acceleration = 500000
@@ -65,6 +67,10 @@ func _ready():
 	#var command2 = 'mpv --input-ipc-server=\\\\.\\pipe\\mpv-pipe bxe.mp4'
 	#OS.create_process("cmd", ["/c", command])
 	#OS.create_process()
+	var dir = DirAccess.open("user://")
+	if not dir.dir_exists("Tracks"):
+		dir.make_dir("Tracks")
+
 	OS.request_permissions()
 
 	var physics_ticks = "physics/common/physics_ticks_per_second"
@@ -259,6 +265,7 @@ func play(play_time_ms = null):
 	var command: PackedByteArray
 	if AppMode.active == AppMode.MOVE and active_path_index != null:
 		paused = false
+		music_player.stream_paused = false
 		#if play_time_ms != null:
 			#command.resize(6)
 			#command.encode_u8(0, OSSM.Command.PLAY)
@@ -280,6 +287,8 @@ func pause():
 		command.resize(1)
 		command[0] = OSSM.Command.PAUSE
 		%WebSocket.server.broadcast_binary(command)
+
+	music_player.stream_paused = true
 	paused = true
 
 

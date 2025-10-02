@@ -1,17 +1,17 @@
-[gd_scene load_steps=58 format=3 uid="uid://b0h7dqw6nn3gd"]
+[gd_scene load_steps=58 format=3 uid="uid://ctob7kjs6jpwj"]
 
 [ext_resource type="Theme" uid="uid://dqhnc02ffxjr2" path="res://Theme.tres" id="1_2qx77"]
-[ext_resource type="Script" path="res://Scripts/OSSM Sauce.gd" id="2_7liag"]
+[ext_resource type="Script" uid="uid://bcl1axbtw05ci" path="res://Scripts/OSSM Sauce.gd" id="2_7liag"]
 [ext_resource type="Texture2D" uid="uid://da3nxjs8pqcoy" path="res://Textures/Dot Small.svg" id="3_4fxdc"]
-[ext_resource type="Script" path="res://Scripts/Position Controls.gd" id="4_juubk"]
+[ext_resource type="Script" uid="uid://brrct0qmqq407" path="res://Scripts/Position Controls.gd" id="4_juubk"]
 [ext_resource type="Texture2D" uid="uid://du8j273r744tn" path="res://Textures/Straight.svg" id="5_assl3"]
 [ext_resource type="Texture2D" uid="uid://bm14gbhhm3uqb" path="res://Textures/Smooth.svg" id="6_w7w2d"]
 [ext_resource type="Texture2D" uid="uid://cb703kraugp85" path="res://Textures/S32.svg" id="7_vkr47"]
 [ext_resource type="Texture2D" uid="uid://cnyl16jr7jd8g" path="res://Textures/Dot.svg" id="8_gc26k"]
-[ext_resource type="Script" path="res://Scripts/Loop Controls.gd" id="9_ggpkr"]
+[ext_resource type="Script" uid="uid://cu75s80u86jl" path="res://Scripts/Loop Controls.gd" id="9_ggpkr"]
 [ext_resource type="Texture2D" uid="uid://bssf5wkfubmdu" path="res://Textures/PauseLarge.svg" id="10_txgs1"]
-[ext_resource type="Script" path="res://Scripts/Vibration Controls.gd" id="11_nekr0"]
-[ext_resource type="Script" path="res://Scripts/Action Panel.gd" id="11_ovb0l"]
+[ext_resource type="Script" uid="uid://vf6er30rg7gg" path="res://Scripts/Vibration Controls.gd" id="11_nekr0"]
+[ext_resource type="Script" uid="uid://chirlya65yehq" path="res://Scripts/Action Panel.gd" id="11_ovb0l"]
 [ext_resource type="Texture2D" uid="uid://dkpllak4evknm" path="res://Textures/Play.svg" id="12_5566s"]
 [ext_resource type="Texture2D" uid="uid://bsgwwhgpuqxap" path="res://Textures/Wave Triangle.svg" id="12_uvqyu"]
 [ext_resource type="Texture2D" uid="uid://dcx71x8114vuv" path="res://Textures/Selection.svg" id="13_5y1j6"]
@@ -20,10 +20,10 @@
 [ext_resource type="Texture2D" uid="uid://dd4yrbph2jgxm" path="res://Textures/Speed.svg" id="15_h1yph"]
 [ext_resource type="Texture2D" uid="uid://df1fg8fsnax6k" path="res://Textures/Range.svg" id="16_6gn0p"]
 [ext_resource type="Texture2D" uid="uid://biyi8wy11rxn2" path="res://Textures/Menu.svg" id="17_qgwvh"]
-[ext_resource type="Script" path="res://Scripts/Speed Panel.gd" id="18_xiv3r"]
+[ext_resource type="Script" uid="uid://bpsi0jcewjfkb" path="res://Scripts/Speed Panel.gd" id="18_xiv3r"]
 [ext_resource type="Texture2D" uid="uid://btmbmu74nqhry" path="res://Textures/Back.svg" id="19_cpmuu"]
-[ext_resource type="Script" path="res://Scripts/Range Panel.gd" id="20_ogp2k"]
-[ext_resource type="Script" path="res://Scripts/Menu.gd" id="21_khfk6"]
+[ext_resource type="Script" uid="uid://r4wmcbentqpr" path="res://Scripts/Range Panel.gd" id="20_ogp2k"]
+[ext_resource type="Script" uid="uid://geh3ju1otcwn" path="res://Scripts/Menu.gd" id="21_khfk6"]
 [ext_resource type="Texture2D" uid="uid://1yuj650f5xs" path="res://Textures/Gear.svg" id="22_2ruby"]
 [ext_resource type="Texture2D" uid="uid://o6gdsdww0cu4" path="res://Textures/Exit.svg" id="23_nlut4"]
 [ext_resource type="Texture2D" uid="uid://bvlmowqblmdgt" path="res://Textures/Down.svg" id="24_n8lpp"]
@@ -31,17 +31,17 @@
 [ext_resource type="Texture2D" uid="uid://rcaxkukbqghe" path="res://Textures/Restart.svg" id="26_aqrhn"]
 [ext_resource type="Texture2D" uid="uid://bd8t1o4bylcx0" path="res://Textures/Trash.svg" id="27_jm1bm"]
 [ext_resource type="Texture2D" uid="uid://6v1hvd7m2vhs" path="res://Textures/t3.svg" id="28_wynws"]
-[ext_resource type="Script" path="res://Scripts/Playlist.gd" id="28_ycvea"]
-[ext_resource type="Script" path="res://Scripts/Settings.gd" id="29_ui4fx"]
-[ext_resource type="Script" path="res://Scripts/Add File.gd" id="30_0ohdi"]
-[ext_resource type="Script" path="res://Scripts/File List.gd" id="31_476hc"]
-[ext_resource type="Script" path="res://Scripts/Circle Selection.gd" id="32_6g672"]
+[ext_resource type="Script" uid="uid://ctf5xg6wcbhqx" path="res://Scripts/Playlist.gd" id="28_ycvea"]
+[ext_resource type="Script" uid="uid://ccimjgty86f8v" path="res://Scripts/Settings.gd" id="29_ui4fx"]
+[ext_resource type="Script" uid="uid://qc06washnpwx" path="res://Scripts/Add File.gd" id="30_0ohdi"]
+[ext_resource type="Script" uid="uid://borvji2u3vb68" path="res://Scripts/File List.gd" id="31_476hc"]
+[ext_resource type="Script" uid="uid://c7byjwheu5qbc" path="res://Scripts/Circle Selection.gd" id="32_6g672"]
 [ext_resource type="Texture2D" uid="uid://8r6wnojlpyb2" path="res://Textures/Circle Selection.svg" id="33_onotn"]
 [ext_resource type="Texture2D" uid="uid://ceigu0byvwpor" path="res://Textures/Play Large.svg" id="34_0psch"]
 [ext_resource type="Texture2D" uid="uid://dtor82hfkxpes" path="res://Textures/Restart Large.svg" id="35_yhpak"]
 [ext_resource type="Texture2D" uid="uid://ceniqb8fv6rr" path="res://Textures/hourglass.svg" id="36_fybvn"]
 [ext_resource type="Texture2D" uid="uid://c0bgeto1j6das" path="res://Textures/wifi.svg" id="37_kag8w"]
-[ext_resource type="Script" path="res://Scripts/WebSocket.gd" id="42_kvii6"]
+[ext_resource type="Script" uid="uid://c6ao0rhurexoq" path="res://Scripts/WebSocket.gd" id="42_kvii6"]
 
 [sub_resource type="GDScript" id="GDScript_o3urw"]
 script/source = "extends Control
@@ -529,7 +529,7 @@ func _on_dont_show_toggled(toggled_on):
 	owner.user_settings.set_value('app_settings', 'show_splash', !toggled_on)
 "
 
-[node name="OSSMSauce" type="Control"]
+[node name="OSSMSauce" type="Control" node_paths=PackedStringArray("music_player")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -538,6 +538,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_2qx77")
 script = ExtResource("2_7liag")
+music_player = NodePath("MusicPlayer")
 
 [node name="PathDisplay" type="Control" parent="."]
 unique_name_in_owner = true
@@ -3121,6 +3122,8 @@ script = ExtResource("42_kvii6")
 [node name="MCPCommandServer" type="Node" parent="."]
 
 [node name="MCPBridge" type="Node" parent="."]
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 
 [connection signal="gui_input" from="PathDisplay/PathArea" to="PathDisplay/PathArea" method="_on_gui_input"]
 [connection signal="timeout" from="PathDisplay/PathArea/Timer" to="PathDisplay/PathArea" method="_on_timer_timeout"]
