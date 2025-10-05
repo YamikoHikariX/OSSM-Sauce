@@ -58,6 +58,7 @@ func _on_pause_pressed():
 
 func _on_restart_pressed():
 	hide()
+	owner.update_music_player()
 	%ActionPanel.show()
 	flash_button($PathControls/HBox/Restart)
 	owner.display_active_path_index()

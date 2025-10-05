@@ -17,7 +17,15 @@ var path_speed: int = 30
 
 var paused: bool = true
 
-var active_path_index
+var active_path_index:
+	set(value):
+		active_path_index = value
+		update_music_player()
+
+var music_tracks: PackedStringArray = []
+
+@export var delay_checkbox: CheckBox
+@export var delay_spinbox: SpinBox
 
 var paths: Array
 var markers: Array
@@ -70,6 +78,12 @@ func _ready():
 	var dir = DirAccess.open("user://")
 	if not dir.dir_exists("Tracks"):
 		dir.make_dir("Tracks")
+
+	dir.change_dir("Tracks")
+
+	for track in dir.get_files():
+		if track.ends_with(".mp3"):
+			music_tracks.append(track)
 
 	OS.request_permissions()
 
@@ -260,6 +274,26 @@ func home_to(target_position: int):
 		command.encode_s32(1, target_position)
 		%WebSocket.server.broadcast_binary(command)
 
+
+func update_music_player():
+	if active_path_index == null: return
+
+	music_player.stop()
+
+	var item_node = $Menu/Playlist/Scroll/VBox.get_child(active_path_index).get_node("Label")
+	if item_node == null: return
+	var song_name = item_node.text.replace(".funscript", "").replace(".bx", "")
+	for track in music_tracks:
+		var track_name = track.replace(".mp3", "")
+		if track_name in song_name:
+			music_player.stream = AudioStreamMP3.load_from_file("user://Tracks/" + track)
+			music_player.play()
+			if delay_checkbox.button_pressed:
+				music_player.seek(delay_spinbox.value / 1000.0)
+				print("applied delay:", delay_spinbox.value / 1000.0)
+			music_player.stream_paused = true
+			print("Loaded track:", track)
+			return
 
 func play(play_time_ms = null):
 	var command: PackedByteArray
@@ -657,6 +691,12 @@ func deactivate_move_mode():
 	%Menu/PathControls.hide()
 	%Menu/Playlist.hide()
 
+
+func _shortcut_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"volume_up"):
+		music_player.volume_db = min(music_player.volume_db + 2, 6)
+	elif event.is_action_pressed(&"volume_down"):
+		music_player.volume_db = max(music_player.volume_db - 2, -80)
 
 func _on_window_size_changed():
 	if OS.get_name() != "Android":

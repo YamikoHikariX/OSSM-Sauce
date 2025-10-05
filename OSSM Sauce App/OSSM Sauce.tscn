@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://ctob7kjs6jpwj"]
+[gd_scene load_steps=59 format=3 uid="uid://ctob7kjs6jpwj"]
 
 [ext_resource type="Theme" uid="uid://dqhnc02ffxjr2" path="res://Theme.tres" id="1_2qx77"]
 [ext_resource type="Script" uid="uid://bcl1axbtw05ci" path="res://Scripts/OSSM Sauce.gd" id="2_7liag"]
@@ -42,6 +42,9 @@
 [ext_resource type="Texture2D" uid="uid://ceniqb8fv6rr" path="res://Textures/hourglass.svg" id="36_fybvn"]
 [ext_resource type="Texture2D" uid="uid://c0bgeto1j6das" path="res://Textures/wifi.svg" id="37_kag8w"]
 [ext_resource type="Script" uid="uid://c6ao0rhurexoq" path="res://Scripts/WebSocket.gd" id="42_kvii6"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_kvii6"]
+font_size = 50
 
 [sub_resource type="GDScript" id="GDScript_o3urw"]
 script/source = "extends Control
@@ -529,7 +532,7 @@ func _on_dont_show_toggled(toggled_on):
 	owner.user_settings.set_value('app_settings', 'show_splash', !toggled_on)
 "
 
-[node name="OSSMSauce" type="Control" node_paths=PackedStringArray("music_player")]
+[node name="OSSMSauce" type="Control" node_paths=PackedStringArray("delay_checkbox", "delay_spinbox", "music_player")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -538,6 +541,8 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_2qx77")
 script = ExtResource("2_7liag")
+delay_checkbox = NodePath("PathDisplay/DelayContainer/DelayCheckBox")
+delay_spinbox = NodePath("PathDisplay/DelayContainer/DelaySpinBox")
 music_player = NodePath("MusicPlayer")
 
 [node name="PathDisplay" type="Control" parent="."]
@@ -549,6 +554,27 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="DelayContainer" type="HBoxContainer" parent="PathDisplay"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 8
+
+[node name="DelayLabel" type="Label" parent="PathDisplay/DelayContainer"]
+layout_mode = 2
+text = "Audio Delay"
+label_settings = SubResource("LabelSettings_kvii6")
+
+[node name="DelaySpinBox" type="SpinBox" parent="PathDisplay/DelayContainer"]
+layout_mode = 2
+max_value = 500.0
+value = 500.0
+suffix = "ms"
+
+[node name="DelayCheckBox" type="CheckBox" parent="PathDisplay/DelayContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
 
 [node name="PathArea" type="Control" parent="PathDisplay"]
 layout_mode = 1
@@ -3124,6 +3150,7 @@ script = ExtResource("42_kvii6")
 [node name="MCPBridge" type="Node" parent="."]
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+volume_db = -13.0
 
 [connection signal="gui_input" from="PathDisplay/PathArea" to="PathDisplay/PathArea" method="_on_gui_input"]
 [connection signal="timeout" from="PathDisplay/PathArea/Timer" to="PathDisplay/PathArea" method="_on_timer_timeout"]
