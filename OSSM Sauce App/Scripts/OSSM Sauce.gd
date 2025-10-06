@@ -240,6 +240,7 @@ func send_command(value:int):
 
 func home_to(target_position:int):
 	if %WebSocket.ossm_connected:
+		print("Starting homing to position %d" % target_position)
 		$CircleSelection.show_hourglass()
 		var displays = [
 			$PositionControls,

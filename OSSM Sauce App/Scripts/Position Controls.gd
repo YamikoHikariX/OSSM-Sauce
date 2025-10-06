@@ -162,13 +162,13 @@ func _start_next_queued_move() -> void:
 func _emit_move_complete_if_needed():
 	# Determine current logical position (0-100) and emit
 	var mapped_pos: int = int(remap(slider.position.y, min_range, max_range, 0, 100))
-	emit_signal("position_move_complete", mapped_pos)
+	position_move_complete.emit(mapped_pos)
 
 var _queue_complete_announced: bool = false
 func _emit_queue_complete_if_needed():
 	if move_queue.is_empty() and not move_active:
 		if not _queue_complete_announced:
-			emit_signal("position_queue_complete")
+			position_queue_complete.emit()
 			_queue_complete_announced = true
 	else:
 		# Reset flag if queue refills

@@ -81,9 +81,22 @@ func _on_message_received(client_id, message):
 	var ack: Dictionary = {"received": {}}
 
 	if data.has("bpm"):
-		%LoopControls.send_command_by_bpm(data["bpm"])
+		await %LoopControls.send_command_by_bpm(data["bpm"])
 		print("BPM command received: %f" % data["bpm"])
+		if owner.paused:
+			owner.play()
 		ack.received.bpm = data["bpm"]
+
+	if data.has("set_mode"):
+		var mode = data["set_mode"]
+		if mode == "loop":
+			%Menu.select_mode(2)
+		elif mode == "position":
+			%Menu.select_mode(1)
+
+		if %WebSocket.ossm_connected:
+			await owner.homing_complete
+		ack.received.set_mode = mode
 
 	if data.has("position"):
 		if data.has("duration"):
@@ -128,12 +141,16 @@ func _on_message_received(client_id, message):
 		ack.received.position_range_max = data["position_range_max"]
 
 	if data.has("stop"):
-		%LoopControls.send_command_by_bpm(0)
+		await %LoopControls.send_command_by_bpm(0)
 		print("Stop command received")
+		if not owner.paused:
+			owner.pause()
 		ack.received.stop = true
 
 	if data.has("pullout"):
-		%LoopControls.send_command_by_bpm(0)
+		await %LoopControls.send_command_by_bpm(0)
+		owner.home_to(0)
+		owner.pause()
 		print("Pullout command received")
 		ack.received.pullout = true
 

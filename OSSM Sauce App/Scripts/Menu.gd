@@ -232,6 +232,7 @@ func select_mode(index):
 	$Main/Mode.select(index)
 	_on_mode_selected(index)
 
+var did_first_homing:bool = false
 
 func _on_mode_selected(index:int):
 	var mode_id:int = $Main/Mode.get_item_id(index)
@@ -243,6 +244,14 @@ func _on_mode_selected(index:int):
 	owner.home_to(0)
 	if %WebSocket.ossm_connected:
 		await owner.homing_complete
+
+
+	# if not did_first_homing:
+	# 	owner.home_to(0)
+	# 	if %WebSocket.ossm_connected:
+	# 		await owner.homing_complete
+	# did_first_homing = true
+	
 	
 	owner.paused = true
 	

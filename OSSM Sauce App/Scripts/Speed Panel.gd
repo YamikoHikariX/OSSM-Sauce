@@ -14,8 +14,6 @@ var accel_slider_max_pos:float
 func _ready():
 	$LabelTop.self_modulate.a = 0
 	$LabelBot.self_modulate.a = 0
-	$BackTexture.self_modulate.a = 0
-	$BackButton.hide()
 	
 	speed_slider.connect('gui_input', speed_slider_gui_input)
 	speed_slider_max_pos = speed_slider.position.y
@@ -137,18 +135,15 @@ func tween(activating:bool = true):
 	if not activating:
 		positions.reverse()
 	tween.tween_method(set_position, position, positions[1], owner.ANIM_TIME)
-	var start_color:Color = $BackTexture.self_modulate
+	var start_color:Color = Color.WHITE
 	var end_color:Color = start_color
 	start_color.a = 0
 	end_color.a = 1
 	var colors:Array = [start_color, end_color]
 	if not activating:
 		colors.reverse()
-		$BackButton.hide()
 		tween.tween_callback(anim_finished).set_delay(owner.ANIM_TIME)
-	else:
-		$BackButton.show()
-	var visuals = [$BackTexture, $LabelTop, $LabelBot]
+	var visuals = [$LabelTop, $LabelBot]
 	for node in visuals:
 		tween.tween_method(
 			node.set_self_modulate,
@@ -167,3 +162,8 @@ func _on_back_button_pressed():
 	tween(false)
 	$BackButton.hide()
 	%ActionPanel.show()
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed:
+		if not get_global_rect().has_point(event.position):
+			_on_back_button_pressed()

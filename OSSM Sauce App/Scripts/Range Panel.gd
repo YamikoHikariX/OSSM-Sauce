@@ -10,9 +10,6 @@ var max_range_pos: float
 func _ready():
 	$LabelTop.self_modulate.a = 0
 	$LabelBot.self_modulate.a = 0
-	$BackTexture.self_modulate.a = 0
-	$BackTexture.self_modulate.a = 0
-	$BackButton.hide()
 	min_slider.connect('gui_input', min_slider_gui_input)
 	max_slider.connect('gui_input', max_slider_gui_input)
 	min_range_pos = min_slider.position.y
@@ -52,7 +49,7 @@ func max_slider_gui_input(event):
 func update_min_range():
 	var slider_pos = min_slider.position.y
 	var range_map = remap(slider_pos, min_range_pos, max_range_pos, 0, 10000)
-	var percent = remap(slider_pos, min_range_pos, max_range_pos, 0, 1)
+	var percent = remap(slider_pos, min_range_pos, max_range_pos, 0, 100)
 	owner.user_settings.set_value('range_slider_min', 'position_percent', percent)
 	if %WebSocket.ossm_connected:
 		const MIN_RANGE = 0
@@ -69,7 +66,7 @@ func update_min_range():
 func update_max_range():
 	var slider_pos = max_slider.position.y
 	var range_map = remap(slider_pos, min_range_pos, max_range_pos, 0, 10000)
-	var percent = remap(slider_pos, min_range_pos, max_range_pos, 0, 1)
+	var percent = remap(slider_pos, min_range_pos, max_range_pos, 0, 100)
 	owner.user_settings.set_value('range_slider_max', 'position_percent', percent)
 	if %WebSocket.ossm_connected:
 		const MAX_RANGE = 1
@@ -122,19 +119,15 @@ func tween(activating: bool = true):
 	if not activating:
 		positions.reverse()
 	tween.tween_method(set_position, position, positions[1], owner.ANIM_TIME)
-	var back = $BackTexture
-	var start_color: Color = $BackTexture.self_modulate
+	var start_color: Color = Color.WHITE
 	var end_color: Color = start_color
 	start_color.a = 0
 	end_color.a = 1
 	var colors: Array = [start_color, end_color]
 	if not activating:
 		colors.reverse()
-		$BackButton.hide()
 		tween.tween_callback(anim_finished).set_delay(owner.ANIM_TIME)
-	else:
-		$BackButton.show()
-	var visuals = [$BackTexture, $LabelBot, $LabelTop]
+	var visuals = [$LabelBot, $LabelTop]
 	for node in visuals:
 		tween.tween_method(
 				node.set_self_modulate,
@@ -159,3 +152,8 @@ func _on_back_button_pressed():
 	$BackButton.hide()
 	tween(false)
 	%ActionPanel.show()
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed:
+		if not get_global_rect().has_point(event.position):
+			_on_back_button_pressed()

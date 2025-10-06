@@ -43,6 +43,15 @@ func _ready():
 	C.y = $Control.position.y + $Control.size.y
 	_on_link_speed_sliders_toggled(true)
 
+	var line_edit: LineEdit = bpm_spin_box.get_line_edit()
+	line_edit.keep_editing_on_text_submit = true
+	line_edit.text_submitted.connect(on_text_submitted)
+
+func on_text_submitted(_new_text:String):
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await send_command_by_bpm(bpm_spin_box.value)
 
 func rmt(input:int):
 	return tween_map[input]
@@ -108,6 +117,8 @@ func send_command_by_bpm(bpm: float):
 	if %WebSocket.ossm_connected:
 		%WebSocket.server.broadcast_binary(loop_command)
 		if in_duration + out_duration == 0:
+			# owner.home_to(0)
+			# await owner.homing_complete
 			owner.pause()
 			active = false
 		elif not active:

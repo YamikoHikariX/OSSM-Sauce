@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://d3cq3b5o0feo0"]
+[gd_scene load_steps=59 format=3 uid="uid://ctob7kjs6jpwj"]
 
 [ext_resource type="Theme" uid="uid://dqhnc02ffxjr2" path="res://Theme.tres" id="1_2qx77"]
 [ext_resource type="Script" uid="uid://bcl1axbtw05ci" path="res://Scripts/OSSM Sauce.gd" id="2_7liag"]
@@ -1892,6 +1892,7 @@ grow_vertical = 2
 texture = ExtResource("8_gc26k")
 
 [node name="BackTexture" type="TextureRect" parent="SpeedPanel"]
+visible = false
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -1908,6 +1909,7 @@ mouse_filter = 2
 texture = ExtResource("19_cpmuu")
 
 [node name="BackButton" type="TextureButton" parent="SpeedPanel"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2009,6 +2011,7 @@ grow_vertical = 2
 texture = ExtResource("8_gc26k")
 
 [node name="BackTexture" type="TextureRect" parent="RangePanel"]
+visible = false
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -2023,6 +2026,7 @@ texture = ExtResource("19_cpmuu")
 flip_h = true
 
 [node name="BackButton" type="TextureButton" parent="RangePanel"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
