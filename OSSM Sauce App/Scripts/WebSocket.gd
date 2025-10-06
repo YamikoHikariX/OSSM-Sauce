@@ -131,12 +131,12 @@ func _on_message_received(client_id, message):
 		ack.received.position_clear_queue = true
 
 	if data.has("position_range_min"):
-		%RangePanel.set_min_slider_pos(data["position_range_min"])
+		%RangePanel.set_actual_min_percent(data["position_range_min"])
 		print("Min range position received: %f" % data["position_range_min"])
 		ack.received.position_range_min = data["position_range_min"]
 
 	if data.has("position_range_max"):
-		%RangePanel.set_max_slider_pos(data["position_range_max"])
+		%RangePanel.set_actual_max_percent(data["position_range_max"])
 		print("Max range position received: %f" % data["position_range_max"])
 		ack.received.position_range_max = data["position_range_max"]
 
