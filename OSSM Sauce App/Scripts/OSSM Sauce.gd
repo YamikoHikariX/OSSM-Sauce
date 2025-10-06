@@ -34,6 +34,8 @@ var min_stroke_duration:float
 var max_stroke_duration:float
 
 signal homing_complete
+signal stroke_in_finished
+signal stroke_out_finished
 
 @onready var PATH_TOP = $PathDisplay/PathArea.position.y
 @onready var PATH_BOTTOM = PATH_TOP + $PathDisplay/PathArea.size.y

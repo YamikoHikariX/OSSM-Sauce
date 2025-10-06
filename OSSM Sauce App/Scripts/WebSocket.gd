@@ -74,17 +74,39 @@ func _on_message_received(client_id, message):
 	var json = JSON.new()
 	var result = json.parse(message)
 	if result != OK:
-		printerr("Failed to parse JSON message: %s" % json.error_string)
+		printerr("Failed to parse JSON message: %s" % error_string(result))
 		return
 
 	var data = json.data
 	var ack: Dictionary = {"received": {}}
 
+	
+	if data.has("ease_type"):
+		%LoopControls.set_ease(data["ease_type"])
+		ack.received.ease_type = data["ease_type"]
+	if data.has("ease_type_in"):
+		%LoopControls.set_ease_in(data["ease_type_in"])
+		ack.received.ease_type = data["ease_type_in"]
+	if data.has("ease_type_out"):
+		%LoopControls.set_ease_out(data["ease_type_out"])
+		ack.received.ease_type_out = data["ease_type_out"]
+	
+	if data.has("trans_type"):
+		%LoopControls.set_trans_type(data["trans_type"])
+		ack.receieved.trans_type = data["trans_type"]
+	if data.has("trans_type_in"):
+		%LoopControls.set_trans_type_in(data["trans_type_in"])
+		ack.received.trans_type = data["trans_type_in"]
+	if data.has("trans_type_out"):
+		%LoopControls.set_trans_type_out(data["trans_type_out"])
+		ack.receieved.trans_type_out = data["trans_type_out"]
+	
+
 	if data.has("bpm"):
-		await %LoopControls.send_command_by_bpm(data["bpm"])
+		%LoopControls.send_command_by_bpm(data["bpm"])
 		print("BPM command received: %f" % data["bpm"])
 		if owner.paused:
-			owner.play()
+			owner.play()	
 		ack.received.bpm = data["bpm"]
 
 	if data.has("set_mode"):
@@ -141,15 +163,10 @@ func _on_message_received(client_id, message):
 		ack.received.position_range_max = data["position_range_max"]
 
 	if data.has("stop"):
-		await %LoopControls.send_command_by_bpm(0)
-		print("Stop command received")
-		if not owner.paused:
-			owner.pause()
+		owner.pause()
 		ack.received.stop = true
 
 	if data.has("pullout"):
-		await %LoopControls.send_command_by_bpm(0)
-		owner.home_to(0)
 		owner.pause()
 		print("Pullout command received")
 		ack.received.pullout = true
@@ -185,6 +202,12 @@ func _on_data_received(_client_id, data):
 						%CircleSelection.show_play()
 				elif AppMode.active == AppMode.POSITION:
 					owner.play()
+			OSSM.Command.STROKE_IN_FINISHED:
+				print("Stroke in finished signal received")
+				owner.stroke_in_finished.emit()
+			OSSM.Command.STROKE_OUT_FINISHED:
+				print("Stroke out finished signal received")
+				owner.stroke_out_finished.emit()
 
 
 func _on_position_move_complete(position: int):

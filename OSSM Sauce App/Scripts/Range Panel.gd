@@ -12,6 +12,8 @@ var actual_max_percent: float = 100.0
 @onready var hard_min_slider: TextureRect = $RangeBar/MinSlider
 @onready var hard_max_slider: TextureRect = $RangeBar/MaxSlider
 
+var shown: bool = false
+
 func _ready():
 	$LabelTop.self_modulate.a = 0
 	$LabelBot.self_modulate.a = 0
@@ -198,6 +200,7 @@ func _if_fix_actual_bounds():
 # --- UI animation (unchanged) ---
 #
 func tween(activating: bool = true):
+	shown = activating
 	var tween = get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_QUART)
 	tween.set_ease(Tween.EASE_OUT)
@@ -225,7 +228,6 @@ func tween(activating: bool = true):
 func anim_finished():
 	%ActionPanel/Range/Selection.hide()
 	%ActionPanel.self_modulate.a = 1
-	$BackButton.hide()
 
 func _on_back_button_pressed():
 	if %WebSocket.ossm_connected and %Mode.selected == 1:
@@ -235,11 +237,11 @@ func _on_back_button_pressed():
 		owner.home_to(%PositionControls.last_position)
 	_send_effective_min_to_ossm()
 	_send_effective_max_to_ossm()
-	$BackButton.hide()
 	tween(false)
 	%ActionPanel.show()
 
 func _input(event: InputEvent) -> void:
+	if not shown: return
 	if event is InputEventMouseButton and event.pressed:
 		if not get_global_rect().has_point(event.position):
 			_on_back_button_pressed()

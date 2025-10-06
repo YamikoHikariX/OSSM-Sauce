@@ -10,6 +10,7 @@ var accel_slider_max_pos:float
 @onready var acceleration_slider:TextureRect = $AccelerationBar/Slider
 @onready var acceleration_bottom:TextureRect = $AccelerationBar/SliderBottom
 
+var shown: bool = false
 
 func _ready():
 	$LabelTop.self_modulate.a = 0
@@ -125,6 +126,7 @@ func acceleration_slider_gui_input(event):
 
 
 func tween(activating:bool = true):
+	shown = activating
 	var tween = get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_QUART)
 	tween.set_ease(Tween.EASE_OUT)
@@ -155,15 +157,14 @@ func tween(activating:bool = true):
 func anim_finished():
 	%ActionPanel/Speed/Selection.hide()
 	%ActionPanel.self_modulate.a = 1
-	$BackButton.hide()
 
 
 func _on_back_button_pressed():
 	tween(false)
-	$BackButton.hide()
 	%ActionPanel.show()
 
 func _input(event: InputEvent) -> void:
+	if not shown: return
 	if event is InputEventMouseButton and event.pressed:
 		if not get_global_rect().has_point(event.position):
 			_on_back_button_pressed()
