@@ -15,21 +15,22 @@
 #define COLOR_ORDER GRB
 
 // LED status colors
-#define COLOR_OFF        CRGB::Black
-#define COLOR_WAITING    CRGB::Blue         // Waiting for config input
-#define COLOR_CONFIG     CRGB::Purple       // In configuration mode
-#define COLOR_CONNECTING CRGB::Orange       // Connecting to WiFi/WebSocket
-#define COLOR_CONNECTED  CRGB::Green        // Successfully connected
-#define COLOR_ERROR      CRGB::Red          // Error/connection failed
+#define COLOR_OFF CRGB::Black
+#define COLOR_WAITING CRGB::Blue	  // Waiting for config input
+#define COLOR_CONFIG CRGB::Purple	  // In configuration mode
+#define COLOR_CONNECTING CRGB::Orange // Connecting to WiFi/WebSocket
+#define COLOR_CONNECTED CRGB::Green	  // Successfully connected
+#define COLOR_ERROR CRGB::Red		  // Error/connection failed
 
 // LED status indicators
-enum LEDStatus {
-  LED_OFF,
-  LED_WAITING_CONFIG,    // Breathing blue
-  LED_CONFIG_MODE,       // Pulsing purple
-  LED_CONNECTING,        // Solid orange
-  LED_CONNECTED,         // Green flash sequence
-  LED_ERROR              // Flashing red
+enum LEDStatus
+{
+	LED_OFF,
+	LED_WAITING_CONFIG, // Breathing blue
+	LED_CONFIG_MODE,	// Pulsing purple
+	LED_CONNECTING,		// Solid orange
+	LED_CONNECTED,		// Green flash sequence
+	LED_ERROR			// Flashing red
 };
 
 // Global variables

@@ -26,65 +26,74 @@ extern uint32_t globalAcceleration;
 extern int homingTargetPosition;
 extern uint32_t homingSpeedHz;
 
-extern enum LoopPhase {PUSH, PULL} activeLoopPhase;
+extern enum LoopPhase { PUSH,
+						PULL } activeLoopPhase;
 
-enum Direction {IN, OUT};
-
-enum TransType:byte {
-  TRANS_LINEAR,
-  TRANS_SINE,
-  TRANS_CIRC,
-  TRANS_EXPO,
-  TRANS_QUAD,
-  TRANS_CUBIC,
-  TRANS_QUART,
-  TRANS_QUINT
+enum Direction
+{
+	IN,
+	OUT
 };
 
-enum EaseType:byte {
-  EASE_IN,
-  EASE_OUT,
-  EASE_IN_OUT,
-  EASE_OUT_IN
+enum TransType : byte
+{
+	TRANS_LINEAR,
+	TRANS_SINE,
+	TRANS_CIRC,
+	TRANS_EXPO,
+	TRANS_QUAD,
+	TRANS_CUBIC,
+	TRANS_QUART,
+	TRANS_QUINT
 };
 
-extern enum MovementMode:byte {
-  MODE_IDLE,
-  MODE_HOMING,
-  MODE_MOVE,
-  MODE_POSITION,
-  MODE_LOOP,
-  MODE_VIBRATE,
-  MODE_SMOOTH_MOVE,
+enum EaseType : byte
+{
+	EASE_IN,
+	EASE_OUT,
+	EASE_IN_OUT,
+	EASE_OUT_IN
+};
+
+extern enum MovementMode : byte {
+	MODE_IDLE,
+	MODE_HOMING,
+	MODE_MOVE,
+	MODE_POSITION,
+	MODE_LOOP,
+	MODE_VIBRATE,
+	MODE_SMOOTH_MOVE,
 } movementMode;
 
-struct StrokeCommand {
-  uint32_t endTimeMs;
-  short depth;
-  TransType transType;
-  EaseType easeType;
-  byte auxiliary;
-  long targetPosition;
-  uint32_t playTimeStartedMs;
-  float durationReciprocal;
-  uint32_t baseSpeedHz;
-  bool active;
+struct StrokeCommand
+{
+	uint32_t endTimeMs;
+	short depth;
+	TransType transType;
+	EaseType easeType;
+	byte auxiliary;
+	long targetPosition;
+	uint32_t playTimeStartedMs;
+	float durationReciprocal;
+	uint32_t baseSpeedHz;
+	bool active;
 };
 
-extern struct Vibration {
-  int32_t duration;
-  uint32_t halfPeriodMs;
-  uint16_t position;
-  uint8_t rangePercent;
-  uint8_t speedScaling;
-  int32_t origin;
-  int32_t crest;
-  Direction direction;
-  float movementSpeed;
-  bool timed;
-  uint32_t endMs;
-  uint32_t currentMs;
-  int32_t targetPosition;
+extern struct Vibration
+{
+	int32_t duration;
+	uint32_t halfPeriodMs;
+	uint16_t position;
+	uint8_t rangePercent;
+	uint8_t speedScaling;
+	int32_t origin;
+	int32_t crest;
+	Direction direction;
+	float movementSpeed;
+	bool timed;
+	uint32_t endMs;
+	uint32_t currentMs;
+	int32_t targetPosition;
 } vibration;
 
 void initializeMotor();
@@ -95,6 +104,6 @@ uint32_t getMoveBaseSpeedHz(StrokeCommand stroke, uint32_t moveDuration, bool us
 
 void processSafeAccel();
 
-void processStroke(StrokeCommand* stroke, uint32_t elapsedTimeMs);
+void processStroke(StrokeCommand *stroke, uint32_t elapsedTimeMs);
 
 #endif
