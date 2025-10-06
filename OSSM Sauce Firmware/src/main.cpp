@@ -25,6 +25,13 @@ StrokeCommand smoothMoveCommand;
 unsigned long smoothMoveStartTime;
 bool smoothMoveActive = false;
 
+const int STROKE_COMPLETION_TOLERANCE_STEPS = 500;
+
+bool hasSentStrokeInFinished = false;
+bool hasSentStrokeOutFinished = false;
+
+bool queued_paused = false;
+
 enum CommandType : byte
 {
 	RESPONSE,
@@ -43,6 +50,8 @@ enum CommandType : byte
 	SET_HOMING_SPEED,
 	SET_HOMING_TRIGGER,
 	SMOOTH_MOVE,
+	STROKE_IN_FINISHED,
+	STROKE_OUT_FINISHED,
 };
 
 struct Response
@@ -83,6 +92,33 @@ void sendResponse(CommandType responseCommand)
 	esp_websocket_client_send_bin(wsClient, message, messageSize, portMAX_DELAY);
 }
 
+static void sendStrokeCompletionResponse(long targetPosition)
+{
+	if (targetPosition >= rangeLimitUserMax)
+	{
+		sendResponse(STROKE_IN_FINISHED);
+		hasSentStrokeInFinished = true;
+		hasSentStrokeOutFinished = false;
+		Serial.println("Sent STROKE_IN_FINISHED");
+	}
+	else if (targetPosition <= rangeLimitUserMin)
+	{
+		sendResponse(STROKE_OUT_FINISHED);
+		hasSentStrokeOutFinished = true;
+		hasSentStrokeInFinished = false;
+		Serial.println("Sent STROKE_OUT_FINISHED");
+	}
+}
+
+static bool hasStepperReachedTarget(long targetPosition)
+{
+	long currentPosition = stepper->getCurrentPosition();
+	long delta = currentPosition - targetPosition;
+	if (delta < 0)
+		delta = -delta;
+	return delta <= STROKE_COMPLETION_TOLERANCE_STEPS;
+}
+
 void parseMessage(esp_websocket_event_data_t *data)
 {
 	byte *message = (byte *)data->data_ptr;
@@ -99,6 +135,7 @@ void parseMessage(esp_websocket_event_data_t *data)
 
 	case MOVE:
 	{
+		Serial.println("MOVE COMMAND");
 		if (messageLength != 10)
 			break;
 		if (!xQueueSend(moveQueue, &(message[1]), (TickType_t)10))
@@ -111,10 +148,13 @@ void parseMessage(esp_websocket_event_data_t *data)
 
 	case LOOP:
 	{
+		Serial.println("LOOP COMMAND");
 		if (messageLength != 19)
 			break;
 		memcpy(&loopPush, message + 1, 9);
 		memcpy(&loopPull, message + 10, 9);
+		hasSentStrokeInFinished = false;
+		hasSentStrokeOutFinished = false;
 		if (loopPush.endTimeMs != 0)
 		{
 			loopPush.targetPosition = rangeLimitUserMax;
@@ -132,6 +172,7 @@ void parseMessage(esp_websocket_event_data_t *data)
 
 	case POSITION:
 	{
+		Serial.println("POSITION COMMAND");
 		// if (movementMode != MODE_POSITION)
 		// break;
 		u32_t inputPosition;
@@ -154,6 +195,7 @@ void parseMessage(esp_websocket_event_data_t *data)
 
 	case VIBRATE:
 	{
+		Serial.println("VIBRATE COMMAND");
 		if (messageLength != 13)
 			break;
 		memcpy(&vibration, message + 1, 12);
@@ -193,26 +235,32 @@ void parseMessage(esp_websocket_event_data_t *data)
 
 	case PLAY:
 	{
+		Serial.println("PLAY COMMAND");
 		memcpy(&movementMode, message + 1, 1);
 		if (messageLength == 6)
 			memcpy(&playTimeMs, message + 2, 4);
 		playStartTime = millis() - playTimeMs;
+		queued_paused = false;
 		break;
 	}
 
 	case PAUSE:
 	{
-		movementMode = MODE_IDLE;
+		Serial.println("PAUSE COMMAND");
+		queued_paused = true;
 		break;
 	}
 
 	case RESET:
 	{
+		Serial.println("RESET COMMAND");
 		movementMode = MODE_IDLE;
 		playTimeMs = 0;
 		xQueueReset(moveQueue);
 		xQueueReset(positionQueue);
 		moveQueueIsEmpty = true;
+		hasSentStrokeInFinished = false;
+		hasSentStrokeOutFinished = false;
 		break;
 	}
 
@@ -234,6 +282,7 @@ void parseMessage(esp_websocket_event_data_t *data)
 
 	case SET_SPEED_LIMIT:
 	{
+		Serial.println("SET_SPEED_LIMIT COMMAND");
 		int speedLimit;
 		memcpy(&speedLimit, message + 1, 4);
 		globalSpeedLimitHz = max(speedLimit, 0);
@@ -242,6 +291,7 @@ void parseMessage(esp_websocket_event_data_t *data)
 
 	case SET_GLOBAL_ACCELERATION:
 	{
+		Serial.println("SET_GLOBAL_ACCELERATION COMMAND");
 		int acceleration;
 		memcpy(&acceleration, message + 1, 4);
 		globalAcceleration = max(acceleration, 0);
@@ -250,6 +300,7 @@ void parseMessage(esp_websocket_event_data_t *data)
 
 	case SET_RANGE_LIMIT:
 	{
+		Serial.println("SET_RANGE_LIMIT COMMAND");
 		short rangeLimitInput;
 		memcpy(&rangeLimitInput, message + 2, 2);
 		rangeLimitInput = constrain(rangeLimitInput, 0, 10000);
@@ -287,6 +338,7 @@ void parseMessage(esp_websocket_event_data_t *data)
 
 	case SET_HOMING_SPEED:
 	{
+		Serial.println("SET_HOMING_SPEED COMMAND");
 		u32_t homingSpeedInputHz;
 		memcpy(&homingSpeedInputHz, message + 1, 4);
 		homingSpeedHz = min(globalSpeedLimitHz, homingSpeedInputHz);
@@ -295,6 +347,7 @@ void parseMessage(esp_websocket_event_data_t *data)
 
 	case SET_HOMING_TRIGGER:
 	{
+		Serial.println("SET_HOMING_TRIGGER COMMAND");
 		float homingTriggerInput;
 		memcpy(&homingTriggerInput, message + 1, 4);
 		powerAvgRangeMultiplier = constrain(homingTriggerInput, 0.1, 10);
@@ -418,10 +471,38 @@ void loop()
 		playTimeMs = millis() - playStartTime;
 		StrokeCommand *loopPhase = (activeLoopPhase == PUSH) ? &loopPush : &loopPull;
 		if (playTimeMs <= loopPhase->endTimeMs)
+		{
 			processStroke(loopPhase, playTimeMs);
+			// if (hasStepperReachedTarget(loopPhase->targetPosition) &&
+			// 	((activeLoopPhase == PUSH && !hasSentStrokeInFinished) ||
+			// 	 (activeLoopPhase == PULL && !hasSentStrokeOutFinished)))
+			// {
+			// 	sendStrokeCompletionResponse(loopPhase->targetPosition);
+			// }
+		}
 		else
 		{
+			if (queued_paused && activeLoopPhase == PULL)
+			{
+				Serial.println("Loop paused");
+				movementMode = MODE_IDLE;
+				hasSentStrokeInFinished = false;
+				hasSentStrokeOutFinished = false;
+				queued_paused = false;
+				break;
+			}
 			activeLoopPhase = (activeLoopPhase == PUSH) ? PULL : PUSH;
+			// if (activeLoopPhase == PUSH)
+			// {
+			// 	sendResponse(STROKE_IN_FINISHED);
+			// 	Serial.println("Sent STROKE_IN_FINISHED");
+			// }
+			// else
+			// {
+			// 	sendResponse(STROKE_OUT_FINISHED);
+			// 	Serial.println("Sent STROKE_OUT_FINISHED");
+			// }
+
 			playStartTime = millis();
 		}
 		break;
