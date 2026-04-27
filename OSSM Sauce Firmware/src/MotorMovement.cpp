@@ -1,17 +1,11 @@
 #include <Arduino.h>
 #include "MotorMovement.h"
+#include "Configuration.h"
 
-#define motorDirectionPin 27
-#define motorEnablePin 26
-#define motorStepPin 14
-#define motorStopPin 19
-#define limitSwitchPin 12
-#define powerSensorPin 36
-
-const int powerAvgRangeMultiplier = 1.8; //raise to decrease, or lower to increase sensitivity of sensorless homing
+float powerAvgRangeMultiplier = 1.5; // Raise to decrease, or lower to increase sensitivity of sensorless homing
 const int outliersSampleSize = 10;
 const int powerSampleSize = 10;
-const int deltaSampleLength = 6000;
+const int deltaSampleLength = 5000;
 
 FastAccelStepperEngine engine = FastAccelStepperEngine();
 FastAccelStepper *stepper = NULL;
@@ -31,10 +25,12 @@ MovementMode movementMode;
 LoopPhase activeLoopPhase;
 
 int32_t previousStrokePosition;
-enum {IN, OUT} movementDirection;
+Direction movementDirection;
 
 int homingTargetPosition;
 uint32_t homingSpeedHz = 1000;
+
+Vibration vibration;
 
 
 void initializeMotor() {
@@ -89,7 +85,7 @@ void getPowerReading(bool takeDeltaSample = false, int deltaSampleIndex = 0) {
 
 
 void sensorlessHoming() {
-// root mean square could be a better way to determine averages
+// Root mean square could be a better way to determine averages
   Serial.println("");
   Serial.println("Scanning power consumption variance...");
   Serial.println("");
@@ -99,26 +95,26 @@ void sensorlessHoming() {
   powerEMASlowSmooth = 0;
   powerEMASlowDoubleSmooth = 0;
 
-  //relax motor
+  // Relax motor
   digitalWrite(motorEnablePin, HIGH);
   delay(600);
   digitalWrite(motorEnablePin, LOW);
   delay(100);
 
-  stepper->setAcceleration(160000);
-  stepper->setSpeedInUs(1800);
+  stepper->setAcceleration(180000);
+  stepper->setSpeedInUs(1900);
 
-  //stabilize EMA
+  // Stabilize EMA
   for (int i = 0; i < 1200; i++) {
     getPowerReading();
   }
 
-  //take samples
-  for (int i = 0; i < 5000; i++) {
+  // Take samples
+  for (int i = 0; i < deltaSampleLength; i++) {
     getPowerReading(true, i);
   }
 
-  //bubble sort samples ascending
+  // Bubble sort samples ascending
   for (int i = 0; i < deltaSampleLength - 1; i++) {
     for (int j = 0; j < deltaSampleLength - i - 1; j++) {
       if (deltaArray[j] > deltaArray[j + 1]) {
@@ -129,31 +125,32 @@ void sensorlessHoming() {
     }
   }
 
-  //get average of lowest 10 samples
+  // Get average of lowest 10 samples
   float outliersAvgLow = 0;
   for (int i = 0; i < outliersSampleSize; i++) {
     outliersAvgLow += deltaArray[i];
   }
   outliersAvgLow = outliersAvgLow / outliersSampleSize;
 
-  //get average of highest 10 samples
+  // Get average of highest 10 samples
   float outliersAvgHigh = 0;
   for (int i = 1; i < outliersSampleSize; i++) {
     outliersAvgHigh += deltaArray[deltaSampleLength - i];
   }
   outliersAvgHigh = outliersAvgHigh / outliersSampleSize;
 
-  //get average range of samples
+  // Get average range of samples
   powerAvgRange = outliersAvgHigh - outliersAvgLow;
   powerAvgRange *= powerAvgRangeMultiplier;
 
   Serial.println("");
   Serial.println("Beginning sensorless homing...");
-  Serial.println("");
+  Serial.print("powerAvgRangeMultiplier: ");
+  Serial.println(powerAvgRangeMultiplier);
 
   stepper->setAutoEnable(true);
 
-  //find physical maximum limit
+  // Find physical maximum limit
   powerEMAFast = powerEMASlowDoubleSmooth;
   powerSpikeTriggered = false;
   int limitPhysicalMax;
@@ -162,13 +159,13 @@ void sensorlessHoming() {
   while (!powerSpikeTriggered) {
     getPowerReading();
   }
-  stepper->stopMove();
-  limitPhysicalMax = stepper->getCurrentPosition();
+  stepper->forceStop();
   stepper->move(-50);
+  limitPhysicalMax = stepper->getCurrentPosition();
 
   delay(300);
 
-  //find physical minimum limit
+  // Find physical minimum limit
   powerEMAFast = powerEMASlowDoubleSmooth;
   powerSpikeTriggered = false;
   int limitPhysicalMin;
@@ -177,19 +174,26 @@ void sensorlessHoming() {
   while (!powerSpikeTriggered) {
     getPowerReading();
   }
-  stepper->stopMove();
+  stepper->forceStop();
+  stepper->move(50);
   limitPhysicalMin = stepper->getCurrentPosition();
 
   delay(200);
 
-  //lock motor movement
+  // Lock motor movement
   stepper->setAutoEnable(false);
   digitalWrite(motorEnablePin, LOW);
 
-  //set hard limits
+  // Set hard limits
   float hardLimitBuffer = abs(limitPhysicalMax - limitPhysicalMin) * 0.06;
-  rangeLimitHardMin = limitPhysicalMin + hardLimitBuffer;
-  rangeLimitHardMax = limitPhysicalMax - hardLimitBuffer;
+
+  if (preferences.getBool("motor_reversed", false)) {
+    rangeLimitHardMin = limitPhysicalMax - hardLimitBuffer;
+    rangeLimitHardMax = limitPhysicalMin + hardLimitBuffer;
+  } else {
+    rangeLimitHardMin = limitPhysicalMin + hardLimitBuffer;
+    rangeLimitHardMax = limitPhysicalMax - hardLimitBuffer;
+  }
 
   rangeLimitUserMin = rangeLimitHardMin;
   rangeLimitUserMax = rangeLimitHardMax;
@@ -280,7 +284,7 @@ double interpolate(double weight, TransType transType, EaseType easeType) {
 }
 
 
-//amplifying base move speed to match traversal time with linear move
+// Amplify base move speed to match traversal time with linear move
 uint32_t getMoveBaseSpeedHz(StrokeCommand stroke, uint32_t moveDuration, bool useFullUserRange) {
   int moveDelta;
   if (useFullUserRange)
