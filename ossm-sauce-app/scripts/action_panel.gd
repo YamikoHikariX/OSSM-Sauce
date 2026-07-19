@@ -1,6 +1,18 @@
 extends Panel
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_released("toggle_playback"):
+		if $Play.visible:
+			_on_play_button_pressed()
+		else:
+			_on_pause_button_pressed()
+	elif event.is_action_pressed("ui_left"):
+		%VideoPlayer.seek_relative(-0.1)
+	elif event.is_action_pressed("ui_right"):
+		%VideoPlayer.seek_relative(0.1)
+
+
 func _on_play_button_pressed():
 	flash_button($Play)
 	$Timer.start()

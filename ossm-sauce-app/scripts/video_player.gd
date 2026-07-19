@@ -159,6 +159,13 @@ func pause_player():
 	_start_cooldown()
 
 
+func seek_relative(delta_seconds: float) -> void:
+	if not is_active():
+		return
+	_send_seek(maxf(player_time + delta_seconds, 0.0))
+	_start_cooldown()
+
+
 func _on_delay_timeout():
 	match _pending_action:
 		"play":
