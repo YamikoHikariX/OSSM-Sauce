@@ -238,6 +238,16 @@ func select_mode(index):
 	_on_mode_selected(index)
 
 
+var _switching_mode: bool
+func cycle_mode(direction: int):
+	if _switching_mode:
+		return
+	_switching_mode = true
+	var mode: OptionButton = $Main/Mode
+	await select_mode(wrapi(mode.selected + direction, 0, mode.item_count))
+	_switching_mode = false
+
+
 func _on_bridge_mode_selected(index: int) -> void:
 	%Menu/BridgeSettings/BPIO.hide()
 	%Menu/BridgeSettings/XToys.hide()

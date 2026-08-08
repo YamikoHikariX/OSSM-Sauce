@@ -20,6 +20,11 @@ var tween_map: Dictionary = {
 # Slider lerp resistance — safety feature, do not loosen.
 var slider_resist: float = 0.8
 
+# Gamepad sweep rates (fraction of full slider travel per second at full stick
+# deflection). Kept gentle for safety.
+const SPEED_AXIS_RATE: float = 0.6
+const DEPTH_AXIS_RATE: float = 0.5
+
 var A: Vector2
 var B: Vector2
 var C: Vector2
@@ -42,6 +47,36 @@ func _ready():
 	debounce_timer.one_shot = true
 	debounce_timer.timeout.connect(_on_throttle_timeout)
 	_on_link_speed_sliders_toggled(true)
+	set_physics_process(false)
+
+
+# Live gamepad control while loop mode is active:
+#   Left stick (speed axis)  → stroke-duration sliders (In + Out together)
+#   Right stick (depth axis) → device stroke range via RangePanel
+#                              hold depth_out_modifier to move the retracted end
+func _physics_process(delta: float) -> void:
+	var speed_axis := Input.get_action_strength("increase_speed") \
+			- Input.get_action_strength("decrease_speed")
+	if speed_axis != 0.0:
+		# Track runs top (fast) to bottom (off); increase_speed moves toward the
+		# fast end, i.e. toward max_y (smaller Y).
+		var travel: float = $In.off_y - $In.max_y
+		var d: float = -speed_axis * travel * SPEED_AXIS_RATE * delta
+		$In.adjust_by(d)
+		$Out.adjust_by(d)
+		request_send()
+
+	var depth_axis := Input.get_action_strength("increase_depth") \
+			- Input.get_action_strength("decrease_depth")
+	if depth_axis != 0.0:
+		var range_panel = %RangePanel
+		# max_range_pos is the deep end (smaller Y); increase_depth moves toward it.
+		var travel: float = range_panel.min_range_pos - range_panel.max_range_pos
+		var d: float = -depth_axis * travel * DEPTH_AXIS_RATE * delta
+		if Input.is_action_pressed("depth_out_modifier"):
+			range_panel.adjust_min(d)
+		else:
+			range_panel.adjust_max(d)
 
 
 func draw_easing():
@@ -182,6 +217,7 @@ func activate():
 	pending = false
 	debounce_timer.stop()
 	draw_easing()
+	set_physics_process(true)
 	%Menu/LoopSettings.show()
 	show()
 
@@ -189,6 +225,7 @@ func activate():
 func deactivate():
 	$In.set_physics_process(false)
 	$Out.set_physics_process(false)
+	set_physics_process(false)
 	debounce_timer.stop()
 	%Menu/LoopSettings.hide()
 	hide()

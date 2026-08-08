@@ -822,6 +822,13 @@ func _input(event: InputEvent) -> void: # Handle ui element outside click
 			line_edit.release_focus()
 
 
+func _unhandled_input(event: InputEvent) -> void:  # Gamepad mode switching
+	if event.is_action_pressed("select_next_mode"):
+		$Menu.cycle_mode(1)
+	elif event.is_action_pressed("select_prev_mode"):
+		$Menu.cycle_mode(-1)
+
+
 func _on_window_size_changed():
 	if OS.get_name() != "Android":
 		var window_size = DisplayServer.window_get_size()

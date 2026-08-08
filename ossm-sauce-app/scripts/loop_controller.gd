@@ -72,6 +72,14 @@ func map_stroke_duration():
 			owner.max_stroke_duration), 0.01)
 
 
+# Gamepad speed control (loop mode). Nudges the stroke-duration slider by
+# delta_y pixels within its track, then refreshes the mapped duration + label.
+func adjust_by(delta_y: float) -> void:
+	slider.position.y = clamp(slider.position.y + delta_y, max_y, off_y)
+	map_stroke_duration()
+	update_stroke_duration_text()
+
+
 func reset_stroke_duration_slider():
 	slider.position.y = off_y
 	if %WebSocket.ossm_connected:

@@ -44,6 +44,22 @@ func _on_max_slider_gui_input(event):
 				update_max_range()
 
 
+# Gamepad depth control (loop mode). Nudges a slider by delta_y pixels,
+# clamped against the opposite slider, then pushes the limit to the device.
+func adjust_max(delta_y: float) -> void:
+	var drag_pos = max_slider.position.y + delta_y
+	var min_range = min_slider.position.y - min_slider.size.y
+	max_slider.position.y = clamp(drag_pos, max_range_pos, min_range)
+	update_max_range()
+
+
+func adjust_min(delta_y: float) -> void:
+	var drag_pos = min_slider.position.y + delta_y
+	var max_range = max_slider.position.y + max_slider.size.y
+	min_slider.position.y = clamp(drag_pos, max_range, min_range_pos)
+	update_min_range()
+
+
 func update_min_range(label_only := false):
 	var slider_pos = min_slider.position.y
 	min_range_limit = round(remap(slider_pos, min_range_pos, max_range_pos, 0, 10000))

@@ -13,12 +13,23 @@ var last_position: int
 
 var input_active: bool
 
+# Gamepad sweep rate: fraction of full travel per second at full stick deflection.
+const POSITION_AXIS_RATE: float = 0.7
+
 
 func _ready():
 	_on_smoothing_slider_value_changed($Smoothing/HSlider.value)
 
 
 func _physics_process(delta) -> void:
+	# Gamepad position control. min_range is app position 0 (retracted, larger Y);
+	# max_range is full depth (smaller Y). move_position_in drives toward depth.
+	var axis := Input.get_action_strength("move_position_in") \
+			- Input.get_action_strength("move_position_out")
+	if axis != 0.0:
+		var travel: float = min_range - max_range
+		touch_pos = clamp(touch_pos - axis * travel * POSITION_AXIS_RATE * delta,
+				max_range, min_range)
 	var pos = lerp(slider.position.y, touch_pos, delta * smoothing)
 	slider.position.y = clamp(pos, max_range, min_range)
 	var mapped_pos: int = abs(owner.motor_direction * 10000 - remap(slider.position.y, min_range, max_range, 0, 10000))
